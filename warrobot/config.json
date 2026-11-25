@@ -4,11 +4,11 @@
   "mode": "live",
   "timezone": "Asia/Tehran",
   "fees": {
-    "buy_pct": 1.5,
-    "sell_pct": 0.5
+    "buy_pct": 0.3712,
+    "sell_pct": 0.88
   },
   "universe": {
-    "max_positions": 3,
+    "max_positions": 10,
     "exclude_symbols": [
       "خساپا"
     ],
@@ -38,8 +38,9 @@
     "preopen_until": "08:46",
     "order_path": "playwright",
     "max_order_value_pct_of_free": 0.95,
-    "each_symbol_pct_of_total": 33.3333,
-    "rotate_on_unfilled": true
+    "each_symbol_pct_of_total": 10.0,
+    "rotate_on_unfilled": true,
+    "preopen_first": "sell"
   },
   "sell": {
     "target_pct": 25.0,
@@ -48,7 +49,8 @@
     "check_interval_sec": 60,
     "price_mode": "best_bid",
     "stop_price_mode": "floor",
-    "rule_locked": true
+    "rule_locked": true,
+    "reprice_after_min": 10
   },
   "schedule": {
     "nightly_download": "20:30",
@@ -60,10 +62,13 @@
     "chromedriver": "C:\\TSE_Strategy\\chromedriver.exe",
     "order_page": 2
   },
+  "daemon": {
+    "trading": false
+  },
   "version": "5.0",
   "strategy": {
-    "version": "v1",
-    "_comment": "v1 = legacy rules (default). v2 = strategy_v2.py rules, see STRATEGY_HARK.md and reports/hark_backtest. Switch only after a dry-run period. v3 = strategy_v3.py (v2 + rank by individual buyer power + skip known loss-makers), see STRATEGY_V3_HARK.md; dry-run first.",
+    "version": "v3",
+    "_comment": "v3 = strategy_v3.py (v2 filters/exits + skip known loss-makers, rank by individual buyer power), live since 2026-11-26 on owner's order (no dry-run); v2 = strategy_v2.py; fees corrected to 0.3712/0.88 on owner's order. Rollback: backups/pre_v3_*/rollback.ps1",
     "v2": {
       "entry": "queue",
       "first_lock_only": false,

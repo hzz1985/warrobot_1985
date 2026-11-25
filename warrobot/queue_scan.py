@@ -81,6 +81,23 @@ def main() -> int:
                      "tp_pct": TP, "sl_pct": SL, "hold_days": HOLD,
                      "reason": f"قفل روی سقف {ceiling_today:,.0f} · حجم {vol/1e6:.1f}M"})
     all_locked = pd.DataFrame(rows)
+    # Hark V3 (2026-11-26): strategy switch. config.json strategy.version v2/v3 filters and ranks
+    # the locked list (v3 = v2 filters + skip known loss-makers, rank by individual buyer power,
+    # see strategy_v3.py). v1, or any error here, keeps the old data-file order.
+    try:
+        import json as _jv
+        _ver = ((_jv.loads((PROJ / "config.json").read_text(encoding="utf-8")).get("strategy") or {})
+                .get("version") or "v1").lower()
+        if _ver in ("v2", "v3") and len(all_locked):
+            sys.path.insert(0, str(BASE / "Tse2" / "orderflow"))   # tsetmc.resolve for insCodes
+            sys.path.insert(0, str(PROJ))
+            import strategy_v3 as _sv
+            _ranked = _sv.filter_scan(all_locked, PROJ / "config.json", DAILY, keep_all=True,
+                                      log=lambda m: print(m, flush=True))
+            print(f"strategy {_ver}: locked={len(all_locked)} -> eligible={len(_ranked)}")
+            all_locked = _ranked.reset_index(drop=True)
+    except Exception as exc:
+        print(f"strategy filter skipped (file order kept): {str(exc)[:120]}")
     df = all_locked.copy()
     if len(all_locked) > MAX_PICK:
         # candidates 7..12 stay as the reserve used when an order never fills

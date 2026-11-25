@@ -180,9 +180,11 @@ def _resolve_ins(sym: str):
 
 
 def filter_scan(cands, config_path: str | Path, daily_dir: str | Path, limit: float = 0.03,
-                ins_codes: dict | None = None, log=None):
-    """v3 entry filters on distbot.scan_nightly() output (symbol, close, turnover, ...).
-    Any version other than v3 -> strategy_v2.filter_scan (unchanged v1/v2 behaviour)."""
+                ins_codes: dict | None = None, log=None, keep_all: bool = False):
+    """v3 entry filters on distbot.scan_nightly() / queue_scan output (symbol, close, turnover, ...).
+    Any version other than v3 -> strategy_v2.filter_scan (unchanged v1/v2 behaviour).
+    keep_all=True returns every survivor in rank order (the caller takes max_picks and keeps the
+    rest as its reserve list)."""
     try:
         cfg = json.loads(Path(config_path).read_text(encoding="utf-8"))
     except Exception:
@@ -219,4 +221,4 @@ def filter_scan(cands, config_path: str | Path, daily_dir: str | Path, limit: fl
         out[col] = [r.get(col) for r in keep]
     if log:
         log(f"strategy_v3: {len(base)} v2-eligible -> {len(out)} after v3 filters, ranked by {v3.rank_by}")
-    return out.head(v3.max_picks)
+    return out if keep_all else out.head(v3.max_picks)

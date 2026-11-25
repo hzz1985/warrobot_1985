@@ -39,6 +39,14 @@ PW = BASE / "pw"
 NODE = r"C:\Program Files\nodejs\node.exe"
 
 
+def _tehran_str() -> str:
+    try:
+        import market_cal
+        return market_cal.now_tehran().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+    except Exception:
+        return ""
+
+
 def _clear_lock() -> None:
     prof = BASE / "state" / "pw-profile"
     for n in ("SingletonLock", "SingletonCookie", "SingletonSocket"):
@@ -260,8 +268,43 @@ def _bind_bad(symbol: str) -> bool:
     return int((_bind_failures().get(symbol) or {}).get("count") or 0) >= 3
 
 
-def run(dry: bool = False) -> dict:
-    out = {"at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "orders": []}
+def submitted_today_symbols() -> set:
+    """Symbols with a buy that this bot already got accepted today (idempotency)."""
+    today = datetime.now().strftime("%Y-%m-%d")      # orders_log "at" uses the same clock
+    out = set()
+    try:
+        for line in LOG.read_text(encoding="utf-8").splitlines():
+            try:
+                d = json.loads(line)
+            except Exception:
+                continue
+            if str(d.get("at") or "")[:10] == today and d.get("submitted") and d.get("symbol") \
+                    and str(d.get("side") or "buy") == "buy":
+                out.add(str(d["symbol"]))
+    except Exception:
+        pass
+    return out
+
+
+def run(dry: bool = False, at_epoch_ms: int = 0, priority: bool = False) -> dict:
+    """prepare() + execute() under ONE lock.
+
+    Hark fix #1: the old code released pw_lock right after taking it (the
+    `with` block only held the check), so the whole order run was unguarded and
+    raced the other morning jobs on the browser profile."""
+    import pw_lock as _pl
+    with _pl.guard("order_candidates") as got:
+        if not got:
+            return {"at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "orders": [],
+                    "note": "playwright_lock_timeout", "submitted": 0}
+        plan = prepare()
+        return execute(plan, dry=dry, at_epoch_ms=at_epoch_ms, priority=priority)
+
+
+def prepare() -> dict:
+    """Everything that needs the network BEFORE the order second: balance, open
+    orders, holdings, prices, sizes. Returns {"orders": [planned rec, ...], ...}."""
+    out = {"at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "orders": [], "planned": []}
     if not CAND.exists():
         out["note"] = "no candidates file"
         return out
@@ -269,12 +312,6 @@ def run(dry: bool = False) -> dict:
     if not len(df):
         out["note"] = "empty candidates"
         return out
-
-    import pw_lock as _pl
-    with _pl.guard("order_candidates") as got:
-        if not got:
-            out["note"] = "playwright_lock_timeout"
-            return out
 
     free = _free_balance()
     out["free_balance"] = round(free, 0)
@@ -285,7 +322,7 @@ def run(dry: bool = False) -> dict:
     # symbols that already have an open order are skipped, not the whole plan:
     # their reserved cash is subtracted so the next 1/3 slot can still be opened
     open_buy_syms = {str(o.get("symbol")) for o in open_orders
-                     if "خرید" in str(o.get("side") or "")}
+                     if "خرید" in str(o.get("side") or "")} | submitted_today_symbols()
     reserved = 0.0
     for o in open_orders:
         try:
@@ -347,7 +384,7 @@ def run(dry: bool = False) -> dict:
     if broker_held:
         holdings = {**holdings, **broker_held}   # broker value wins over TSETMC
     held = {sym: val for sym, val in holdings.items() if sym not in MANUAL_ONLY}
-    slots_free = max(0, 3 - len(held))
+    slots_free = max(0, int(round(_slots)) - len(held))   # Hark V3: was hard-coded 3; v2/v3 = strategy.v2.max_positions
     # never dilute a position that is already close to its take-profit
     try:
         import json as _json
@@ -477,46 +514,88 @@ def run(dry: bool = False) -> dict:
         rec = {"at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                "symbol": sym, "isin": isin, "budget": round(budget, 0),
                "price": px, "qty": qty, "price_source": price_source}
+        try:
+            rec["reason_text"] = str(r.get("reason") or "")
+        except Exception:
+            rec["reason_text"] = ""
+        out["planned"].append(rec)
+    return out
+
+
+def _send_buy(rec: dict, at_epoch_ms: int = 0, priority: bool = False) -> dict:
+    env = dict(os.environ)
+    if at_epoch_ms:
+        env["FLOW_AT_EPOCH_MS"] = str(int(at_epoch_ms))
+    if priority:
+        env["WARROBOT_UI_PRIORITY"] = "1"
+    try:
+        p = subprocess.run([NODE, str(PW / "flow.js"), rec["symbol"], rec["isin"],
+                            str(rec["qty"]), str(rec["price"])],
+                           cwd=str(PW), capture_output=True, text=True, timeout=900,
+                           encoding="utf-8", errors="replace", env=env)
+        for line in reversed((p.stdout or "").splitlines()):
+            line = line.strip()
+            if line.startswith("{"):
+                return json.loads(line)
+        return {"message": "no_output"}
+    except Exception as exc:
+        return {"message": f"error:{str(exc)[:60]}"}
+
+
+def execute(plan: dict, dry: bool = False, at_epoch_ms: int = 0, priority: bool = False,
+            sender=None) -> dict:
+    """Send the planned buys. Only the FIRST one waits for at_epoch_ms (flow.js
+    prepares bind+fields first and clicks at that exact millisecond); the rest
+    follow back-to-back."""
+    sender = sender or _send_buy
+    out = dict(plan)
+    out["orders"] = list(plan.get("orders") or [])
+    already = submitted_today_symbols()
+    first = True
+    for planned in plan.get("planned") or []:
+        rec = dict(planned)
+        sym = rec["symbol"]
         if dry:
             rec["dry"] = True
             out["orders"].append(rec)
             continue
-        try:
-            p = subprocess.run([NODE, str(PW / "flow.js"), sym, isin, str(qty), str(px)],
-                               cwd=str(PW), capture_output=True, text=True, timeout=900,
-                               encoding="utf-8", errors="replace")
-            data = {}
-            for line in reversed((p.stdout or "").splitlines()):
-                line = line.strip()
-                if line.startswith("{"):
-                    data = json.loads(line)
-                    break
-        except Exception as exc:
-            data = {"message": f"error:{str(exc)[:60]}"}
+        if sym in already:
+            rec.update(skipped="already_submitted_today", submitted=False)
+            out["orders"].append(rec)
+            continue
+        if int(rec.get("qty") or 0) <= 0:
+            # qty 0 made flow.js order the whole per-ticket limit, ignoring the budget
+            rec.update(skipped="qty_zero_unpriced", submitted=False)
+            out["orders"].append(rec)
+            continue
+        data = sender(rec, at_epoch_ms=at_epoch_ms if first else 0, priority=priority)
+        first = False
         if "bind_mismatch" in str(data.get("message") or ""):
             _note_bind_failure(sym)
-        if rec.get("submitted"):
+        # flow.js reports submitted=true when the broker returned an OrderId or the
+        # order is visible in the open-order list (same symbol AND side). The old
+        # regex on the message turned verified orders into submitted=false.
+        rec.update({
+            "at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),     # send time (server clock)
+            "side": "buy",
+            "qty": data.get("qty") if data.get("qty") is not None else rec.get("qty"),
+            "price": data.get("placed_price") or data.get("intended_price") or rec.get("price"),
+            "message": data.get("message"),
+            "orderid": data.get("placed_orderid"),
+            "submitted": bool(data.get("submitted")) or
+                         bool(re.search(r"موفقیت", str(data.get("message") or ""))),
+            "click_epoch_ms": data.get("click_epoch_ms"),
+            "at_tehran": _tehran_str(),
+        })
+        if rec["submitted"]:
+            already.add(sym)
             try:
                 import trade_journal as _tj
-                _tj.record_buy(sym, rec.get("qty"), rec.get("price") or px,
-                               fee=0.0, reason=(r.get("reason") if isinstance(r, dict) else ""))
+                _tj.record_buy(sym, rec.get("qty"), rec.get("price"), fee=0.0,
+                               reason=rec.get("reason_text") or "")
                 rec["journaled"] = True
             except Exception as exc:
                 rec["journal_error"] = str(exc)[:80]
-        if not rec.get("submitted") and rec.get("qty"):
-            for o in _open_orders():
-                if str(o.get("symbol")) == sym and str(o.get("side")) == "خرید":
-                    rec["submitted"] = True
-                    rec["verified_by_open_orders"] = True
-                    rec["orderid"] = o.get("orderid")
-                    rec["price"] = float(o.get("price") or 0)
-                    break
-        rec.update({
-            "qty": data.get("qty"),
-            "price": data.get("finalPrice") or data.get("price"),
-            "message": data.get("message"),
-            "submitted": bool(re.search(r"موفق|ثبت", str(data.get("message") or ""))),
-        })
         out["orders"].append(rec)
         with LOG.open("a", encoding="utf-8") as fh:
             fh.write(json.dumps(rec, ensure_ascii=False) + "\n")
