@@ -97,7 +97,7 @@ def _read_json(p: Path, default: Any):
 
 
 def _ledger() -> Ledger:
-    return Ledger(Path(r"C:\Users\Administrator\Desktop\DeepSeek DeskTop\WarRobot\state") / "ledger_all.jsonl")
+    return Ledger((Wdata.STATE) / "ledger_all.jsonl")
 
 
 def realised_series() -> List[Dict[str, Any]]:
@@ -161,7 +161,7 @@ def current_picks() -> Dict[str, Any]:
 
     Falls back to the legacy picks file when the nightly scan has not run yet.
     """
-    path = Path(r"C:\Users\Administrator\Desktop\DeepSeek DeskTop\WarRobot\state") / "candidates.csv"
+    path = (Wdata.STATE) / "candidates.csv"
     if path.exists():
         try:
             import pandas as _pd
@@ -323,7 +323,7 @@ def per_symbol_series(limit: int = 0) -> List[Dict[str, Any]]:
 
 
 def _toman(v: float) -> str:
-    t = v / 10.0
+    t = float(v or 0) / 10.0
     a = abs(t)
     if a >= 1e9:
         return f"{t/1e9:,.2f}B"
@@ -563,6 +563,7 @@ def decide_label(pnl: float, total: float, cfg) -> str:
     return "نگهداری"
 
 
+@app.route("/health")
 def health():
     return jsonify({"ok": True, "mode": CFG.mode, "time": now_tehran().isoformat(timespec="seconds")})
 
@@ -599,7 +600,7 @@ def _alloc_advice():
     """Shadow allocation advice written by the bot (no trades behind it)."""
     import json
     from pathlib import Path as _P
-    fp = _P(r"C:\Users\Administrator\Desktop\DeepSeek DeskTop\WarRobot\state\alloc_advice.json")
+    fp = Wdata.STATE / "alloc_advice.json"
     try:
         return json.loads(fp.read_text(encoding="utf-8"))
     except Exception:
@@ -612,7 +613,7 @@ def _web_snapshot():
     """Everything the nightly refresh wrote: candidates, sells, positions, orders."""
     import json
     from pathlib import Path as _P
-    fp = _P(r"C:\Users\Administrator\Desktop\DeepSeek DeskTop\WarRobot\state\web_snapshot.json")
+    fp = Wdata.STATE / "web_snapshot.json"
     try:
         return json.loads(fp.read_text(encoding="utf-8"))
     except Exception:
@@ -631,7 +632,7 @@ def index():
     sells = Wdata.sells_history(5)      # last 5 SOLD SYMBOLS, one row each (aggregated)
     try:
         import json as _j
-        _wr = _j.loads((Path(r"C:\Users\Administrator\Desktop\DeepSeek DeskTop\WarRobot\config.json")).read_text(encoding="utf-8"))
+        _wr = _j.loads((Wdata.WAR / "config.json").read_text(encoding="utf-8"))
         target = float(_wr["sell"].get("target_pct", 25.0))
         stop = float(_wr["sell"].get("stop_pct", 3.0))
     except Exception:
@@ -668,6 +669,8 @@ def index():
     port_pct = (port_total / port_invested * 100.0) if port_invested else 0.0
     return render_template(
         "index.html",
+        dash=Wdata.dashboard(positions=positions, target=target, stop=stop, max_pos=max_pos),
+        advice=advice,
         picks=picks, exports=exports, prompts=prompts, positions=positions, sell_rows=sell_rows,
         balance=Wdata.balance(), price_map=Wdata.price_map(),
         fund=Wdata.fund(), report=Wdata.report(), report_charts=report_charts,
@@ -702,8 +705,11 @@ def demo():
     ]
     picks = current_picks()
     return render_template("index.html",
-                           snap=snap,
-                           advice=advice, picks=picks, positions=open_positions(),
+                           snap=_web_snapshot(), dash=Wdata.dashboard(),
+                           jalali=Wdata.to_jalali, balance=Wdata.balance(), fund=Wdata.fund(),
+                           webdata={}, price_map={}, agents=Wdata.agents(), report=Wdata.report(),
+                           report_charts={}, weekly={}, sell_data={}, exports=[], pnl_at="",
+                           advice=_alloc_advice(), picks=picks, positions=open_positions(),
                            sell_rows=[], sells=sample, chart=svg_chart(sample),
                            target=float(CFG.get("sell.target_pct", 12.0)),
                            stop=float(CFG.get("sell.stop_pct", 3.0)),

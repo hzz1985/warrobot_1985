@@ -1,444 +1,269 @@
 <!doctype html>
-<html lang="fa" dir="rtl">
+<html lang="fa" dir="rtl" data-theme="light">
 <head>
-<meta http-equiv="refresh" content="60">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0f1419">
 <meta name="format-detection" content="telephone=no">
-<title>TeseRobot — کاندیدای خرید و فروش</title>
-<style>
-  :root { --bg:#0f1419; --card:#171e26; --line:#25303b; --txt:#e6edf3; --muted:#8b98a5;
-          --green:#2e7d32; --red:#c62828; --accent:#1f6feb;
-          --fs: clamp(13px, 0.55vw + 11px, 16px); }
-  * { box-sizing:border-box; }
-  html { -webkit-text-size-adjust:100%; }
-  body { margin:0; background:var(--bg); color:var(--txt); font-size:var(--fs);
-         font-family:Tahoma, "Segoe UI", sans-serif; overflow-x:hidden; }
-
-  header { padding:14px clamp(12px,3vw,24px); border-bottom:1px solid var(--line);
-           display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
-  h1 { font-size:clamp(15px,1.2vw + 10px,19px); margin:0; white-space:nowrap; }
-  .badge { font-size:clamp(10px,0.6vw + 8px,12px); padding:3px 10px; border-radius:999px;
-           background:#1b2733; color:var(--muted); white-space:nowrap; }
-  .badge.live { background:#3a1515; color:#ff8a80; }
-  .badge.dry { background:#14301c; color:#7ee2a8; }
-
-  .tabs { display:flex; gap:8px; padding:12px clamp(12px,3vw,24px) 0; }
-  .tab { flex:1 1 0; text-align:center; padding:12px 14px; border:1px solid var(--line);
-         border-bottom:none; border-radius:10px 10px 0 0; cursor:pointer;
-         color:var(--muted); background:#121922; font-size:clamp(12px,0.6vw + 10px,14px);
-         min-height:44px; }
-  .tab.active { background:var(--card); color:var(--txt); font-weight:bold; }
-
-  .panel { display:none; padding:clamp(14px,2.4vw,22px) clamp(12px,3vw,24px) 40px; }
-  .panel.active { display:block; }
-
-  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-          gap:clamp(8px,1.2vw,12px); margin-bottom:18px; }
-  .kpi { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px 14px; }
-  .kpi .lbl { color:var(--muted); font-size:0.8em; margin-bottom:6px; }
-  .kpi .val { font-size:clamp(16px,1.2vw + 12px,21px); font-weight:bold; }
-
-  .table-wrap { width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; }
-  table { width:100%; border-collapse:collapse; background:var(--card);
-          border:1px solid var(--line); border-radius:12px; overflow:hidden; }
-  th, td { padding:10px 12px; text-align:right; border-bottom:1px solid var(--line);
-           font-size:0.92em; white-space:nowrap; }
-  th { color:var(--muted); font-weight:normal; background:#121922; }
-  tr:last-child td { border-bottom:none; }
-  .pos { color:#7ee2a8; } .neg { color:#ff8a80; }
-
-  .chart { width:100%; height:auto; background:var(--card); border:1px solid var(--line);
-           border-radius:12px; margin-top:10px; display:block; }
-  .grid-line, .grid { stroke:#25303b; stroke-width:1; }
-  .zero { stroke:#55636f; stroke-width:1; stroke-dasharray:5 5; }
-  .line { fill:none; stroke:#1faa4b; stroke-width:4; stroke-linejoin:round; stroke-linecap:round; }        .chart-legend { display:flex; flex-wrap:wrap; gap:8px; align-items:center; font-size:12px; color:#cfd8e3; margin:6px 0 10px; }        .chart-legend .swatch { width:22px; height:4px; background:#1faa4b; border-radius:2px; display:inline-block; }        .chart-legend .sep { color:#3a4757; }        .legend-line { stroke:#1faa4b; stroke-width:4; }
-  .axis { fill:#8b98a5; font-size:11px; }        .point-label { fill:#e6edf3; font-size:12px; font-weight:600; }        .point-value { fill:#9aa7b4; font-size:10px; }
-        .zone { fill:#5b6b7c; font-size:12px; font-weight:700; }
-
-  .empty { padding:26px; text-align:center; color:var(--muted); background:var(--card);
-           border:1px dashed var(--line); border-radius:12px; }
-  .note { color:var(--muted); font-size:0.82em; margin:6px 0 14px; line-height:1.8; }
-  h2 { font-size:clamp(13px,0.7vw + 10px,15px); margin:20px 0 10px; color:#c9d4df; }
-
-
-  /* ================= animations (self-contained, no CDN) ================= */
-  @keyframes fadeUp   { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
-  @keyframes popIn    { 0% { opacity:0; transform:scale(.4); } 70% { transform:scale(1.15); } 100% { opacity:1; transform:scale(1); } }
-  @keyframes drawLine { to { stroke-dashoffset:0; } }
-  @keyframes pulseLive{ 0%,100% { box-shadow:0 0 0 0 rgba(255,138,128,.55); } 50% { box-shadow:0 0 0 7px rgba(255,138,128,0); } }
-  @keyframes shimmer  { 0% { background-position:-200% 0; } 100% { background-position:200% 0; } }
-  @keyframes glow     { 0%,100% { box-shadow:0 0 0 0 rgba(31,111,235,.0); } 50% { box-shadow:0 0 18px -2px rgba(31,111,235,.45); } }
-  @keyframes slideBar { from { transform:scaleX(0); } to { transform:scaleX(1); } }
-
-  header h1 {
-    background:linear-gradient(90deg,#e6edf3 20%,#7ee2a8 40%,#1f6feb 55%,#e6edf3 75%);
-    background-size:200% auto; -webkit-background-clip:text; background-clip:text;
-    color:transparent; animation:shimmer 7s linear infinite;
-  }
-  .badge.live { animation:pulseLive 2.4s ease-in-out infinite; }
-
-  .tab { transition:background .25s ease, color .25s ease, transform .18s ease; position:relative; overflow:hidden; }
-  .tab:hover { color:var(--txt); background:#16202b; }
-  .tab.active::after {
-    content:""; position:absolute; inset-inline:12px; bottom:0; height:3px; border-radius:3px;
-    background:linear-gradient(90deg,#1f6feb,#7ee2a8); transform-origin:center;
-    animation:slideBar .45s cubic-bezier(.2,.8,.2,1) both;
-  }
-
-  .panel.active { animation:fadeUp .45s ease both; }
-
-  .kpi { transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
-         animation:fadeUp .5s ease both; }
-  .kpi:hover { transform:translateY(-3px); border-color:#31414f;
-               box-shadow:0 10px 24px -14px rgba(0,0,0,.9); }
-  .kpi:nth-child(1){animation-delay:.02s} .kpi:nth-child(2){animation-delay:.07s}
-  .kpi:nth-child(3){animation-delay:.12s} .kpi:nth-child(4){animation-delay:.17s}
-  .kpi:nth-child(5){animation-delay:.22s} .kpi:nth-child(6){animation-delay:.27s}
-  .kpi .val { transition:color .3s ease; }
-  .kpi:hover .val { color:#bfe6ff; }
-
-  table tbody tr, table tr:not(.head) {
-    animation:fadeUp .42s ease both;
-  }
-  table tr:nth-child(2){animation-delay:.03s}  table tr:nth-child(3){animation-delay:.08s}
-  table tr:nth-child(4){animation-delay:.13s}  table tr:nth-child(5){animation-delay:.18s}
-  table tr:nth-child(6){animation-delay:.23s}  table tr:nth-child(7){animation-delay:.28s}
-  table tr:not(.head):hover td { background:#1b2530; }
-  td { transition:background .2s ease; }
-
-  .chart { animation:fadeUp .55s ease both; }
-  /* the line is drawn by JS (measured length); without JS it stays a normal
-     solid line, so a disabled animation can never hide the chart */
-  svg .line { filter:drop-shadow(0 3px 10px rgba(31,170,75,.25)); transition:stroke-dashoffset 1.9s ease-out; }
-  svg circle { transform-box:fill-box; transform-origin:center;
-               animation:popIn .5s cubic-bezier(.2,.9,.25,1.2) both; }
-  svg circle:nth-of-type(1){animation-delay:.55s} svg circle:nth-of-type(2){animation-delay:.75s}
-  svg circle:nth-of-type(3){animation-delay:.95s} svg circle:nth-of-type(4){animation-delay:1.15s}
-  svg circle:nth-of-type(5){animation-delay:1.35s} svg circle:nth-of-type(6){animation-delay:1.55s}
-  svg circle:nth-of-type(7){animation-delay:1.75s} svg circle:nth-of-type(8){animation-delay:1.95s}
-  svg .point-label, svg .point-value { animation:fadeUp .45s ease both; animation-delay:1.2s; }
-
-  .empty { animation:fadeUp .5s ease both; }
-
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation:none !important; transition:none !important; }
-  }
-
-
-
-  /* ---------------- Import Prompt ---------------- */
-  /* ---------------- Import Prompt items ---------------- */
-  .prompt-item { margin-bottom: 6px; }
-  .prompt-body { background:#121922; }
-  .prompt-result { margin-top:8px; }
-  .prompt-result summary { cursor:pointer; color:var(--muted); font-size:13px; padding:6px 0; }
-  .prompt-result pre { background:#0d1319; border:1px solid var(--line); border-radius:10px;
-                       padding:12px; white-space:pre-wrap; max-height:40vh; overflow:auto;
-                       font-family:Consolas,monospace; font-size:12.5px; direction:ltr; }
-
-  .prompt-form { background:var(--card); border:1px solid var(--line); border-radius:12px;
-                 padding:14px; display:flex; flex-direction:column; gap:10px; }
-  .prompt-form input, .prompt-form textarea {
-      background:#121922; color:var(--txt); border:1px solid var(--line); border-radius:10px;
-      padding:10px 12px; font-family:inherit; font-size:14px; width:100%; }
-  .prompt-form textarea { resize:vertical; min-height:90px; line-height:1.9; }
-  .prompt-actions { display:flex; gap:10px; align-items:center; }
-  .prompt-actions button { background:#1f6feb; color:#fff; border:none; border-radius:10px;
-                           padding:10px 18px; font-size:14px; cursor:pointer; }
-  .prompt-actions button#prompt-queue { background:#1b2733; color:var(--txt);
-                                        border:1px solid var(--line); }
-  .prompt-actions button:hover { transform:translateY(-1px); }
-  .prompt-status { color:var(--muted); font-size:13px; }
-  .mono { font-family:monospace; direction:ltr; display:inline-block; max-width:420px;
-          overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-
-  /* ---------------- DeepSeekExport ---------------- */
-  .export-item { margin-bottom: 6px; }
-  .export-sep { height: 0; border-top: 2px solid #e53935; margin: 18px 0 10px; }
-  .export-tools { display:flex; gap:10px; align-items:center; margin-bottom:8px; }
-  .export-tools button { background:#1b2733; color:#e6edf3; border:1px solid var(--line);
-                         border-radius:8px; padding:7px 14px; font-size:13px; cursor:pointer;
-                         transition:background .2s ease, transform .15s ease; }
-  .export-tools button:hover { background:#233142; transform:translateY(-1px); }
-  .export-tools .btn-del:hover { background:#3a1515; border-color:#5a2020; }
-  .export-meta { color:var(--muted); font-size:12px; margin-inline-start:auto; }
-  .export-body { background:var(--card); border:1px solid var(--line); border-radius:12px;
-                 padding:14px 16px; white-space:pre-wrap; overflow-x:auto;
-                 font-family:Tahoma,"Segoe UI",monospace; font-size:13.5px; line-height:1.9;
-                 max-height:65vh; overflow-y:auto; }
-
-  /* ---------------- mobile ---------------- */
-  @media (max-width: 700px) {
-    :root { --fs: 15px; }
-    header { padding:12px 14px; gap:8px; }
-    h1 { font-size:17px; }
-    .badge { font-size:11px; padding:3px 8px; }
-    .tabs { padding:10px 12px 0; gap:6px; }
-    .tab { padding:13px 10px; font-size:14px; }
-    .panel { padding:14px 12px 34px; }
-    .grid { grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px; }
-    .kpi { padding:10px 12px; }
-    .kpi .val { font-size:18px; }
-    h2 { font-size:14px; }
-    .note { font-size:12.5px; }
-
-    /* tables become cards: one block per row, label + value */
-    table.responsive { border:none; background:transparent; }
-    table.responsive tr.head { display:none; }
-    table.responsive tr { display:block; background:var(--card); border:1px solid var(--line);
-                          border-radius:12px; margin-bottom:10px; padding:4px 12px; }
-    table.responsive td { display:flex; justify-content:space-between; align-items:center;
-                          gap:12px; border-bottom:1px dashed #202a34; padding:9px 0;
-                          white-space:normal; text-align:left; }
-    table.responsive td:last-child { border-bottom:none; }
-    table.responsive td::before { content:attr(data-label); color:var(--muted);
-                                  font-size:12px; flex:0 0 auto; }
-    table.responsive td > * { margin-inline-start:auto; }
-    .chart { min-height:220px; }
-  }
-</style>
-
-<style>
-  /* mobile: stop overflowing/overlapping Persian words and wide tables */
-  body, td, th, .note, h2 { overflow-wrap: anywhere; word-break: break-word; }
-  @media (max-width: 760px) {
-    body { font-size: 13px; }
-    table.responsive { display: block; width: 100%; overflow-x: auto; }
-    table.responsive td, table.responsive th { white-space: normal; font-size: 12px; padding: 6px 4px; }
-    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    h2 { font-size: 15px; }
-  }
-</style>
-<style>
-/* ===== PRO-THEME 2026 — polish layer (overrides only, no markup change) ===== */
-:root{
-  --bg:#0b1017; --card:#141b24; --card2:#18212c; --line:#22303d; --line2:#2b3b4b;
-  --txt:#e8eef6; --muted:#93a3b4; --accent:#3b82f6; --accent2:#60a5fa;
-  --green:#22c55e; --red:#ef4444; --amber:#f59e0b;
-  --shadow:0 8px 28px rgba(0,0,0,.35); --radius:16px;
-}
-html{scroll-behavior:smooth}
-body{
-  background:
-    radial-gradient(1200px 600px at 85% -10%, rgba(59,130,246,.10), transparent 60%),
-    radial-gradient(900px 500px at 10% 0%, rgba(34,197,94,.06), transparent 55%),
-    var(--bg) !important;
-  font-family:"Vazirmatn","IRANSans","Segoe UI",Tahoma,sans-serif !important;
-  line-height:1.75; letter-spacing:.1px;
-}
-header{
-  position:sticky; top:0; z-index:50; backdrop-filter:blur(14px);
-  background:rgba(11,16,23,.82) !important; border-bottom:1px solid var(--line2) !important;
-  box-shadow:0 6px 24px rgba(0,0,0,.35); padding:14px clamp(14px,3vw,28px) !important;
-}
-h1{font-weight:800 !important; letter-spacing:.2px;
-   background:linear-gradient(90deg,#fff,#9cc3ff); -webkit-background-clip:text;
-   background-clip:text; color:transparent !important}
-.badge{border:1px solid var(--line2) !important; background:#101823 !important;
-       padding:4px 12px !important; font-weight:600}
-.badge.live{background:rgba(239,68,68,.12) !important; color:#fca5a5 !important;
-            border-color:rgba(239,68,68,.35) !important}
-.badge.dry{background:rgba(34,197,94,.12) !important; color:#86efac !important;
-           border-color:rgba(34,197,94,.35) !important}
-.tabs{gap:10px !important; padding:16px clamp(14px,3vw,28px) 0 !important;
-      position:sticky; top:63px; z-index:40; background:linear-gradient(var(--bg),transparent)}
-.tab{
-  border:1px solid var(--line2) !important; border-bottom:none !important;
-  background:linear-gradient(180deg,#131c26,#101720) !important;
-  border-radius:14px 14px 0 0 !important; font-weight:600; transition:.18s ease;
-}
-.tab:hover{color:var(--txt) !important; transform:translateY(-1px)}
-.tab.active{
-  background:linear-gradient(180deg,var(--card2),var(--card)) !important;
-  color:#fff !important; box-shadow:0 -2px 0 var(--accent) inset;
-}
-.panel{padding:clamp(16px,2.6vw,26px) clamp(14px,3vw,28px) 56px !important}
-.grid{gap:14px !important}
-.kpi{
-  background:linear-gradient(160deg,var(--card2),var(--card)) !important;
-  border:1px solid var(--line2) !important; border-radius:var(--radius) !important;
-  box-shadow:var(--shadow); transition:.2s ease;
-}
-.kpi:hover{transform:translateY(-2px); border-color:#36506b !important}
-.kpi .lbl{color:var(--muted) !important; font-weight:600; letter-spacing:.2px}
-.kpi .val{font-weight:800 !important; font-variant-numeric:tabular-nums}
-.table-wrap{border-radius:var(--radius); box-shadow:var(--shadow)}
-table{border:1px solid var(--line2) !important; border-radius:var(--radius) !important;
-      font-variant-numeric:tabular-nums}
-thead th{background:#101a24 !important; color:#b9c9db !important; font-weight:700 !important;
-         position:sticky; top:0; z-index:5; border-bottom:1px solid var(--line2) !important}
-tbody tr{transition:.15s ease}
-tbody tr:hover{background:rgba(59,130,246,.07) !important}
-td,th{padding:11px 13px !important}
-h2{font-weight:800 !important; letter-spacing:.2px; margin-top:26px !important}
-h2::before{content:""; display:inline-block; width:6px; height:18px; border-radius:3px;
-           margin-inline-end:10px; vertical-align:-3px;
-           background:linear-gradient(180deg,var(--accent2),var(--accent))}
-canvas{filter:drop-shadow(0 6px 18px rgba(0,0,0,.35))}
-a{color:var(--accent2) !important; text-decoration:none}
-a:hover{text-decoration:underline}
-button,.btn{border-radius:10px !important; font-weight:700; transition:.18s ease}
-button:hover,.btn:hover{transform:translateY(-1px)}
-::-webkit-scrollbar{height:10px; width:10px}
-::-webkit-scrollbar-thumb{background:#2a3a4b; border-radius:8px}
-::-webkit-scrollbar-track{background:#0d141c}
-@media (max-width:640px){
-  h1{font-size:16px !important}
-  .tab{font-size:13px !important; padding:11px 8px !important}
-  .tabs{top:58px}
-  th,td{padding:9px 10px !important; font-size:.86em}
-  .kpi .val{font-size:18px !important}
-}
-@media print{ header,.tabs{position:static} body{background:#fff;color:#000} }
-</style>
-
-<style>
-/* ===== LIGHT-THEME 2026 — white dashboard ===== */
-:root{
-  --bg:#f6f8fb; --card:#ffffff; --card2:#fbfdff; --line:#e3e9f0; --line2:#d3ddeb;
-  --txt:#16202b; --muted:#5d6b7a; --accent:#1f6feb; --accent2:#3b82f6;
-  --green:#14804a; --red:#c62828; --amber:#b26a00;
-  --shadow:0 4px 18px rgba(20,40,80,.08); --radius:14px;
-}
-html,body{background:#f6f8fb !important; color:#16202b !important}
-body{
-  background:
-    radial-gradient(1100px 500px at 90% -10%, rgba(59,130,246,.08), transparent 60%),
-    radial-gradient(800px 400px at 5% 0%, rgba(20,128,74,.05), transparent 55%),
-    #f6f8fb !important;
-}
-header{
-  background:rgba(255,255,255,.92) !important; border-bottom:1px solid #e3e9f0 !important;
-  box-shadow:0 2px 10px rgba(20,40,80,.06) !important;
-}
-h1{background:none !important; -webkit-text-fill-color:#0f1a26 !important; color:#0f1a26 !important}
-.badge{background:#eef3f9 !important; color:#48606f !important; border:1px solid #dbe4ee !important}
-.badge.live{background:#fdecec !important; color:#a11616 !important; border-color:#f3c9c9 !important}
-.badge.dry{background:#e9f7ef !important; color:#11643c !important; border-color:#bfe6d0 !important}
-.tabs{background:linear-gradient(#f6f8fb, rgba(246,248,251,0)) !important}
-.tab{background:#edf2f8 !important; color:#4b5d6d !important; border:1px solid #dbe4ee !important}
-.tab.active{background:#ffffff !important; color:#0f1a26 !important;
-             box-shadow:inset 0 -2px 0 var(--accent) !important}
-.panel{background:transparent !important}
-.kpi{background:#ffffff !important; border:1px solid #e3e9f0 !important; box-shadow:var(--shadow) !important}
-.kpi .lbl{color:#5d6b7a !important}
-.kpi .val{color:#10202e !important}
-table{background:#ffffff !important; border-color:#e3e9f0 !important}
-thead th{background:#f1f5fa !important; color:#33475b !important; border-bottom:1px solid #e3e9f0 !important}
-td,th{color:#22303c !important; border-bottom:1px solid #eef2f7 !important}
-tbody tr:hover{background:#f5f9ff !important}
-h2{color:#0f1a26 !important}
-h2::before{background:linear-gradient(180deg,#3b82f6,#1f6feb) !important}
-.note,p,.empty{color:#5d6b7a !important}
-.pos{color:#14804a !important}
-.neg{color:#c62828 !important}
-a{color:#1f6feb !important}
-canvas{filter:none !important}
-.text, .chart-legend{color:#33475b !important}
-tr.head th, tbody tr.head th, .head th {
-  background:#f1f5fa !important; color:#33475b !important;
-  border-bottom:1px solid #e3e9f0 !important;
-}
-tr.head td { background:#f1f5fa !important; color:#33475b !important; }
-.rial{opacity:.85}
-.src{opacity:.6;font-size:.8em}
-/* chart colours for the light theme */
-svg text, .point-label, .point-value { fill:#16202b !important; }
-.axis { fill:#51606f !important; }
-.grid, .grid-line { stroke:#e3e9f0 !important; }
-.zero { stroke:#9aa8b5 !important; }
-.line { stroke:#14804a !important; }
-.chart-legend { color:#33475b !important; }
-/* hover-fix: the old dark theme turned rows black on hover (leftover) */
-table tr:not(.head):hover td,
-table tr:hover td,
-tbody tr:hover td,
-tbody tr:hover {
-  background:#eaf2fb !important;
-  color:#16202b !important;
-}
-.tab:hover {
-  background:#eef4fb !important;
-  color:#0f1a26 !important;
-}
-.kpi:hover {
-  border-color:#d3ddeb !important;
-  box-shadow:0 6px 16px rgba(20,40,80,.10) !important;
-}
-.kpi:hover .val { color:#0f1a26 !important; }
-tr.head:hover td, tr.head:hover th { background:#f1f5fa !important; color:#33475b !important; }
-.legend-main{fill:#16202b;font-size:13px;font-weight:700}
-.point-value{fill:#51606f;font-size:11px;font-weight:600}
-.point-label{fill:#16202b;font-size:12px;font-weight:700}
-.zone{fill:#9aa8b5;font-size:11px}
-/* chart labels always visible (the old fadeUp animation hid them) */
-svg .point-label, svg .point-value, svg .axis, svg .zone, svg .legend-main {
-  animation:none !important; opacity:1 !important;
-}
-circle { animation:none !important; opacity:1 !important; }
-</style>
+<meta name="theme-color" content="#f4f6fa">
+<noscript><meta http-equiv="refresh" content="60"></noscript>
+<title>WarRobot — داشبورد معاملاتی</title>
+<script>
+  /* theme before first paint: saved choice, else the phone/OS preference */
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem('wrTheme'); } catch (e) {}
+    if (!t) t = (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.0.3/Vazirmatn-font-face.css">
+{% include "_dashboard_css.html" %}
 </head>
-
-{% if advice and advice.allocation %}
-<div class="card alloc-card" style="margin:12px 0;padding:12px 16px;border-radius:10px;background:#0f172a;color:#e2e8f0;">
-  <div style="font-weight:700;margin-bottom:6px;">توصیهٔ تخصیص سرمایه (حالت سایه — بدون معامله)</div>
-  <div style="font-size:15px;">
-    سهم <b>{{ advice.allocation.stocks }}%</b> ·
-    طلا <b>{{ advice.allocation.gold }}%</b> ·
-    درآمد ثابت <b>{{ advice.allocation.fixed }}%</b>
-  </div>
-  <div style="opacity:.8;font-size:12.5px;margin-top:6px;">
-    {{ advice.reason }} · جلسه {{ advice.session }} ·
-    شاخص {{ advice.index.gap_pct }}% نسبت به میانگین ۲۰۰ روزه ·
-    طلا {{ advice.gold.gap_pct }}%
-  </div>
-</div>
-{% endif %}
-
 <body>
-<header>
-  <h1>🤖 TeseRobot</h1>
-  <span class="badge {{ 'live' if mode == 'live' else 'dry' }}">حالت: {{ mode }}</span>
-  <span class="badge">پیک‌ها برای {{ for_date }}</span>
-  <span class="badge">ساخته‌شده {{ generated }}</span>
-  <span class="badge">اکنون {{ now }}</span>
+{# ------------------------------------------------------------------ helpers #}
+{% macro rial(v) -%}{{ '{:,.0f}'.format(v or 0) }}{%- endmacro %}
+{% macro srial(v) -%}{{ '{:+,.0f}'.format(v or 0) }}{%- endmacro %}
+{% macro toman(v) -%}
+  {%- set t = (v or 0) / 10.0 -%}
+  {%- if t|abs >= 1000000000 -%}{{ '%.2f'|format(t / 1000000000) }} میلیارد تومان
+  {%- elif t|abs >= 1000000 -%}{{ '%.1f'|format(t / 1000000) }} میلیون تومان
+  {%- else -%}{{ '{:,.0f}'.format(t) }} تومان{%- endif -%}
+{%- endmacro %}
+{% macro jd(x) -%}
+  {%- if x and (x|string)[:2] == '20' -%}<bdi class="dt">{{ (jalali(x)|string)[:16]|replace('-', '/') }}</bdi>
+  {%- elif x and (x|string)[:2] == '14' -%}<bdi class="dt">{{ (x|string)|replace('-', '/') }}</bdi>
+  {%- else -%}{{ x or '—' }}{%- endif -%}
+{%- endmacro %}
+{% macro tval(v) -%}
+  {%- set t = (v or 0) / 10.0 -%}
+  {%- if t|abs >= 1000000000 -%}<bdi>{{ '%.2f'|format(t / 1000000000) }}</bdi><span class="unit">میلیارد تومان</span>
+  {%- elif t|abs >= 1000000 -%}<bdi>{{ '%.1f'|format(t / 1000000) }}</bdi><span class="unit">میلیون تومان</span>
+  {%- else -%}<bdi>{{ '{:,.0f}'.format(t) }}</bdi><span class="unit">تومان</span>{%- endif -%}
+{%- endmacro %}
+{% macro pcls(v) -%}{{ 'pos' if (v or 0) >= 0 else 'neg' }}{%- endmacro %}
+{% set d = dash or {} %}
+{% set k = d.kpi or {} %}
+{% set h = d.health or {} %}
+{% set overall_fa = {'ok':'ربات سالم','warn':'نیازمند توجه','bad':'خطا در ربات','unk':'وضعیت نامشخص'} %}
+
+<header class="topbar" id="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <div class="logo">W</div>
+      <div><h1>WarRobot</h1><span class="sub">داشبورد معاملاتی بورس تهران</span></div>
+    </div>
+    <div class="top-actions">
+      <span class="chip {{ h.overall or 'unk' }}"><span class="dot"></span>{{ overall_fa[h.overall or 'unk'] }}</span>
+      <button class="icon-btn" id="refresh-btn" type="button" title="به‌روزرسانی" aria-label="به‌روزرسانی">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 4v5h-5"/></svg>
+      </button>
+      <button class="icon-btn" id="theme-btn" type="button" title="تم روشن/تیره" aria-label="تغییر تم">
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="meta-row">
+    <span class="chip {{ 'live' if mode == 'live' else 'dry' }}"><span class="dot"></span>حالت: {{ mode }}</span>
+    <span class="chip">اکنون <span class="num">{{ jd(now) }}</span></span>
+    <span class="chip hide-sm">کاندیدها برای <span class="num">{{ jd(for_date) }}</span></span>
+  </div>
 </header>
 
-<div class="tabs">
-  <div class="tab active" data-tab="buy">کاندیدای خرید</div>
-  <div class="tab" data-tab="sell">کاندیدای فروش</div>
-  <div class="tab" data-tab="report">گزارش</div>
-  <div class="tab" data-tab="agents">ایجنت‌ها</div>
+<nav class="tabs-wrap" aria-label="بخش‌ها">
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-tab="overview" type="button">نمای کلی</button>
+    <button class="tab" data-tab="buy" type="button">کاندیدای خرید{% if picks.picks %}<span class="cnt">{{ picks.picks|length }}</span>{% endif %}</button>
+    <button class="tab" data-tab="sell" type="button">کاندیدای فروش</button>
+    <button class="tab" data-tab="orders" type="button">سفارش‌ها</button>
+    <button class="tab" data-tab="journal" type="button">ژورنال</button>
+    <button class="tab" data-tab="report" type="button">گزارش</button>
+    <button class="tab" data-tab="agents" type="button">ایجنت‌ها</button>
+    <button class="tab" data-tab="export" type="button">DeepSeekExport{% if exports %}<span class="cnt">{{ exports|length }}</span>{% endif %}</button>
+  </div>
+</nav>
+
+<main>
+<!-- ================= OVERVIEW ================= -->
+<section class="panel active" id="overview">
+  <div class="kpis">
+    <div class="kpi hero">
+      <div class="lbl">کل دارایی</div>
+      <div class="val">{% if k.total is not none %}{{ rial(k.total) }}<span class="unit">ریال</span>{% else %}—{% endif %}</div>
+      <div class="sub">{% if k.total %}≈ {{ toman(k.total) }} · {% endif %}{{ k.total_src or 'داده‌ای نیست' }}{% if k.total_date %} {{ jd(k.total_date) }}{% endif %}</div>
+    </div>
+    <div class="kpi">
+      <div class="lbl">سود/زیان امروز</div>
+      {% if k.today %}
+      <div class="val {{ pcls(k.today.rial) }}">{{ '%+.2f'|format(k.today.pct) }}%</div>
+      <div class="sub"><span class="num">{{ srial(k.today.rial) }}</span> ریال · {{ jd(k.today.date) }}</div>
+      {% else %}<div class="val">—</div><div class="sub">اسنپ‌شات معتبر امروز نیست{% if k.last_good %} · آخرین: {{ jd(k.last_good) }}{% endif %}</div>{% endif %}
+    </div>
+    <div class="kpi">
+      <div class="lbl">سود/زیان محقق‌شده</div>
+      <div class="val {{ pcls(k.realized) }}">{{ tval(k.realized) }}</div>
+      <div class="sub"><span class="num">{{ srial(k.realized) }}</span> ریال · {{ k.realized_n or 0 }} فروش ({{ k.wins or 0 }} سودده)</div>
+    </div>
+    <div class="kpi">
+      <div class="lbl">پوزیشن‌های باز</div>
+      <div class="val">{{ k.open_n or 0 }} <span class="unit">از {{ k.max_pos or max_pos }}</span></div>
+      <div class="sub">{% if k.open_n %}سود/زیان باز: <span class="num {{ pcls(k.open_pnl) }}">{{ srial(k.open_pnl) }}</span>{% else %}{{ free_slots }} اسلات آزاد{% endif %}</div>
+    </div>
+    <div class="kpi">
+      <div class="lbl">نقد / قدرت خرید</div>
+      <div class="val">{{ tval(k.cash) }}</div>
+      <div class="sub"><span class="num">{{ rial(k.cash) }}</span> ریال{% if k.cash_at %} · {{ jd(k.cash_at) }}{% endif %}</div>
+    </div>
   </div>
 
+  <div class="kpis minis">
+    <div class="kpi mini"><div class="lbl">حد سود</div><div class="val pos">{{ target }}%</div></div>
+    <div class="kpi mini"><div class="lbl">حد ضرر</div><div class="val neg">{{ stop }}%</div></div>
+    <div class="kpi mini"><div class="lbl">صندوق افران</div><div class="val">{{ tval(fund.value) }}</div></div>
+    <div class="kpi mini"><div class="lbl">سود/زیان کل پوزیشن‌ها</div>
+      <div class="val {{ pcls(port_total) }}">{{ '%+.2f'|format(port_pct) }}%</div></div>
+  </div>
+
+  <!-- bot health -->
+  <div class="section card" id="health">
+    <div class="health-head">
+      <h2>سلامت ربات</h2>
+      <span class="chip {{ h.overall or 'unk' }}" style="margin-inline-start:auto"><span class="dot"></span>{{ overall_fa[h.overall or 'unk'] }}</span>
+    </div>
+    <div class="health-grid">
+      {% for it in h['items'] or [] %}
+      <div class="hitem {{ it.level }}">
+        <span class="ind"></span>
+        <div style="min-width:0">
+          <div class="t">{{ it.label }}</div>
+          <div class="v">{{ it.value }}</div>
+          <div class="d">{% if it.detail %}<bdi>{{ it.detail }}</bdi> · {% endif %}{{ jd(it.at) }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% set jobs = h.jobs or {} %}
+    <div class="jobs">
+      <div class="t">کارهای زمان‌بند — {{ jd(jobs.day) }}
+        {% if jobs.last %} · آخرین اجرا <bdi>{{ jobs.last.time }}</bdi> (<bdi>{{ jobs.last.family }}</bdi>) · {{ jobs.count }} اجرا{% endif %}</div>
+      {% for j in jobs.key or [] %}
+      <span class="job {{ 'done' if j.done else '' }}">{{ j.label }} <bdi class="tm">{{ (j.time.split('@')[-1]) if j.time else '—' }}</bdi></span>
+      {% endfor %}
+    </div>
+    {% if h.errors or h.escalations %}
+    <details class="more">
+      <summary>جزئیات خطاها ({{ (h.errors or [])|length }} خطا · {{ (h.escalations or [])|length }} در صف)</summary>
+      <ul class="err-list">
+        {% for e in h.errors %}<li><b>{{ e.agent }}</b><code>{{ e.msg }}</code><span class="muted">{{ jd(e.at) }}</span></li>{% endfor %}
+        {% for e in h.escalations %}<li><b>{{ e.agent }}</b><code>{{ e.key }}</code><span class="muted">{{ jd(e.at) }}</span></li>{% endfor %}
+      </ul>
+    </details>
+    {% endif %}
+    {% if h.readiness %}
+    <details class="more">
+      <summary>چک‌لیست آمادگی ({{ jd(h.readiness_at) }})</summary>
+      <ul class="err-list">
+        {% for c in h.readiness %}<li><span class="{{ 'pos' if c.ok else 'neg' }}">{{ '✓' if c.ok else '✗' }}</span><b>{{ c.check }}</b><span class="muted" style="overflow-wrap:anywhere">{{ c.detail }}</span></li>{% endfor %}
+      </ul>
+    </details>
+    {% endif %}
+  </div>
+
+  <!-- open positions -->
+  <div class="section">
+    <div class="section-h"><h2>پوزیشن‌های باز</h2>
+      <span class="aside">سهم هدف هر نماد: {{ '%.1f'|format(target_share) }}% · به‌روزرسانی: {{ jd(pnl_at) }}</span></div>
+    {% if excluded %}<p class="note">خارج از حلقهٔ پایش و تصمیم‌گیری: <b>{{ excluded|join('، ') }}</b> — باگ کارگزار؛ نه فروخته می‌شود و نه اسلات می‌گیرد.</p>{% endif %}
+    {% if positions %}
+    <div class="positions">
+      {% for p in positions %}
+      <article class="card pcard">
+        <div class="top">
+          <span class="sym">{{ p.symbol }}</span>
+          {% if p.off_balance %}<span class="tag warn">نامتوازن</span>{% endif %}
+          <div class="pl">
+            <span class="pct {{ pcls(p.pnl_pct) }}">{{ '%+.2f'|format(p.pnl_pct) }}%</span>
+            <span class="rial {{ pcls(p.total_pnl) }}">{{ srial(p.total_pnl) }} ریال</span>
+          </div>
+        </div>
+        <dl>
+          <div><dt>ورود (میانگین)</dt><dd>{{ rial(p.avg) }}</dd></div>
+          <div><dt>آخرین قیمت</dt><dd>{{ rial(p.price) }}</dd></div>
+          <div><dt>تعداد</dt><dd>{{ '{:,.0f}'.format(p.qty) }}</dd></div>
+          <div><dt>ارزش (تومان)</dt><dd>{{ '{:,.0f}'.format((p.value or 0) / 10) }}</dd></div>
+          <div><dt>سهم از سبد</dt><dd>{{ p.share_pct }}%</dd></div>
+          <div><dt>وضعیت</dt><dd>{{ p.status or 'hold' }}</dd></div>
+        </dl>
+        <div class="tpsl" title="از حد ضرر (−{{ stop }}%) تا حد سود (+{{ target }}%)">
+          <div class="bar">
+            <span class="zero" style="inset-inline-start:{{ '%.1f'|format(p.zero_at or 50) }}%"></span>
+            <span class="mark" style="inset-inline-start:{{ '%.1f'|format(p.bar if p.bar is defined else 50) }}%"></span>
+          </div>
+          <div class="ends">
+            <span class="neg">تا حد ضرر <b class="num">{{ '%.2f'|format(p.to_sl or 0) }}%</b> <small>(<bdi>−{{ stop }}%</bdi>)</small></span>
+            <span class="pos">تا حد سود <b class="num">{{ '%.2f'|format(p.to_tp or 0) }}%</b> <small>(<bdi>+{{ target }}%</bdi>)</small></span>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty">هیچ پوزیشن بازی در اسنپ‌شات کارگزار نیست.</div>
+    {% endif %}
+  </div>
+
+  <div class="grid2 section">
+    <!-- equity curve -->
+    <div>
+      <div class="section-h"><h2>منحنی دارایی</h2><span class="aside">کل دارایی روزانه (ریال)</span></div>
+      <div class="card chart-card">
+        {% if d.equity %}
+        <div class="chart-box"><canvas id="equity-chart" aria-label="منحنی دارایی"></canvas></div>
+        {% else %}<div class="empty">هنوز داده‌ای برای منحنی دارایی نیست.</div>{% endif %}
+      </div>
+      {% if d.equity_suspect %}
+      <p class="note">⚠ {{ d.equity_suspect|length }} اسنپ‌شات با دارایی تقریباً صفر ({% for s in d.equity_suspect %}{{ jd(s.date) }}{% if not loop.last %}، {% endif %}{% endfor %}) کنار گذاشته شد — معمولاً یعنی ورود کارگزار در آن لحظه ناموفق بوده.</p>
+      {% endif %}
+    </div>
+    <!-- today's candidates (short) -->
+    <div>
+      <div class="section-h"><h2>کاندیدهای امروز</h2>
+        <a class="aside" href="#buy" data-goto="buy">همه ←</a></div>
+      {% if picks.picks %}
+      <ul class="card cand-list">
+        {% for p in picks.picks[:6] %}
+        {% set close = (price_map.get(p.symbol) or {}).get('close') %}
+        <li>
+          <span class="rank">{{ p.rank }}</span>
+          <div class="c-main"><b>{{ p.symbol }}</b>
+            <span class="c-sub">{% if close %}پایانی <bdi>{{ rial(close) }}</bdi> · {% endif %}تا سقف <bdi>{{ '%.2f'|format(p.dist_to_ceiling_pct) }}%</bdi></span></div>
+          <span class="score" title="امتیاز رتبه">{{ '%.0f'|format(p.score) }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}<div class="empty">کاندیدی برای امروز ثبت نشده است.</div>{% endif %}
+    </div>
+  </div>
+</section>
+
 <!-- ================= BUY ================= -->
-<section class="panel active" id="buy">
-  <div class="grid">
-    <div class="kpi"><div class="lbl">پوزیشن‌های باز</div><div class="val">{{ positions|length }} / {{ max_pos }}</div></div>
-    <div class="kpi"><div class="lbl">اسلات آزاد</div><div class="val">{{ free_slots }}</div></div>
-    <div class="kpi"><div class="lbl">قدرت خرید (نقد) — بروزرسانی کارت: {{ jalali((webdata.balance or {}).get('at')) }}</div>
-      <div class="val">{{ '{:,.0f}'.format(balance.cash) }}</div>
-      <div class="lbl">ریال · {{ jalali(balance.at) }}</div></div>
-    <div class="kpi"><div class="lbl">صندوق درآمد ثابت (افران)</div>
-      <div class="val">{{ '{:,.0f}'.format(fund.value) }}</div>
-      <div class="lbl">ریال · {{ '%+.2f'|format(fund.pnl_pct) }}% — جزو پوزیشن‌های باز نیست</div></div>
-    <div class="kpi"><div class="lbl">حد سود (ناخالص)</div><div class="val">{{ target }}%</div></div>
-    <div class="kpi"><div class="lbl">حد ضرر</div><div class="val">{{ stop }}%</div></div>
-    <div class="kpi"><div class="lbl">سود/زیان کل از زمان خرید</div>
-      <div class="val {{ 'pos' if port_total >= 0 else 'neg' }}">{{ '%+.2f'|format(port_pct) }}%</div>
-      <div class="lbl">{{ '{:,.0f}'.format(port_total) }} ریال</div></div>
+<section class="panel" id="buy">
+  <div class="kpis minis" style="margin-top:0">
+    <div class="kpi mini"><div class="lbl">پوزیشن‌های باز</div><div class="val">{{ positions|length }} / {{ max_pos }}</div></div>
+    <div class="kpi mini"><div class="lbl">اسلات آزاد</div><div class="val">{{ free_slots }}</div></div>
+    <div class="kpi mini"><div class="lbl">قدرت خرید (نقد)</div><div class="val">{{ rial(balance.cash) }}</div>
+      <div class="sub">ریال · {{ jd(balance.at) }}</div></div>
+    <div class="kpi mini"><div class="lbl">صندوق درآمد ثابت (افران)</div><div class="val">{{ rial(fund.value) }}</div>
+      <div class="sub">{{ '%+.2f'|format(fund.pnl_pct) }}% — جزو پوزیشن‌ها نیست</div></div>
   </div>
 
   <h2>کاندیدهای خرید فردا — اسکن شبانه (قفل صف خرید)</h2>
-  <p class="note">این ستون «امتیاز رتبه‌بندی» است، نه احتمال آماری:
-     ۶ بهترین کاندیدای امشب و ۱ ضعیف‌ترین. با سقف ۶ جایگاه، امتیاز از ۶ تا ۱ نزول می‌کند.
-     احتمال عددیِ صف، در این نسخه محاسبه نمی‌شود و عمداً نمایش داده نمی‌شود.</p>
+  <p class="note">ستون «امتیاز» امتیاز رتبه‌بندی است، نه احتمال آماری: ۶ بهترین کاندیدای امشب و ۱ ضعیف‌ترین؛
+     با سقف ۶ جایگاه، امتیاز از ۶ تا ۱ نزول می‌کند. ساخته‌شده: {{ jd(generated) }}</p>
   {% if picks.picks %}
-  <div class="table-wrap">
+  <div class="table-wrap stack">
   <table class="responsive">
-    <tr class="head"><th>#</th><th>نماد</th><th>امتیاز رتبه (۶ بهترین)</th><th>منبع فیچر</th>
+    <tr class="head"><th>#</th><th>نماد</th><th>امتیاز رتبه</th><th>منبع فیچر</th>
         <th>قیمت پایانی</th><th>فاصله تا سقف</th><th>قفل امروز</th><th>علت معرفی (BFomul)</th></tr>
     {% for p in picks.picks %}
     <tr>
@@ -446,11 +271,11 @@ circle { animation:none !important; opacity:1 !important; }
       <td data-label="نماد"><b>{{ p.symbol }}</b></td>
       <td data-label="امتیاز" class="pos">{{ '%.0f'|format(p.score) }}</td>
       <td data-label="منبع فیچر">{{ p.feature_source }}{% if p.degraded %} (fallback){% endif %}</td>
-      <td data-label="قیمت پایانی">{{ '{:,.0f}'.format((price_map.get(p.symbol) or {}).get('close') or 0) }}
+      <td data-label="قیمت پایانی" class="n">{% set close = (price_map.get(p.symbol) or {}).get('close') %}{{ rial(close) if close else '—' }}
         <small class="src">{{ (price_map.get(p.symbol) or {}).get('session') or '' }}</small></td>
-      <td data-label="فاصله تا سقف">{{ '%.2f'|format(p.dist_to_ceiling_pct) }}%</td>
+      <td data-label="فاصله تا سقف" class="n">{{ '%.2f'|format(p.dist_to_ceiling_pct) }}%</td>
       <td data-label="قفل امروز">{{ 'بله' if p.queue_run_today else 'خیر' }}</td>
-      <td data-label="علت" class="note">{{ p.reason or '-' }}</td>
+      <td data-label="علت" class="wrap">{{ p.reason or '-' }}</td>
     </tr>
     {% endfor %}
   </table>
@@ -459,65 +284,64 @@ circle { animation:none !important; opacity:1 !important; }
   <div class="empty">پیکی برای امروز موجود نیست.</div>
   {% endif %}
 
-  <p class="note">آخرین به‌روزرسانی سود/زیان: {{ jalali(pnl_at) }} ·
+  <p class="note">آخرین به‌روزرسانی سود/زیان: {{ jd(pnl_at) }} ·
      میانگین خرید = مبنای با کارمزد (همان عددی که کارگزار نشان می‌دهد) ·
-     صفحه هر ۶۰ ثانیه خودکار نو می‌شود.</p>
-  <p class="note" style="opacity:.75">بروزرسانی کارت پرتفوی: {{ jalali((webdata.portfolio or {}).get('at')) }} ·
-     بروزرسانی سود/زیان: {{ jalali((webdata.pnl or {}).get('at')) }} ·
-     بروزرسانی فروش‌ها: {{ jalali((webdata.sells or {}).get('at')) }}</p>
-  <h2>پوزیشن‌های باز — سهم هر سهم از سبد (هدف: {{ '%.1f'|format(target_share) }}%)</h2>
-  {% if excluded %}<p class="note">خارج از حلقهٔ پایش و تصمیم‌گیری: <b>{{ excluded|join('، ') }}</b> — باگ کارگزار؛ نه فروخته می‌شود و نه اسلات می‌گیرد.</p>{% endif %}
+     صفحه هر ۶۰ ثانیه خودکار نو می‌شود.<br>
+     بروزرسانی کارت پرتفوی: {{ jd((webdata.portfolio or {}).get('at')) }} ·
+     سود/زیان: {{ jd((webdata.pnl or {}).get('at')) }} ·
+     فروش‌ها: {{ jd((webdata.sells or {}).get('at')) }} ·
+     موجودی: {{ jd((webdata.balance or {}).get('at')) }}</p>
+
   {% if positions %}
-  <div class="table-wrap">
+  <h2>جدول پوزیشن‌های باز</h2>
+  <div class="table-wrap stack">
   <table class="responsive">
     <tr class="head"><th>نماد</th><th>تعداد</th><th>میانگین خرید</th><th>قیمت</th><th>سود/زیان فعلی</th><th>سود/زیان کل</th><th>ارزش</th><th>سهم از سبد</th></tr>
     {% for p in positions %}
     <tr>
       <td data-label="نماد"><b>{{ p.symbol }}</b></td>
-      <td data-label="تعداد">{{ '{:,}'.format(p.qty) }}</td>
-      <td data-label="میانگین">{{ '{:,.0f}'.format(p.avg) }}</td>
-      <td data-label="قیمت">{{ '{:,.0f}'.format(p.price) }}</td>
-      <td data-label="سود/زیان فعلی" class="{{ 'pos' if p.pnl_pct >= 0 else 'neg' }}">{{ '%+.2f'|format(p.pnl_pct) }}%</td>
-      <td data-label="سود/زیان کل" class="{{ 'pos' if p.total_pct >= 0 else 'neg' }}">{{ '%+.2f'|format(p.total_pct) }}%
-        <small class="rial">{{ '{:+,.0f}'.format(p.total_pnl) }} ریال</small>{% if p.avg_source %}<small class="src"> منبع میانگین: {{ p.avg_source }}</small>{% endif %}</td>
-      <td data-label="ارزش">{{ '{:,.0f}'.format(p.value) }}</td>
-      <td data-label="سهم از سبد" class="{{ 'neg' if p.off_balance else '' }}">{{ p.share_pct }}%{% if p.off_balance %} ⚠{% endif %}</td>
+      <td data-label="تعداد" class="n">{{ '{:,.0f}'.format(p.qty) }}</td>
+      <td data-label="میانگین" class="n">{{ rial(p.avg) }}</td>
+      <td data-label="قیمت" class="n">{{ rial(p.price) }}</td>
+      <td data-label="سود/زیان فعلی" class="n {{ pcls(p.pnl_pct) }}">{{ '%+.2f'|format(p.pnl_pct) }}%</td>
+      <td data-label="سود/زیان کل" class="n {{ pcls(p.total_pct) }}">{{ '%+.2f'|format(p.total_pct) }}%
+        <small class="rial">{{ srial(p.total_pnl) }} ریال</small>{% if p.avg_source %}<small class="src"> منبع میانگین: {{ p.avg_source }}</small>{% endif %}</td>
+      <td data-label="ارزش" class="n">{{ rial(p.value) }}</td>
+      <td data-label="سهم از سبد" class="n {{ 'neg' if p.off_balance else '' }}">{{ p.share_pct }}%{% if p.off_balance %} ⚠{% endif %}</td>
     </tr>
     {% endfor %}
   </table>
   </div>
-  {% else %}
-  <div class="empty">هیچ پوزیشن بازی در دفتر ثبت نشده است.</div>
   {% endif %}
 </section>
 
 <!-- ================= SELL ================= -->
 <section class="panel" id="sell">
-  <div class="grid">
-    <div class="kpi"><div class="lbl">حد سود</div><div class="val">{{ target }}%</div></div>
-    <div class="kpi"><div class="lbl">حد ضرر</div><div class="val">{{ stop }}%</div></div>
-    <div class="kpi"><div class="lbl">میانگین سود فروش‌ها</div>
-      <div class="val {{ 'pos' if avg_realised and avg_realised > 0 else 'neg' }}">
+  <div class="kpis minis" style="margin-top:0">
+    <div class="kpi mini"><div class="lbl">حد سود</div><div class="val pos">{{ target }}%</div></div>
+    <div class="kpi mini"><div class="lbl">حد ضرر</div><div class="val neg">{{ stop }}%</div></div>
+    <div class="kpi mini"><div class="lbl">میانگین سود فروش‌ها</div>
+      <div class="val {{ 'pos' if avg_realised and avg_realised > 0 else ('neg' if avg_realised is not none else '') }}">
         {{ ('%+.2f%%'|format(avg_realised)) if avg_realised is not none else '—' }}</div></div>
-    <div class="kpi"><div class="lbl">تعداد فروش</div><div class="val">{{ sells|length }}</div></div>
+    <div class="kpi mini"><div class="lbl">تعداد فروش</div><div class="val">{{ sells|length }}</div></div>
   </div>
 
-  <p class="note" style="opacity:.75">بروزرسانی تب فروش: {{ jalali((sell_data or {}).get('at')) }} ·
+  <p class="note">بروزرسانی تب فروش: {{ jd((sell_data or {}).get('at')) }} ·
      تصمیم‌ها: {{ (sell_data or {}).get('sell_count', 0) }} فروش ثبت‌شده ·
      میانگین سود فروش‌ها: {{ (sell_data or {}).get('avg_sell_pct') if (sell_data or {}).get('avg_sell_pct') is not none else '—' }}%</p>
   <h2>کاندیدهای فروش (حلقهٔ تصمیم)</h2>
   {% if sell_rows %}
-  <div class="table-wrap">
+  <div class="table-wrap stack">
   <table class="responsive">
     <tr class="head"><th>نماد</th><th>تعداد</th><th>میانگین</th><th>قیمت</th><th>سود/زیان فعلی</th><th>سود/زیان کل</th><th>تصمیم</th></tr>
     {% for p in sell_rows %}
     <tr>
       <td data-label="نماد"><b>{{ p.symbol }}</b></td>
-      <td data-label="تعداد">{{ '{:,}'.format(p.qty) }}</td>
-      <td data-label="میانگین">{{ '{:,.0f}'.format(p.avg) }}</td>
-      <td data-label="قیمت">{{ '{:,.0f}'.format(p.price) }}</td>
-      <td data-label="سود/زیان فعلی" class="{{ 'pos' if p.pnl_pct >= 0 else 'neg' }}">{{ '%+.2f'|format(p.pnl_pct) }}%</td>
-      <td data-label="سود/زیان کل" class="{{ 'pos' if p.total_pct >= 0 else 'neg' }}">{{ '%+.2f'|format(p.total_pct) }}%</td>
+      <td data-label="تعداد" class="n">{{ '{:,.0f}'.format(p.qty) }}</td>
+      <td data-label="میانگین" class="n">{{ rial(p.avg) }}</td>
+      <td data-label="قیمت" class="n">{{ rial(p.price) }}</td>
+      <td data-label="سود/زیان فعلی" class="n {{ pcls(p.pnl_pct) }}">{{ '%+.2f'|format(p.pnl_pct) }}%</td>
+      <td data-label="سود/زیان کل" class="n {{ pcls(p.total_pct) }}">{{ '%+.2f'|format(p.total_pct) }}%</td>
       <td data-label="تصمیم">{{ p.decision }}</td>
     </tr>
     {% endfor %}
@@ -527,35 +351,26 @@ circle { animation:none !important; opacity:1 !important; }
   <div class="empty">پوزیشنی برای ارزیابی وجود ندارد.</div>
   {% endif %}
 
-  <h2>منحنی سود و زیان پرتفوی — محقق‌شده و جاری</h2>
-  <p class="note">هر نقطه یک فروش واقعی است و ارتفاع آن سود/زیان ریالی همان معامله؛
-     خط، جمع تجمعی تغییر دارایی است.</p>
-  <div class="chart-legend">
-    <span class="swatch"></span>
-    <span>سود/زیان تجمعی (ریال)</span>
-    <span class="sep">|</span>
-    <span><b>محور افقی:</b> تاریخ بسته شدن معامله</span>
-    <span class="sep">|</span>
-    <span><b>محور عمودی:</b> تغییر دارایی به ریال</span>
-  </div>
-  <p class="note">نسخهٔ نمودار: {{ chart_version }} — اگر این شماره را نمی‌بینی، صفحهٔ کش‌شده است (Ctrl+F5).</p>
-  {{ chart|safe }}
+  <h2>منحنی سود و زیان محقق‌شده</h2>
+  <p class="note">هر نقطه یک فروش واقعی است و ارتفاع آن سود/زیان ریالی همان معامله؛ خط، جمع تجمعی تغییر دارایی است.
+     نسخهٔ نمودار: {{ chart_version }}</p>
+  <div class="svg-scroll">{{ chart|safe }}</div>
 
   {% if sells %}
-  <p class="note" style="opacity:.75">بروزرسانی فروش‌های اخیر: {{ jalali((sell_data or {}).get('at')) }} · منبع: realized + ژورنال</p>
-  <h2>فروش‌های اخیر — تجمیع هر نماد (۵ نماد آخر)</h2>
-  <div class="table-wrap">
+  <h2>فروش‌های اخیر — ۵ نماد آخر</h2>
+  <p class="note">بروزرسانی: {{ jd((sell_data or {}).get('at')) }} · منبع: realized + ژورنال</p>
+  <div class="table-wrap stack">
   <table class="responsive">
     <tr class="head"><th>زمان</th><th>نماد</th><th>تعداد</th><th>میانگین خرید</th><th>قیمت فروش</th><th>سود</th></tr>
     {% for s in sells %}
     <tr>
-      <td data-label="زمان">{{ jalali(s.ts) }}</td>
+      <td data-label="زمان" class="n">{{ jd(s.ts) }}</td>
       <td data-label="نماد"><b>{{ s.symbol }}</b></td>
-      <td data-label="تعداد">{{ '{:,}'.format(s.qty|round|int) }}</td>
-      <td data-label="میانگین خرید">{{ '{:,.0f}'.format(s.avg) }}</td>
-      <td data-label="قیمت فروش">{{ '{:,.0f}'.format(s.price) }}</td>
-      <td data-label="سود" class="{{ 'pos' if s.pnl_pct >= 0 else 'neg' }}">{{ '%+.2f'|format(s.pnl_pct) }}%
-        <small class="rial">{{ '{:+,.0f}'.format(s.pnl_rial) }} ریال</small></td>
+      <td data-label="تعداد" class="n">{{ '{:,}'.format(s.qty|round|int) }}</td>
+      <td data-label="میانگین خرید" class="n">{{ rial(s.avg) }}</td>
+      <td data-label="قیمت فروش" class="n">{{ rial(s.price) }}</td>
+      <td data-label="سود" class="n {{ pcls(s.pnl_pct) }}">{{ '%+.2f'|format(s.pnl_pct) }}%
+        <small class="rial">{{ srial(s.pnl_rial) }} ریال</small></td>
     </tr>
     {% endfor %}
   </table>
@@ -563,26 +378,98 @@ circle { animation:none !important; opacity:1 !important; }
   {% endif %}
 </section>
 
+<!-- ================= ORDERS ================= -->
+<section class="panel" id="orders">
+  <div class="section-h" style="margin-top:4px"><h2>لاگ سفارش‌ها</h2>
+    <span class="aside">تلاش‌های خرید (orders_log) و فروش (exits_log) — جدیدترین بالا</span></div>
+  {% if d.orders %}
+  <ul class="card olist only-sm">
+    {% for o in d.orders %}
+    <li>
+      <div class="o1"><span class="side {{ o.side }}">{{ 'خرید' if o.side == 'buy' else 'فروش' }}</span>
+        <b>{{ o.symbol }}</b>
+        <span class="chip {{ 'ok' if o.submitted else 'bad' }}">{{ 'ثبت شد' if o.submitted else 'ثبت نشد' }}</span>
+        <span class="o-at">{{ jd(o.at) }}</span></div>
+      <div class="o2">{% if o.qty %}<bdi>{{ '{:,.0f}'.format(o.qty) }}</bdi> سهم{% endif %}{% if o.price %} @ <bdi>{{ rial(o.price) }}</bdi>{% endif %}
+        {% if o.reason %} · <bdi>{{ o.reason }}</bdi>{% endif %}{% if o.message %} · <bdi>{{ o.message }}</bdi>{% endif %}</div>
+    </li>
+    {% endfor %}
+  </ul>
+  <div class="table-wrap hide-sm">
+  <table class="responsive">
+    <tr class="head"><th>زمان</th><th>سمت</th><th>نماد</th><th>تعداد</th><th>قیمت</th><th>وضعیت</th><th>علت / منبع قیمت</th><th>پیام</th></tr>
+    {% for o in d.orders %}
+    <tr>
+      <td data-label="زمان" class="n">{{ jd(o.at) }}</td>
+      <td data-label="سمت"><span class="side {{ o.side }}">{{ 'خرید' if o.side == 'buy' else 'فروش' }}</span></td>
+      <td data-label="نماد"><b>{{ o.symbol }}</b></td>
+      <td data-label="تعداد" class="n">{{ '{:,.0f}'.format(o.qty) if o.qty else '—' }}</td>
+      <td data-label="قیمت" class="n">{{ rial(o.price) if o.price else '—' }}</td>
+      <td data-label="وضعیت"><span class="chip {{ 'ok' if o.submitted else 'bad' }}">{{ 'ثبت شد' if o.submitted else 'ثبت نشد' }}</span></td>
+      <td data-label="علت">{{ o.reason or '—' }}</td>
+      <td data-label="پیام" class="wrap">{{ o.message or '—' }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  </div>
+  {% else %}<div class="empty">سفارشی ثبت نشده است.</div>{% endif %}
+</section>
 
+<!-- ================= JOURNAL ================= -->
+<section class="panel" id="journal">
+  <div class="section-h" style="margin-top:4px"><h2>ژورنال معاملات</h2><span class="aside">trade_journal — جدیدترین بالا</span></div>
+  {% if d.journal %}
+  <div class="table-wrap stack">
+  <table class="responsive">
+    <tr class="head"><th>نماد</th><th>ورود</th><th>قیمت ورود</th><th>تعداد</th><th>وضعیت</th><th>خروج</th><th>قیمت خروج</th><th>سود/زیان</th><th>علت ورود</th></tr>
+    {% for t in d.journal %}
+    <tr>
+      <td data-label="نماد"><b>{{ t.symbol }}</b>{% if t.pick_rank %} <small class="src">رتبه {{ t.pick_rank }}</small>{% endif %}</td>
+      <td data-label="ورود" class="n">{{ jd(t.at) }}</td>
+      <td data-label="قیمت ورود" class="n">{{ rial(t.price) }}</td>
+      <td data-label="تعداد" class="n">{{ '{:,.0f}'.format(t.qty) }}</td>
+      <td data-label="وضعیت"><span class="chip {{ 'unk' if t.status == 'closed' else 'warn' }}">{{ 'بسته' if t.status == 'closed' else 'باز' }}</span></td>
+      <td data-label="خروج" class="n">{{ jd(t.sell_at) if t.sell_at else '—' }}</td>
+      <td data-label="قیمت خروج" class="n">{{ rial(t.sell_price) if t.sell_price else '—' }}</td>
+      <td data-label="سود/زیان" class="n {{ pcls(t.pnl_rial) }}">{% if t.status == 'closed' %}{{ '%+.2f'|format(t.pnl_pct) }}%<small class="rial">{{ srial(t.pnl_rial) }} ریال</small>{% else %}—{% endif %}</td>
+      <td data-label="علت" class="wrap">{{ t.reason or '—' }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  </div>
+  {% else %}<div class="empty">ژورنالی ثبت نشده است.</div>{% endif %}
+</section>
 
 <!-- ================= REPORT ================= -->
 <section class="panel" id="report">
-  <h2>گزارش عملکرد — سود/زیان تجمیعی هر دوره</h2>
-  <p class="note">سود هر معامله = (قیمت فروش − قیمت خرید) × تعداد − کارمزد کارگزاری ·
-     محور افقی: تاریخ بسته شدن معامله · محور عمودی: تغییر دارایی (ریال) ·
-     بالای خط‌چین سود، پایین آن ضرر.</p>
-  {% if report.reconciliation and not report.reconciliation.ok %}
-  <p class="note neg">⚠ تطبیق با سفارشات کارگزاری مشکل دارد:
-     {{ report.reconciliation.problems|length }} مورد</p>
+  {% if advice and advice.allocation %}
+  <div class="card alloc">
+    <div style="font-weight:800;margin-bottom:4px">توصیهٔ تخصیص سرمایه (حالت سایه — بدون معامله)</div>
+    <div>سهم <b>{{ advice.allocation.stocks }}%</b> · طلا <b>{{ advice.allocation.gold }}%</b> · درآمد ثابت <b>{{ advice.allocation.fixed }}%</b></div>
+    <div class="note" style="margin:4px 0 0">{{ advice.reason }} · جلسه {{ advice.session }} ·
+      شاخص {{ (advice.index or {}).gap_pct }}% نسبت به میانگین ۲۰۰ روزه · طلا {{ (advice.gold or {}).gap_pct }}%</div>
+  </div>
   {% endif %}
-  <p class="note">آخرین به‌روزرسانی: {{ jalali(report.generated_at) }} ·
-     شروع به کار نسخهٔ فعلی: {{ jalali(report.bot_start) }} ·
-     روزهای فعالیت: {{ report.days_running or 0 }}</p>
+  <h2 style="margin-top:4px">گزارش عملکرد — سود/زیان تجمیعی هر دوره</h2>
+  <p class="note">سود هر معامله = (قیمت فروش − قیمت خرید) × تعداد − کارمزد کارگزاری ·
+     محور افقی: تاریخ بسته شدن معامله · محور عمودی: تغییر دارایی · بالای خط‌چین سود، پایین آن ضرر.</p>
+  {% if report.reconciliation and not report.reconciliation.ok %}
+  <p class="note neg">⚠ تطبیق با سفارشات کارگزاری مشکل دارد: {{ (report.reconciliation.problems or [])|length }} مورد</p>
+  {% endif %}
+  <p class="note">آخرین به‌روزرسانی: {{ jd(report.generated_at) }} ·
+     شروع به کار نسخهٔ فعلی: {{ jd(report.bot_start) }} · روزهای فعالیت: {{ report.days_running or 0 }}</p>
 
   <h2>گزارش هفتگی خودکار</h2>
   {% if weekly and weekly.text %}
-  <p class="note">{{ weekly.text }} · تولیدشده در {{ jalali(weekly.at) }}</p>
-  {% if weekly_chart %}{{ weekly_chart|safe }}{% endif %}
+  <p class="note">{{ weekly.text }} · تولیدشده در {{ jd(weekly.at) }}</p>
+  {% if weekly_chart %}<div class="svg-scroll">{{ weekly_chart|safe }}</div>{% endif %}
+  {% elif weekly and weekly.week %}
+  <div class="kpis minis" style="margin-top:0">
+    <div class="kpi mini"><div class="lbl">هفته</div><div class="val">{{ weekly.week_start_fa or weekly.week }}</div><div class="sub">تا {{ weekly.week_end_fa }}</div></div>
+    <div class="kpi mini"><div class="lbl">معاملات</div><div class="val">{{ weekly.trades }}</div><div class="sub">{{ weekly.wins }} سودده</div></div>
+    <div class="kpi mini"><div class="lbl">سود/زیان هفته</div><div class="val {{ pcls(weekly.pnl_rial) }}">{{ tval(weekly.pnl_rial) }}</div></div>
+  </div>
+  {% if weekly_chart %}<div class="svg-scroll">{{ weekly_chart|safe }}</div>{% endif %}
   {% else %}
   <div class="empty">اولین گزارش هفتگی پنجشنبه/جمعه شب به‌صورت خودکار ساخته می‌شود.</div>
   {% endif %}
@@ -591,14 +478,11 @@ circle { animation:none !important; opacity:1 !important; }
   {% set p = (report.periods or {}).get(key) %}
   {% if p %}
   <h2>{{ title }}</h2>
-  <p class="note">تاریخ محاسبه: {{ jalali(report.generated_at) }} ·
-     پایان دوره: {{ jalali(p.period_end) }} ·
-     تعداد معاملات: {{ p.trades }} ·
-     سود/زیان:
-     <span class="{{ 'pos' if p.pnl_rial >= 0 else 'neg' }}">{{ '{:+,.0f}'.format(p.pnl_rial) }} ریال</span>
+  <p class="note">پایان دوره: {{ jd(p.period_end) }} · تعداد معاملات: {{ p.trades }} · سود/زیان:
+     <span class="{{ pcls(p.pnl_rial) }} num">{{ srial(p.pnl_rial) }} ریال</span>
      {% if not p.available %}· دوره کامل نشده ({{ p.days_left }} روز باقی){% endif %}</p>
   {% if report_charts.get(key) and (p.available or key == 'm1') %}
-    {{ report_charts[key]|safe }}
+    <div class="svg-scroll">{{ report_charts[key]|safe }}</div>
   {% else %}
     <div class="empty">{{ title }}: نمودار پس از تکمیل دوره ({{ p.days_left }} روز دیگر) رسم می‌شود.</div>
   {% endif %}
@@ -606,33 +490,31 @@ circle { animation:none !important; opacity:1 !important; }
   {% endfor %}
 </section>
 
-
 <!-- ================= AGENTS ================= -->
 <section class="panel" id="agents">
-  <h2>ایجنت‌های محلی — وضعیت، صف مشکلات و درس‌های آموخته‌شده</h2>
-  <div class="grid">
+  <h2 style="margin-top:4px">ایجنت‌های محلی — وضعیت، صف مشکلات و درس‌ها</h2>
+  <div class="kpis minis" style="margin-top:0">
     {% for a in [agents.a1, agents.a2, agents.a3, agents.a4] %}
-    <div class="kpi"><div class="lbl">{{ a.agent or '—' }}</div>
+    <div class="kpi mini"><div class="lbl">{{ a.agent or '—' }}</div>
       <div class="val {{ 'pos' if a.ok else 'neg' }}">{{ 'سالم' if a.ok else 'نیازمند بررسی' }}</div>
-      <div class="lbl">{{ a.at or '—' }}{% if a.escalate %} · {{ a.escalate }}{% endif %}</div></div>
+      <div class="sub">{{ jd(a.at) }}{% if a.escalate %} · {{ a.escalate }}{% endif %}</div></div>
     {% endfor %}
-    <div class="kpi"><div class="lbl">مدل محلی (Ollama)</div>
+    <div class="kpi mini"><div class="lbl">مدل محلی (Ollama)</div>
       <div class="val {{ 'pos' if agents.llm.alive else 'neg' }}">{{ 'فعال' if agents.llm.alive else 'خاموش' }}</div>
-      <div class="lbl">{{ 'در ساعت بازار متوقف' if agents.llm.paused_market else 'قابل استفاده' }}</div></div>
-    <div class="kpi"><div class="lbl">درس‌های ثبت‌شده</div>
-      <div class="val">{{ agents.lessons_count }}</div>
-      <div class="lbl">حافظهٔ تجربی ربات</div></div>
+      <div class="sub">{{ 'در ساعت بازار متوقف' if agents.llm.paused_market else 'قابل استفاده' }}</div></div>
+    <div class="kpi mini"><div class="lbl">درس‌های ثبت‌شده</div>
+      <div class="val">{{ agents.lessons_count }}</div><div class="sub">حافظهٔ تجربی ربات</div></div>
   </div>
 
   <h2>قیمت سفارش‌ها (a12)</h2>
   {% if agents.order_price and agents.order_price.orders %}
-  <div class="table-wrap"><table class="responsive">
+  <div class="table-wrap stack"><table class="responsive">
     <tr class="head"><th>نماد</th><th>سمت</th><th>قیمت ثبت‌شده</th><th>قیمت پیشنهادی</th><th>منبع</th><th>وضعیت</th></tr>
     {% for o in agents.order_price.orders %}
     <tr><td data-label="نماد"><b>{{ o.symbol }}</b></td>
         <td data-label="سمت">{{ o.side }}</td>
-        <td data-label="ثبت‌شده">{{ '{:,.0f}'.format(o.placed or 0) }}</td>
-        <td data-label="پیشنهادی">{{ '{:,.0f}'.format(o.suggested or 0) }}</td>
+        <td data-label="ثبت‌شده" class="n">{{ rial(o.placed) }}</td>
+        <td data-label="پیشنهادی" class="n">{{ rial(o.suggested) }}</td>
         <td data-label="منبع">{{ o.source }}</td>
         <td data-label="وضعیت" class="{{ 'pos' if o.price_ok else 'neg' }}">{{ 'درست' if o.price_ok else 'اختلاف' }}</td></tr>
     {% endfor %}
@@ -641,57 +523,57 @@ circle { animation:none !important; opacity:1 !important; }
 
   <h2>سود/زیان نمادهای پرتفوی (a14)</h2>
   {% if agents.portfolio_pnl and (agents.portfolio_pnl.positions or agents.portfolio_pnl.fund) %}
-  <div class="table-wrap"><table class="responsive">
+  <div class="table-wrap stack"><table class="responsive">
     <tr class="head"><th>نماد</th><th>تعداد</th><th>میانگین</th><th>قیمت</th><th>ارزش</th><th>سود/زیان ریالی</th><th>درصد</th></tr>
     {% for p in agents.portfolio_pnl.positions %}
     <tr><td data-label="نماد"><b>{{ p.symbol }}</b></td>
-        <td data-label="تعداد">{{ '{:,}'.format(p.qty|round|int) }}</td>
-        <td data-label="میانگین">{{ '{:,.0f}'.format(p.avg or 0) }}</td>
-        <td data-label="قیمت">{{ '{:,.0f}'.format(p.price or 0) }}</td>
-        <td data-label="ارزش">{{ '{:,.0f}'.format(p.value or 0) }}</td>
-        <td data-label="سود/زیان" class="{{ 'pos' if (p.pnl_rial or 0) >= 0 else 'neg' }}">{{ '{:+,.0f}'.format(p.pnl_rial or 0) }}</td>
-        <td data-label="درصد" class="{{ 'pos' if (p.pnl_pct or 0) >= 0 else 'neg' }}">{{ '{:+.2f}'.format(p.pnl_pct or 0) }}%</td></tr>
+        <td data-label="تعداد" class="n">{{ '{:,}'.format(p.qty|round|int) }}</td>
+        <td data-label="میانگین" class="n">{{ rial(p.avg) }}</td>
+        <td data-label="قیمت" class="n">{{ rial(p.price) }}</td>
+        <td data-label="ارزش" class="n">{{ rial(p.value) }}</td>
+        <td data-label="سود/زیان" class="n {{ pcls(p.pnl_rial) }}">{{ srial(p.pnl_rial) }}</td>
+        <td data-label="درصد" class="n {{ pcls(p.pnl_pct) }}">{{ '{:+.2f}'.format(p.pnl_pct or 0) }}%</td></tr>
     {% endfor %}
-    {% if agents.portfolio_pnl.fund %}
-    <tr><td data-label="نماد"><b>{{ agents.portfolio_pnl.fund.symbol }}</b></td>
-        <td data-label="تعداد">{{ '{:,}'.format(agents.portfolio_pnl.fund.qty|round|int) }}</td>
-        <td data-label="میانگین">{{ '{:,.0f}'.format(agents.portfolio_pnl.fund.avg or 0) }}</td>
-        <td data-label="قیمت">{{ '{:,.0f}'.format(agents.portfolio_pnl.fund.price or 0) }}</td>
-        <td data-label="ارزش">{{ '{:,.0f}'.format(agents.portfolio_pnl.fund.value or 0) }}</td>
-        <td data-label="سود/زیان" class="{{ 'pos' if (agents.portfolio_pnl.fund.pnl_rial or 0) >= 0 else 'neg' }}">{{ '{:+,.0f}'.format(agents.portfolio_pnl.fund.pnl_rial or 0) }}</td>
-        <td data-label="درصد">{{ '{:+.2f}'.format(agents.portfolio_pnl.fund.pnl_pct or 0) }}% <small>صندوق</small></td></tr>
+    {% if agents.portfolio_pnl.fund %}{% set f = agents.portfolio_pnl.fund %}
+    <tr><td data-label="نماد"><b>{{ f.symbol }}</b> <small class="src">صندوق</small></td>
+        <td data-label="تعداد" class="n">{{ '{:,}'.format(f.qty|round|int) }}</td>
+        <td data-label="میانگین" class="n">{{ rial(f.avg) }}</td>
+        <td data-label="قیمت" class="n">{{ rial(f.price) }}</td>
+        <td data-label="ارزش" class="n">{{ rial(f.value) }}</td>
+        <td data-label="سود/زیان" class="n {{ pcls(f.pnl_rial) }}">{{ srial(f.pnl_rial) }}</td>
+        <td data-label="درصد" class="n">{{ '{:+.2f}'.format(f.pnl_pct or 0) }}%</td></tr>
     {% endif %}
   </table></div>
   {% else %}<div class="empty">پوزیشن باز نیست.</div>{% endif %}
 
   <h2>سود/زیان فروش‌ها — اختلاف خرید و فروش (a15)</h2>
   {% if agents.sold_pnl and agents.sold_pnl.trades %}
-  <p class="note">فرمول: (قیمت فروش − قیمت خرید) × تعداد − کارمزد · مجموع: {{ '{:+,.0f}'.format(agents.sold_pnl.total_pnl_rial or 0) }} ریال · {{ agents.sold_pnl.wins }} سودده</p>
-  <div class="table-wrap"><table class="responsive">
+  <p class="note">فرمول: (قیمت فروش − قیمت خرید) × تعداد − کارمزد · مجموع: <span class="num">{{ srial(agents.sold_pnl.total_pnl_rial) }}</span> ریال · {{ agents.sold_pnl.wins }} سودده</p>
+  <div class="table-wrap stack"><table class="responsive">
     <tr class="head"><th>نماد</th><th>تاریخ</th><th>تعداد</th><th>خرید</th><th>فروش</th><th>سود ناخالص</th><th>کارمزد</th><th>سود خالص</th><th>درصد</th></tr>
     {% for s in agents.sold_pnl.trades %}
     <tr><td data-label="نماد"><b>{{ s.symbol }}</b></td>
-        <td data-label="تاریخ">{{ jalali(s.at) }}</td>
-        <td data-label="تعداد">{{ '{:,}'.format(s.qty|round|int) }}</td>
-        <td data-label="خرید">{{ '{:,.0f}'.format(s.buy or 0) }}</td>
-        <td data-label="فروش">{{ '{:,.0f}'.format(s.sell or 0) }}</td>
-        <td data-label="ناخالص">{{ '{:+,.0f}'.format(s.gross_rial or 0) }}</td>
-        <td data-label="کارمزد">{{ '{:,.0f}'.format(s.fee_rial or 0) }}</td>
-        <td data-label="خالص" class="{{ 'pos' if (s.pnl_rial or 0) >= 0 else 'neg' }}">{{ '{:+,.0f}'.format(s.pnl_rial or 0) }}</td>
-        <td data-label="درصد" class="{{ 'pos' if (s.pnl_pct or 0) >= 0 else 'neg' }}">{{ '{:+.2f}'.format(s.pnl_pct or 0) }}%</td></tr>
+        <td data-label="تاریخ" class="n">{{ jd(s.at) }}</td>
+        <td data-label="تعداد" class="n">{{ '{:,}'.format(s.qty|round|int) }}</td>
+        <td data-label="خرید" class="n">{{ rial(s.buy) }}</td>
+        <td data-label="فروش" class="n">{{ rial(s.sell) }}</td>
+        <td data-label="ناخالص" class="n">{{ srial(s.gross_rial) }}</td>
+        <td data-label="کارمزد" class="n">{{ rial(s.fee_rial) }}</td>
+        <td data-label="خالص" class="n {{ pcls(s.pnl_rial) }}">{{ srial(s.pnl_rial) }}</td>
+        <td data-label="درصد" class="n {{ pcls(s.pnl_pct) }}">{{ '{:+.2f}'.format(s.pnl_pct or 0) }}%</td></tr>
     {% endfor %}
   </table></div>
   {% else %}<div class="empty">فروشی ثبت نشده.</div>{% endif %}
 
   <h2>نظارت سه اسلات (a13)</h2>
   {% if agents.slots and agents.slots.slots %}
-  <p class="note">کل دارایی: {{ '{:,.0f}'.format(agents.slots.total_assets or 0) }} ریال · هدف هر اسلات: {{ '{:,.0f}'.format(agents.slots.target_per_slot or 0) }} · اسلات آزاد: {{ agents.slots.open_slots }}</p>
-  <div class="table-wrap"><table class="responsive">
+  <p class="note">کل دارایی: <span class="num">{{ rial(agents.slots.total_assets) }}</span> ریال · هدف هر اسلات: <span class="num">{{ rial(agents.slots.target_per_slot) }}</span> · اسلات آزاد: {{ agents.slots.open_slots }}</p>
+  <div class="table-wrap stack"><table class="responsive">
     <tr class="head"><th>نماد</th><th>ارزش</th><th>انحراف از یک‌سوم</th><th>وضعیت</th></tr>
     {% for s in agents.slots.slots %}
-    <tr><td data-label="نماد"><b>{{ s.symbol }}</b> <small>{{ 'باز' if s.kind == 'pending' else 'پر' }}</small></td>
-        <td data-label="ارزش">{{ '{:,.0f}'.format(s.value or 0) }}</td>
-        <td data-label="انحراف" class="{{ 'pos' if s.within_tolerance else 'neg' }}">{{ '{:+.2f}'.format(s.deviation_pct or 0) }}%</td>
+    <tr><td data-label="نماد"><b>{{ s.symbol }}</b> <small class="src">{{ 'باز' if s.kind == 'pending' else 'پر' }}</small></td>
+        <td data-label="ارزش" class="n">{{ rial(s.value) }}</td>
+        <td data-label="انحراف" class="n {{ 'pos' if s.within_tolerance else 'neg' }}">{{ '{:+.2f}'.format(s.deviation_pct or 0) }}%</td>
         <td data-label="وضعیت">{{ 'در محدوده' if s.within_tolerance else 'خارج از محدوده' }}</td></tr>
     {% endfor %}
   </table></div>
@@ -699,194 +581,70 @@ circle { animation:none !important; opacity:1 !important; }
 
   <h2>نمادهای bind‌نشده (حافظهٔ ایجنت)</h2>
   {% if agents.bind_failures %}
-  <div class="table-wrap"><table class="responsive">
+  <div class="table-wrap stack"><table class="responsive">
     <tr class="head"><th>نماد</th><th>تعداد شکست</th><th>آخرین تلاش</th></tr>
     {% for sym, rec in agents.bind_failures.items() %}
     <tr><td data-label="نماد"><b>{{ sym }}</b></td>
         <td data-label="تعداد">{{ rec.count }}</td>
-        <td data-label="آخرین">{{ jalali(rec.last) }}</td></tr>
+        <td data-label="آخرین" class="n">{{ jd(rec.last) }}</td></tr>
     {% endfor %}
   </table></div>
   {% else %}<div class="empty">هیچ نمادی bind‌نشده نیست.</div>{% endif %}
 
   <h2>صف مسائل (Escalation)</h2>
   {% if agents.escalations %}
-  <div class="table-wrap"><table class="responsive">
+  <div class="table-wrap stack"><table class="responsive">
     <tr class="head"><th>ایجنت</th><th>موضوع</th><th>زمان</th></tr>
     {% for e in agents.escalations %}
     <tr><td data-label="ایجنت">{{ e.agent }}</td>
-        <td data-label="موضوع" class="note">{{ e.key }}</td>
-        <td data-label="زمان">{{ jalali(e.at) }}</td></tr>
+        <td data-label="موضوع" class="wrap">{{ e.key }}</td>
+        <td data-label="زمان" class="n">{{ jd(e.at) }}</td></tr>
     {% endfor %}
   </table></div>
   {% else %}<div class="empty">هیچ مسئلهٔ بازِ ثبت‌نشده‌ای نیست.</div>{% endif %}
 
   <h2>آخرین درس‌ها (حافظهٔ کالیبراسیون)</h2>
-  <div class="table-wrap"><table class="responsive">
+  {% if agents.lessons %}
+  <div class="table-wrap stack"><table class="responsive">
     <tr class="head"><th>موضوع</th><th>علت</th><th>راه‌حل</th><th>زمان</th></tr>
     {% for l in agents.lessons|reverse %}
-    <tr><td data-label="موضوع" class="note">{{ l.symptom[:70] }}</td>
-        <td data-label="علت" class="note">{{ l.cause[:70] }}</td>
-        <td data-label="راه‌حل" class="note">{{ l.fix[:90] }}</td>
-        <td data-label="زمان">{{ jalali(l.at) }}</td></tr>
+    <tr><td data-label="موضوع" class="wrap">{{ (l.symptom or '')[:70] }}</td>
+        <td data-label="علت" class="wrap">{{ (l.cause or '')[:70] }}</td>
+        <td data-label="راه‌حل" class="wrap">{{ (l.fix or '')[:90] }}</td>
+        <td data-label="زمان" class="n">{{ jd(l.at) }}</td></tr>
     {% endfor %}
   </table></div>
+  {% else %}<div class="empty">درسی ثبت نشده است.</div>{% endif %}
 </section>
 
 <!-- ================= DEEPSEEK EXPORT ================= -->
+<section class="panel" id="export">
+  <h2 style="margin-top:4px">DeepSeekExport — آرشیو پاسخ‌ها</h2>
+  <p class="note">جدیدترین بالا (۲۰ مورد آخر) · Copy متن را کپی می‌کند و Delete آن را از آرشیو حذف می‌کند.</p>
+  {% if exports %}
+  {% for e in exports %}
+  <div class="export-item" data-id="{{ e.id }}">
+    <div class="export-tools">
+      <button class="btn btn-copy" type="button">📋 Copy</button>
+      <button class="btn danger btn-del" type="button">🗑 Delete</button>
+      <span class="export-meta"><b>{{ e.title }}</b> · <span class="num">{{ jd(e.ts) }}</span></span>
+    </div>
+    <pre class="export-body">{{ e.content }}</pre>
+  </div>
+  {% endfor %}
+  {% else %}
+  <div class="empty">هنوز پاسخی آرشیو نشده است.</div>
+  {% endif %}
+</section>
 
+<p class="foot">WarRobot · حالت {{ mode }} · صفحه هر ۶۰ ثانیه خودکار نو می‌شود ·
+  <a href="/simple">بررسی ساده</a> · <a href="/health">health</a></p>
+</main>
 
-<script>
-  function activate(name) {
-    document.querySelectorAll('.tab').forEach(function (x) {
-      x.classList.toggle('active', x.dataset.tab === name);
-    });
-    document.querySelectorAll('.panel').forEach(function (x) {
-      x.classList.toggle('active', x.id === name);
-    });
-  }
-
-  document.querySelectorAll('.tab').forEach(function (t) {
-    t.addEventListener('click', function () {
-      activate(t.dataset.tab);
-      try { localStorage.setItem('tseTab', t.dataset.tab); } catch (e) {}
-      window.scrollTo({top: 0, behavior: 'smooth'});
-    });
-  });
-
-  // keep the chosen tab and the scroll position across the auto-refresh
-  try {
-    var saved = localStorage.getItem('tseTab');
-    if (saved) activate(saved);
-  } catch (e) {}
-  window.addEventListener('beforeunload', function () {
-    try { sessionStorage.setItem('tseScroll', String(window.scrollY)); } catch (e) {}
-  });
-  try {
-    var y = sessionStorage.getItem('tseScroll');
-    if (y) window.scrollTo(0, parseInt(y, 10));
-  } catch (e) {}
-
-  // server-rendered numbers: refresh so phone and desktop never drift apart
-  setTimeout(function () { location.reload(); }, 60000);
-</script>
-
-<script>
-  // ---- count-up for KPI numbers (respects reduced motion) ----
-  (function () {
-    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    function animate(el) {
-      var raw = (el.textContent || "").trim();
-      var m = raw.match(/^([+\-]?)([\d,]+(?:\.\d+)?)(.*)$/);
-      if (!m) return;
-      var sign = m[1], num = parseFloat(m[2].replace(/,/g, "")), tail = m[3];
-      if (!isFinite(num) || num === 0) return;
-      var dec = (m[2].split(".")[1] || "").length;
-      var start = performance.now(), dur = 900;
-      function frame(now) {
-        var t = Math.min(1, (now - start) / dur);
-        var eased = 1 - Math.pow(1 - t, 3);
-        var v = num * eased;
-        el.textContent = sign + v.toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec }) + tail;
-        if (t < 1) requestAnimationFrame(frame);
-        else el.textContent = raw;
-      }
-      requestAnimationFrame(frame);
-    }
-    document.querySelectorAll('.kpi .val').forEach(animate);
-  })();
-</script>
-
-
-<script>
-  // ---- draw the P&L line: measured length, graceful without JS/reduced motion ----
-  (function () {
-    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    document.querySelectorAll('svg .line').forEach(function (el) {
-      if (reduce) return;
-      try {
-        var len = el.getTotalLength();
-        if (!len || !isFinite(len)) return;
-        el.style.strokeDasharray = len + 'px';
-        el.style.strokeDashoffset = len + 'px';
-        el.getBoundingClientRect();
-        requestAnimationFrame(function () { el.style.strokeDashoffset = '0px'; });
-        // hard guarantee: whatever happens, the line is fully visible afterwards
-        setTimeout(function () {
-          el.style.strokeDasharray = 'none';
-          el.style.strokeDashoffset = '0px';
-        }, 2400);
-      } catch (e) { /* keep the plain line */ }
-    });
-  })();
-</script>
-\n
-<script>
-  // copy / delete for DeepSeekExport entries
-  document.querySelectorAll('.export-item').forEach(function (item) {
-    var body = item.querySelector('.export-body');
-    var copy = item.querySelector('.btn-copy');
-    var del = item.querySelector('.btn-del');
-    if (copy) copy.addEventListener('click', function () {
-      var text = body ? body.textContent : '';
-      var done = function () { copy.textContent = '✔ کپی شد'; setTimeout(function(){ copy.textContent = '📋 Copy'; }, 1600); };
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(done).catch(function () { fallback(text); done(); });
-      } else { fallback(text); done(); }
-      function fallback(t) {
-        var ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta);
-        ta.select(); try { document.execCommand('copy'); } catch (e) {} document.body.removeChild(ta);
-      }
-    });
-    if (del) del.addEventListener('click', function () {
-      if (!confirm('این پاسخ حذف شود؟')) return;
-      fetch('/export/delete', {method:'POST', headers:{'Content-Type':'application/json'},
-                              body: JSON.stringify({id: item.dataset.id})})
-        .then(function(r){ return r.json(); })
-        .then(function(){ item.style.transition='opacity .25s ease'; item.style.opacity='0';
-                          setTimeout(function(){ item.remove(); }, 250); });
-    });
-  });
-</script>
-
-
-<script>
-  (function () {
-    var text = document.getElementById('prompt-text');
-    var title = document.getElementById('prompt-title');
-    var status = document.getElementById('prompt-status');
-    if (!text) return;
-    function send(mode) {
-      var body = {text: text.value.trim(), title: title.value.trim() || 'دستور', mode: mode};
-      if (!body.text) { status.textContent = 'متن خالی است'; return; }
-      status.textContent = 'در حال ارسال…';
-      fetch('/prompt/submit', {method:'POST', headers:{'Content-Type':'application/json'},
-                               body: JSON.stringify(body)})
-        .then(function(r){ return r.json(); })
-        .then(function(d){
-          status.textContent = d.ok ? ('✔ ' + d.status) : ('خطا: ' + (d.error||''));
-          if (d.ok && mode === 'run') {
-            var out = document.createElement('pre');
-            out.className = 'export-body';
-            out.textContent = (d.result || '(بدون خروجی)').slice(0, 4000);
-            status.after(out);
-          }
-          if (d.ok && mode === 'queue') { text.value = ''; title.value = ''; setTimeout(function(){ location.reload(); }, 900); }
-        })
-        .catch(function(e){ status.textContent = 'خطا: ' + e; });
-    }
-    document.getElementById('prompt-queue').addEventListener('click', function(){ send('queue'); });
-    document.getElementById('prompt-run').addEventListener('click', function(){ send('run'); });
-  })();
-</script>
-
-
+{% set eq_json = [] %}
+{% for p in d.equity or [] %}{% set _ = eq_json.append({'d': p.date_fa, 't': p.total, 'c': p.cash, 'h': p.holdings}) %}{% endfor %}
+<script id="equity-data" type="application/json">{{ eq_json|tojson }}</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" defer></script>
+{% include "_dashboard_js.html" %}
 </body>
 </html>
-
-
-
-
-
-
-
