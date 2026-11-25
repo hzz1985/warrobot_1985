@@ -1,0 +1,82 @@
+<style>
+/* ===== PRO-THEME 2026 — polish layer (overrides only, no markup change) ===== */
+:root{
+  --bg:#0b1017; --card:#141b24; --card2:#18212c; --line:#22303d; --line2:#2b3b4b;
+  --txt:#e8eef6; --muted:#93a3b4; --accent:#3b82f6; --accent2:#60a5fa;
+  --green:#22c55e; --red:#ef4444; --amber:#f59e0b;
+  --shadow:0 8px 28px rgba(0,0,0,.35); --radius:16px;
+}
+html{scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(1200px 600px at 85% -10%, rgba(59,130,246,.10), transparent 60%),
+    radial-gradient(900px 500px at 10% 0%, rgba(34,197,94,.06), transparent 55%),
+    var(--bg) !important;
+  font-family:"Vazirmatn","IRANSans","Segoe UI",Tahoma,sans-serif !important;
+  line-height:1.75; letter-spacing:.1px;
+}
+header{
+  position:sticky; top:0; z-index:50; backdrop-filter:blur(14px);
+  background:rgba(11,16,23,.82) !important; border-bottom:1px solid var(--line2) !important;
+  box-shadow:0 6px 24px rgba(0,0,0,.35); padding:14px clamp(14px,3vw,28px) !important;
+}
+h1{font-weight:800 !important; letter-spacing:.2px;
+   background:linear-gradient(90deg,#fff,#9cc3ff); -webkit-background-clip:text;
+   background-clip:text; color:transparent !important}
+.badge{border:1px solid var(--line2) !important; background:#101823 !important;
+       padding:4px 12px !important; font-weight:600}
+.badge.live{background:rgba(239,68,68,.12) !important; color:#fca5a5 !important;
+            border-color:rgba(239,68,68,.35) !important}
+.badge.dry{background:rgba(34,197,94,.12) !important; color:#86efac !important;
+           border-color:rgba(34,197,94,.35) !important}
+.tabs{gap:10px !important; padding:16px clamp(14px,3vw,28px) 0 !important;
+      position:sticky; top:63px; z-index:40; background:linear-gradient(var(--bg),transparent)}
+.tab{
+  border:1px solid var(--line2) !important; border-bottom:none !important;
+  background:linear-gradient(180deg,#131c26,#101720) !important;
+  border-radius:14px 14px 0 0 !important; font-weight:600; transition:.18s ease;
+}
+.tab:hover{color:var(--txt) !important; transform:translateY(-1px)}
+.tab.active{
+  background:linear-gradient(180deg,var(--card2),var(--card)) !important;
+  color:#fff !important; box-shadow:0 -2px 0 var(--accent) inset;
+}
+.panel{padding:clamp(16px,2.6vw,26px) clamp(14px,3vw,28px) 56px !important}
+.grid{gap:14px !important}
+.kpi{
+  background:linear-gradient(160deg,var(--card2),var(--card)) !important;
+  border:1px solid var(--line2) !important; border-radius:var(--radius) !important;
+  box-shadow:var(--shadow); transition:.2s ease;
+}
+.kpi:hover{transform:translateY(-2px); border-color:#36506b !important}
+.kpi .lbl{color:var(--muted) !important; font-weight:600; letter-spacing:.2px}
+.kpi .val{font-weight:800 !important; font-variant-numeric:tabular-nums}
+.table-wrap{border-radius:var(--radius); box-shadow:var(--shadow)}
+table{border:1px solid var(--line2) !important; border-radius:var(--radius) !important;
+      font-variant-numeric:tabular-nums}
+thead th{background:#101a24 !important; color:#b9c9db !important; font-weight:700 !important;
+         position:sticky; top:0; z-index:5; border-bottom:1px solid var(--line2) !important}
+tbody tr{transition:.15s ease}
+tbody tr:hover{background:rgba(59,130,246,.07) !important}
+td,th{padding:11px 13px !important}
+h2{font-weight:800 !important; letter-spacing:.2px; margin-top:26px !important}
+h2::before{content:""; display:inline-block; width:6px; height:18px; border-radius:3px;
+           margin-inline-end:10px; vertical-align:-3px;
+           background:linear-gradient(180deg,var(--accent2),var(--accent))}
+canvas{filter:drop-shadow(0 6px 18px rgba(0,0,0,.35))}
+a{color:var(--accent2) !important; text-decoration:none}
+a:hover{text-decoration:underline}
+button,.btn{border-radius:10px !important; font-weight:700; transition:.18s ease}
+button:hover,.btn:hover{transform:translateY(-1px)}
+::-webkit-scrollbar{height:10px; width:10px}
+::-webkit-scrollbar-thumb{background:#2a3a4b; border-radius:8px}
+::-webkit-scrollbar-track{background:#0d141c}
+@media (max-width:640px){
+  h1{font-size:16px !important}
+  .tab{font-size:13px !important; padding:11px 8px !important}
+  .tabs{top:58px}
+  th,td{padding:9px 10px !important; font-size:.86em}
+  .kpi .val{font-size:18px !important}
+}
+@media print{ header,.tabs{position:static} body{background:#fff;color:#000} }
+</style>

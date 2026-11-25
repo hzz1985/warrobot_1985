@@ -1,0 +1,1216 @@
+{
+  "day": "2026-10-21",
+  "mode": "live",
+  "session": "after_close",
+  "account": {
+    "at": "2026-10-21T13:10:01+03:30",
+    "positions": [
+      {
+        "symbol": "چکاوه",
+        "qty": 81539,
+        "avg_cost": 21742.27,
+        "cost": 1772842953.53,
+        "realized": 0.0,
+        "invested": 1772842953.53,
+        "fees": 17552900.53,
+        "buys": 1,
+        "sells": 0,
+        "first_ts": "2026-10-21T10:28:57+03:30",
+        "last_ts": "2026-10-21T10:28:57+03:30"
+      },
+      {
+        "symbol": "خساپا",
+        "qty": 138299,
+        "avg_cost": 149.0,
+        "cost": 20606551.0,
+        "realized": 0.0,
+        "invested": 20606551.0,
+        "fees": 0.0,
+        "buys": 0,
+        "sells": 0,
+        "first_ts": null,
+        "last_ts": "2026-10-19T08:20:24+03:30"
+      }
+    ],
+    "cash_ledger": -7698223555.22,
+    "exposure": 1793449504.53,
+    "unrealized": 0.0,
+    "realized_total": 59747613.51,
+    "equity": 1793449504.53,
+    "cash_broker": 0.0,
+    "mode": "live"
+  },
+  "orders_today": [
+    {
+      "ref": "2026-10-21:sell:وایرا",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 900000,
+      "price": 4160.0,
+      "reason": "target",
+      "status": "submitted",
+      "created_at": "2026-10-21T08:32:04+03:30",
+      "updated_at": "2026-10-21T08:32:59+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "sent_not_confirmed",
+      "extra": {
+        "pnl_pct": 8.39,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#2",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 900000,
+      "price": 4160.0,
+      "reason": "target",
+      "status": "submitted",
+      "created_at": "2026-10-21T08:40:19+03:30",
+      "updated_at": "2026-10-21T08:41:24+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "sent_not_confirmed",
+      "extra": {
+        "pnl_pct": 8.39,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#3",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 900000,
+      "price": 4138.0,
+      "reason": "target",
+      "status": "submitted",
+      "created_at": "2026-10-21T08:43:30+03:30",
+      "updated_at": "2026-10-21T08:44:35+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "sent_not_confirmed",
+      "extra": {
+        "pnl_pct": 8.129,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#4",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 900000,
+      "price": 4108.0,
+      "reason": "target",
+      "status": "submitted",
+      "created_at": "2026-10-21T09:14:57+03:30",
+      "updated_at": "2026-10-21T09:16:02+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "sent_not_confirmed",
+      "extra": {
+        "pnl_pct": 7.348,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:buy:تپسی",
+      "day": "2026-10-21",
+      "symbol": "تپسی",
+      "side": "buy",
+      "qty": 18926,
+      "price": 30750.0,
+      "reason": "score=0.7126",
+      "status": "submitted",
+      "created_at": "2026-10-21T09:16:07+03:30",
+      "updated_at": "2026-10-21T09:17:06+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "sent_not_confirmed",
+      "extra": {
+        "score": 0.7126
+      }
+    },
+    {
+      "ref": "2026-10-21:buy:چکاوه",
+      "day": "2026-10-21",
+      "symbol": "چکاوه",
+      "side": "buy",
+      "qty": 27120,
+      "price": 21460.0,
+      "reason": "score=0.7188",
+      "status": "submitted",
+      "created_at": "2026-10-21T09:17:11+03:30",
+      "updated_at": "2026-10-21T09:18:10+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "sent_not_confirmed",
+      "extra": {
+        "score": 0.7188
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#5",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 900000,
+      "price": 4098.0,
+      "reason": "target",
+      "status": "unverified",
+      "created_at": "2026-10-21T09:18:16+03:30",
+      "updated_at": "2026-10-21T09:18:33+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"ui\", \"inputs\": [\"900,000\", \"4,098\"], \"button_text\": \"فروش\", \"sent\": true, \"modal\": false, \"checkbox\": true, \"clicked\": null, \"buttons\": [\"خروج\", \"1\", \"2\", \"3\", \"4\", \"5\", \"فروش\"], \"url\": \"https://online.meibours.ir/\"}",
+      "extra": {
+        "pnl_pct": 7.087,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#6",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 900000,
+      "price": 4098.0,
+      "reason": "target",
+      "status": "submitted",
+      "created_at": "2026-10-21T09:21:27+03:30",
+      "updated_at": "2026-10-21T09:22:21+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "sent_not_confirmed",
+      "extra": {
+        "pnl_pct": 7.087,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#7",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 900000,
+      "price": 4098.0,
+      "reason": "target",
+      "status": "submitted",
+      "created_at": "2026-10-21T09:21:36+03:30",
+      "updated_at": "2026-10-21T09:22:30+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "sent_not_confirmed",
+      "extra": {
+        "pnl_pct": 7.087,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#8",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 900000,
+      "price": 4098.0,
+      "reason": "target",
+      "status": "rejected",
+      "created_at": "2026-10-21T09:25:10+03:30",
+      "updated_at": "2026-10-21T09:25:11+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"ui\", \"reason\": \"row_click_failed:Message: element click intercepted: Element is not clickable at point (613, 55)\\n\"}",
+      "extra": {
+        "pnl_pct": 7.087,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#9",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 900000,
+      "price": 4068.0,
+      "reason": "target",
+      "status": "rejected",
+      "created_at": "2026-10-21T09:26:11+03:30",
+      "updated_at": "2026-10-21T09:26:13+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"ui\", \"reason\": \"row_click_failed:Message: element click intercepted: Element is not clickable at point (613, 55)\\n\"}",
+      "extra": {
+        "pnl_pct": 6.305,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#10",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 900000,
+      "price": 4058.0,
+      "reason": "target",
+      "status": "submitted",
+      "created_at": "2026-10-21T09:27:13+03:30",
+      "updated_at": "2026-10-21T09:28:08+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "sent_not_confirmed",
+      "extra": {
+        "pnl_pct": 6.045,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#11",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 900000,
+      "price": 4058.0,
+      "reason": "target",
+      "status": "rejected",
+      "created_at": "2026-10-21T09:30:15+03:30",
+      "updated_at": "2026-10-21T09:30:16+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"ui\", \"reason\": \"row_click_failed:Message: element click intercepted: Element is not clickable at point (613, 55)\\n\"}",
+      "extra": {
+        "pnl_pct": 6.045,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#12",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 600000,
+      "price": 4018.0,
+      "reason": "target",
+      "status": "rejected",
+      "created_at": "2026-10-21T10:39:47+03:30",
+      "updated_at": "2026-10-21T10:39:59+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"وایرا\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"clicked\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": 6.401,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#13",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 600000,
+      "price": 4018.0,
+      "reason": "target",
+      "status": "rejected",
+      "created_at": "2026-10-21T10:40:45+03:30",
+      "updated_at": "2026-10-21T10:40:57+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"وایرا\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"clicked\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": 6.401,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#14",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 600000,
+      "price": 4018.0,
+      "reason": "target",
+      "status": "rejected",
+      "created_at": "2026-10-21T10:41:48+03:30",
+      "updated_at": "2026-10-21T10:42:00+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"وایرا\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"clicked\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": 6.401,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#15",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 600000,
+      "price": 4008.0,
+      "reason": "target",
+      "status": "rejected",
+      "created_at": "2026-10-21T10:42:55+03:30",
+      "updated_at": "2026-10-21T10:43:07+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"وایرا\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"clicked\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": 6.141,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#16",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 600000,
+      "price": 4008.0,
+      "reason": "target",
+      "status": "rejected",
+      "created_at": "2026-10-21T10:43:52+03:30",
+      "updated_at": "2026-10-21T10:44:05+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"وایرا\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"clicked\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": 6.141,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#17",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 600000,
+      "price": 4008.0,
+      "reason": "target",
+      "status": "rejected",
+      "created_at": "2026-10-21T10:44:55+03:30",
+      "updated_at": "2026-10-21T10:45:07+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"وایرا\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"clicked\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": 6.141,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#18",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 600000,
+      "price": 4008.0,
+      "reason": "target",
+      "status": "rejected",
+      "created_at": "2026-10-21T10:45:58+03:30",
+      "updated_at": "2026-10-21T10:46:11+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"وایرا\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"clicked\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": 6.141,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#19",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 600000,
+      "price": 4008.0,
+      "reason": "target",
+      "status": "rejected",
+      "created_at": "2026-10-21T10:47:01+03:30",
+      "updated_at": "2026-10-21T10:47:14+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"وایرا\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"clicked\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": 6.141,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#20",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 600000,
+      "price": 4008.0,
+      "reason": "target",
+      "status": "rejected",
+      "created_at": "2026-10-21T10:47:30+03:30",
+      "updated_at": "2026-10-21T10:47:42+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"وایرا\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"clicked\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": 6.141,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#21",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 600000,
+      "price": 4008.0,
+      "reason": "target",
+      "status": "rejected",
+      "created_at": "2026-10-21T10:48:28+03:30",
+      "updated_at": "2026-10-21T10:48:40+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"وایرا\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"clicked\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": 6.141,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#22",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 600000,
+      "price": 4008.0,
+      "reason": "target",
+      "status": "rejected",
+      "created_at": "2026-10-21T10:49:30+03:30",
+      "updated_at": "2026-10-21T10:49:43+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"وایرا\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"clicked\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": 6.141,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#23",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 600000,
+      "price": 4008.0,
+      "reason": "target",
+      "status": "rejected",
+      "created_at": "2026-10-21T10:50:34+03:30",
+      "updated_at": "2026-10-21T10:50:46+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"وایرا\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"clicked\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": 6.141,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#24",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 600000,
+      "price": 4008.0,
+      "reason": "target",
+      "status": "rejected",
+      "created_at": "2026-10-21T10:51:36+03:30",
+      "updated_at": "2026-10-21T10:51:49+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"وایرا\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"clicked\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": 6.141,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#25",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 600000,
+      "price": 4008.0,
+      "reason": "target",
+      "status": "rejected",
+      "created_at": "2026-10-21T10:52:39+03:30",
+      "updated_at": "2026-10-21T10:52:51+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"وایرا\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"clicked\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": 6.141,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#26",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 221638,
+      "price": 4020.0,
+      "reason": "target",
+      "status": "rejected",
+      "created_at": "2026-10-21T11:47:09+03:30",
+      "updated_at": "2026-10-21T11:47:22+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"وایرا\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"anchor\", \"message\": \"سفارش فروش وایرا1 با خطا مواجه شد. خطا!موجودی سهام کافی نمی باشد.\", \"placed\": false, \"rejected\": true}",
+      "extra": {
+        "pnl_pct": 5.0,
+        "max_qty": 300000,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:buy:چکاوه#2",
+      "day": "2026-10-21",
+      "symbol": "چکاوه",
+      "side": "buy",
+      "qty": 100000,
+      "price": 21460.0,
+      "reason": "score=0.7900",
+      "status": "cancelled",
+      "created_at": "2026-10-21T11:55:09+03:30",
+      "updated_at": "2026-10-21T11:55:09+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "score": 0.79
+      }
+    },
+    {
+      "ref": "2026-10-21:buy:چکاوه#3",
+      "day": "2026-10-21",
+      "symbol": "چکاوه",
+      "side": "buy",
+      "qty": 100000,
+      "price": 21460.0,
+      "reason": "score=0.7900",
+      "status": "cancelled",
+      "created_at": "2026-10-21T11:55:09+03:30",
+      "updated_at": "2026-10-21T11:55:09+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "score": 0.79
+      }
+    },
+    {
+      "ref": "2026-10-21:buy:چکاوه#4",
+      "day": "2026-10-21",
+      "symbol": "چکاوه",
+      "side": "buy",
+      "qty": 50000,
+      "price": 21460.0,
+      "reason": "score=0.7900",
+      "status": "cancelled",
+      "created_at": "2026-10-21T11:55:09+03:30",
+      "updated_at": "2026-10-21T11:55:09+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "score": 0.79
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#27",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 100000,
+      "price": 3998.0,
+      "reason": "target",
+      "status": "cancelled",
+      "created_at": "2026-10-21T11:55:09+03:30",
+      "updated_at": "2026-10-21T11:55:09+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "pnl_pct": 6.0,
+        "max_qty": 100000,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#28",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 100000,
+      "price": 3998.0,
+      "reason": "target",
+      "status": "cancelled",
+      "created_at": "2026-10-21T11:55:09+03:30",
+      "updated_at": "2026-10-21T11:55:09+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "pnl_pct": 6.0,
+        "max_qty": 100000,
+        "chunk": 2
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#29",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 100000,
+      "price": 3998.0,
+      "reason": "target",
+      "status": "cancelled",
+      "created_at": "2026-10-21T11:55:09+03:30",
+      "updated_at": "2026-10-21T11:55:09+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "pnl_pct": 6.0,
+        "max_qty": 100000,
+        "chunk": 3
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#30",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 100000,
+      "price": 3998.0,
+      "reason": "target",
+      "status": "cancelled",
+      "created_at": "2026-10-21T11:55:09+03:30",
+      "updated_at": "2026-10-21T11:55:09+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "pnl_pct": 6.0,
+        "max_qty": 100000,
+        "chunk": 4
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#31",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 100000,
+      "price": 3998.0,
+      "reason": "target",
+      "status": "cancelled",
+      "created_at": "2026-10-21T11:55:09+03:30",
+      "updated_at": "2026-10-21T11:55:09+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "pnl_pct": 6.0,
+        "max_qty": 100000,
+        "chunk": 5
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#32",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 100000,
+      "price": 3998.0,
+      "reason": "target",
+      "status": "cancelled",
+      "created_at": "2026-10-21T11:55:09+03:30",
+      "updated_at": "2026-10-21T11:55:09+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "pnl_pct": 6.0,
+        "max_qty": 100000,
+        "chunk": 6
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#33",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 300000,
+      "price": 4020.0,
+      "reason": "target",
+      "status": "cancelled",
+      "created_at": "2026-10-21T11:55:56+03:30",
+      "updated_at": "2026-10-21T11:55:56+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "pnl_pct": 6.0,
+        "max_qty": 300000,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#34",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 300000,
+      "price": 4020.0,
+      "reason": "target",
+      "status": "cancelled",
+      "created_at": "2026-10-21T11:55:56+03:30",
+      "updated_at": "2026-10-21T11:55:56+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "pnl_pct": 6.0,
+        "max_qty": 300000,
+        "chunk": 2
+      }
+    },
+    {
+      "ref": "2026-10-21:buy:چکاوه#5",
+      "day": "2026-10-21",
+      "symbol": "چکاوه",
+      "side": "buy",
+      "qty": 100000,
+      "price": 21460.0,
+      "reason": "score=0.7900",
+      "status": "cancelled",
+      "created_at": "2026-10-21T11:56:01+03:30",
+      "updated_at": "2026-10-21T11:56:01+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "score": 0.79
+      }
+    },
+    {
+      "ref": "2026-10-21:buy:چکاوه#6",
+      "day": "2026-10-21",
+      "symbol": "چکاوه",
+      "side": "buy",
+      "qty": 100000,
+      "price": 21460.0,
+      "reason": "score=0.7900",
+      "status": "cancelled",
+      "created_at": "2026-10-21T11:56:01+03:30",
+      "updated_at": "2026-10-21T11:56:01+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "score": 0.79
+      }
+    },
+    {
+      "ref": "2026-10-21:buy:چکاوه#7",
+      "day": "2026-10-21",
+      "symbol": "چکاوه",
+      "side": "buy",
+      "qty": 50000,
+      "price": 21460.0,
+      "reason": "score=0.7900",
+      "status": "cancelled",
+      "created_at": "2026-10-21T11:56:01+03:30",
+      "updated_at": "2026-10-21T11:56:01+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "score": 0.79
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#35",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 300000,
+      "price": 4020.0,
+      "reason": "target",
+      "status": "cancelled",
+      "created_at": "2026-10-21T12:01:12+03:30",
+      "updated_at": "2026-10-21T12:01:12+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "pnl_pct": 6.0,
+        "max_qty": 300000,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#36",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 300000,
+      "price": 4020.0,
+      "reason": "target",
+      "status": "cancelled",
+      "created_at": "2026-10-21T12:01:12+03:30",
+      "updated_at": "2026-10-21T12:01:12+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "pnl_pct": 6.0,
+        "max_qty": 300000,
+        "chunk": 2
+      }
+    },
+    {
+      "ref": "2026-10-21:buy:چکاوه#8",
+      "day": "2026-10-21",
+      "symbol": "چکاوه",
+      "side": "buy",
+      "qty": 100000,
+      "price": 21460.0,
+      "reason": "score=0.7900",
+      "status": "cancelled",
+      "created_at": "2026-10-21T12:01:18+03:30",
+      "updated_at": "2026-10-21T12:01:18+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "score": 0.79
+      }
+    },
+    {
+      "ref": "2026-10-21:buy:چکاوه#9",
+      "day": "2026-10-21",
+      "symbol": "چکاوه",
+      "side": "buy",
+      "qty": 100000,
+      "price": 21460.0,
+      "reason": "score=0.7900",
+      "status": "cancelled",
+      "created_at": "2026-10-21T12:01:18+03:30",
+      "updated_at": "2026-10-21T12:01:18+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "score": 0.79
+      }
+    },
+    {
+      "ref": "2026-10-21:buy:چکاوه#10",
+      "day": "2026-10-21",
+      "symbol": "چکاوه",
+      "side": "buy",
+      "qty": 50000,
+      "price": 21460.0,
+      "reason": "score=0.7900",
+      "status": "cancelled",
+      "created_at": "2026-10-21T12:01:18+03:30",
+      "updated_at": "2026-10-21T12:01:18+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "score": 0.79
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#37",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 300000,
+      "price": 4020.0,
+      "reason": "target",
+      "status": "cancelled",
+      "created_at": "2026-10-21T12:01:49+03:30",
+      "updated_at": "2026-10-21T12:01:49+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "pnl_pct": 6.0,
+        "max_qty": 300000,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#38",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 300000,
+      "price": 4020.0,
+      "reason": "target",
+      "status": "cancelled",
+      "created_at": "2026-10-21T12:01:49+03:30",
+      "updated_at": "2026-10-21T12:01:49+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "pnl_pct": 6.0,
+        "max_qty": 300000,
+        "chunk": 2
+      }
+    },
+    {
+      "ref": "2026-10-21:buy:چکاوه#11",
+      "day": "2026-10-21",
+      "symbol": "چکاوه",
+      "side": "buy",
+      "qty": 100000,
+      "price": 21460.0,
+      "reason": "score=0.7900",
+      "status": "cancelled",
+      "created_at": "2026-10-21T12:01:55+03:30",
+      "updated_at": "2026-10-21T12:01:55+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "score": 0.79
+      }
+    },
+    {
+      "ref": "2026-10-21:buy:چکاوه#12",
+      "day": "2026-10-21",
+      "symbol": "چکاوه",
+      "side": "buy",
+      "qty": 100000,
+      "price": 21460.0,
+      "reason": "score=0.7900",
+      "status": "cancelled",
+      "created_at": "2026-10-21T12:01:55+03:30",
+      "updated_at": "2026-10-21T12:01:55+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "score": 0.79
+      }
+    },
+    {
+      "ref": "2026-10-21:buy:چکاوه#13",
+      "day": "2026-10-21",
+      "symbol": "چکاوه",
+      "side": "buy",
+      "qty": 50000,
+      "price": 21460.0,
+      "reason": "score=0.7900",
+      "status": "cancelled",
+      "created_at": "2026-10-21T12:01:55+03:30",
+      "updated_at": "2026-10-21T12:01:55+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "score": 0.79
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#39",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 300000,
+      "price": 4020.0,
+      "reason": "target",
+      "status": "cancelled",
+      "created_at": "2026-10-21T12:02:39+03:30",
+      "updated_at": "2026-10-21T12:02:39+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "pnl_pct": 6.0,
+        "max_qty": 300000,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-21:sell:وایرا#40",
+      "day": "2026-10-21",
+      "symbol": "وایرا",
+      "side": "sell",
+      "qty": 300000,
+      "price": 4020.0,
+      "reason": "target",
+      "status": "cancelled",
+      "created_at": "2026-10-21T12:02:39+03:30",
+      "updated_at": "2026-10-21T12:02:39+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "pnl_pct": 6.0,
+        "max_qty": 300000,
+        "chunk": 2
+      }
+    },
+    {
+      "ref": "2026-10-21:buy:چکاوه#14",
+      "day": "2026-10-21",
+      "symbol": "چکاوه",
+      "side": "buy",
+      "qty": 100000,
+      "price": 21460.0,
+      "reason": "score=0.7900",
+      "status": "cancelled",
+      "created_at": "2026-10-21T12:02:45+03:30",
+      "updated_at": "2026-10-21T12:02:45+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "score": 0.79
+      }
+    },
+    {
+      "ref": "2026-10-21:buy:چکاوه#15",
+      "day": "2026-10-21",
+      "symbol": "چکاوه",
+      "side": "buy",
+      "qty": 100000,
+      "price": 21460.0,
+      "reason": "score=0.7900",
+      "status": "cancelled",
+      "created_at": "2026-10-21T12:02:45+03:30",
+      "updated_at": "2026-10-21T12:02:45+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "score": 0.79
+      }
+    },
+    {
+      "ref": "2026-10-21:buy:چکاوه#16",
+      "day": "2026-10-21",
+      "symbol": "چکاوه",
+      "side": "buy",
+      "qty": 50000,
+      "price": 21460.0,
+      "reason": "score=0.7900",
+      "status": "cancelled",
+      "created_at": "2026-10-21T12:02:45+03:30",
+      "updated_at": "2026-10-21T12:02:45+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "score": 0.79
+      }
+    }
+  ],
+  "last_sync": {
+    "at": "2026-10-21T08:20:15+03:30",
+    "imported": 2,
+    "skipped": 7,
+    "orders": 20,
+    "diffs": {},
+    "cash_broker": 625245379
+  }
+}

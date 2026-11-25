@@ -1,0 +1,35 @@
+{
+ "agent": "a15_sold_pnl",
+ "at": "2026-11-20 23:40:18",
+ "trades": [
+  {
+   "symbol": "آواپارس",
+   "at": "2026-11-17",
+   "qty": 152251.0,
+   "buy": 7736.0,
+   "sell": 8430.0,
+   "gross_rial": 105662194.0,
+   "fee_rial": 10482542.0,
+   "pnl_rial": 95179652.0,
+   "pnl_pct": 8.08,
+   "source": "owner_panel"
+  },
+  {
+   "symbol": "آردینه",
+   "at": "2026-11-13",
+   "qty": 22649.0,
+   "buy": 47984.0,
+   "sell": 44660.0,
+   "gross_rial": -75285276.0,
+   "fee_rial": 9672428.0,
+   "pnl_rial": -84957704.0,
+   "pnl_pct": -7.82,
+   "source": "record"
+  }
+ ],
+ "count": 2,
+ "wins": 1,
+ "total_pnl_rial": 10221948.0,
+ "formula": "(sell - buy) * qty - fee",
+ "ok": true
+}

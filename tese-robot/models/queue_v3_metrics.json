@@ -1,0 +1,111 @@
+{
+  "cut": "1405-07-11",
+  "full": {
+    "auc": 0.9234,
+    "train_rows": 40296,
+    "test_rows": 3647,
+    "train_dates": 59,
+    "test_dates": 5,
+    "pos_train": 925,
+    "pos_test": 68,
+    "base_train_pct": 2.3,
+    "top1": {
+      "k": 1,
+      "days": 5,
+      "picks": 5,
+      "hits": 0,
+      "precision_dayavg": 0.0,
+      "precision_pooled": 0.0,
+      "base_rate": 1.86,
+      "lift": 0.0,
+      "recall": 0.0
+    },
+    "top3": {
+      "k": 3,
+      "days": 5,
+      "picks": 15,
+      "hits": 2,
+      "precision_dayavg": 13.33,
+      "precision_pooled": 13.33,
+      "base_rate": 1.86,
+      "lift": 7.15,
+      "recall": 2.94
+    },
+    "top5": {
+      "k": 5,
+      "days": 5,
+      "picks": 25,
+      "hits": 4,
+      "precision_dayavg": 16.0,
+      "precision_pooled": 16.0,
+      "base_rate": 1.86,
+      "lift": 8.58,
+      "recall": 5.88
+    },
+    "top10": {
+      "k": 10,
+      "days": 5,
+      "picks": 50,
+      "hits": 7,
+      "precision_dayavg": 14.0,
+      "precision_pooled": 14.0,
+      "base_rate": 1.86,
+      "lift": 7.51,
+      "recall": 10.29
+    }
+  },
+  "daily": {
+    "auc": 0.8849,
+    "train_rows": 179765,
+    "test_rows": 7300,
+    "train_dates": 267,
+    "test_dates": 10,
+    "pos_train": 2643,
+    "pos_test": 114,
+    "base_train_pct": 1.47,
+    "top1": {
+      "k": 1,
+      "days": 10,
+      "picks": 10,
+      "hits": 1,
+      "precision_dayavg": 10.0,
+      "precision_pooled": 10.0,
+      "base_rate": 1.56,
+      "lift": 6.4,
+      "recall": 0.88
+    },
+    "top3": {
+      "k": 3,
+      "days": 10,
+      "picks": 30,
+      "hits": 3,
+      "precision_dayavg": 10.0,
+      "precision_pooled": 10.0,
+      "base_rate": 1.56,
+      "lift": 6.4,
+      "recall": 2.63
+    },
+    "top5": {
+      "k": 5,
+      "days": 10,
+      "picks": 50,
+      "hits": 6,
+      "precision_dayavg": 12.0,
+      "precision_pooled": 12.0,
+      "base_rate": 1.56,
+      "lift": 7.68,
+      "recall": 5.26
+    },
+    "top10": {
+      "k": 10,
+      "days": 10,
+      "picks": 100,
+      "hits": 10,
+      "precision_dayavg": 10.0,
+      "precision_pooled": 10.0,
+      "base_rate": 1.56,
+      "lift": 6.4,
+      "recall": 8.77
+    }
+  }
+}

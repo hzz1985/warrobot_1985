@@ -1,0 +1,507 @@
+{
+  "day": "2026-10-24",
+  "mode": "live",
+  "session": "after_close",
+  "account": {
+    "at": "2026-10-24T13:10:01+03:30",
+    "positions": [
+      {
+        "symbol": "خساپا",
+        "qty": 138299,
+        "avg_cost": 149.0,
+        "cost": 20606551.0,
+        "realized": 0.0,
+        "invested": 20606551.0,
+        "fees": 0.0,
+        "buys": 0,
+        "sells": 0,
+        "first_ts": null,
+        "last_ts": "2026-10-19T08:20:24+03:30"
+      }
+    ],
+    "cash_ledger": -6102714366.22,
+    "exposure": 20606551.0,
+    "unrealized": 0.0,
+    "realized_total": -105902899.6,
+    "equity": 2912715838.0,
+    "cash_broker": 2892109287,
+    "mode": "live"
+  },
+  "orders_today": [
+    {
+      "ref": "2026-10-24:sell:چکاوه",
+      "day": "2026-10-24",
+      "symbol": "چکاوه",
+      "side": "sell",
+      "qty": 100000,
+      "price": 21140.0,
+      "reason": "queue_break",
+      "status": "rejected",
+      "created_at": "2026-10-24T08:30:14+03:30",
+      "updated_at": "2026-10-24T08:30:34+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"چکاوه\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"anchor\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": -0.334,
+        "max_qty": 100000,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-24:sell:چکاوه#2",
+      "day": "2026-10-24",
+      "symbol": "چکاوه",
+      "side": "sell",
+      "qty": 100000,
+      "price": 21140.0,
+      "reason": "queue_break",
+      "status": "rejected",
+      "created_at": "2026-10-24T08:31:15+03:30",
+      "updated_at": "2026-10-24T08:31:28+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"چکاوه\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"anchor\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": -0.334,
+        "max_qty": 100000,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-24:sell:چکاوه#3",
+      "day": "2026-10-24",
+      "symbol": "چکاوه",
+      "side": "sell",
+      "qty": 100000,
+      "price": 21140.0,
+      "reason": "queue_break",
+      "status": "rejected",
+      "created_at": "2026-10-24T08:32:20+03:30",
+      "updated_at": "2026-10-24T08:32:33+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"چکاوه\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"anchor\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": -0.334,
+        "max_qty": 100000,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-24:sell:چکاوه#4",
+      "day": "2026-10-24",
+      "symbol": "چکاوه",
+      "side": "sell",
+      "qty": 100000,
+      "price": 21140.0,
+      "reason": "queue_break",
+      "status": "rejected",
+      "created_at": "2026-10-24T08:33:29+03:30",
+      "updated_at": "2026-10-24T08:33:48+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"چکاوه\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"anchor\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": -0.334,
+        "max_qty": 100000,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-24:sell:چکاوه#5",
+      "day": "2026-10-24",
+      "symbol": "چکاوه",
+      "side": "sell",
+      "qty": 100000,
+      "price": 21140.0,
+      "reason": "queue_break",
+      "status": "rejected",
+      "created_at": "2026-10-24T08:34:34+03:30",
+      "updated_at": "2026-10-24T08:34:52+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"چکاوه\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"anchor\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": -0.334,
+        "max_qty": 100000,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-24:sell:چکاوه#6",
+      "day": "2026-10-24",
+      "symbol": "چکاوه",
+      "side": "sell",
+      "qty": 100000,
+      "price": 21140.0,
+      "reason": "queue_break",
+      "status": "rejected",
+      "created_at": "2026-10-24T08:35:39+03:30",
+      "updated_at": "2026-10-24T08:35:57+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"چکاوه\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"anchor\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": -0.334,
+        "max_qty": 100000,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-24:sell:چکاوه#7",
+      "day": "2026-10-24",
+      "symbol": "چکاوه",
+      "side": "sell",
+      "qty": 100000,
+      "price": 21140.0,
+      "reason": "queue_break",
+      "status": "rejected",
+      "created_at": "2026-10-24T08:36:44+03:30",
+      "updated_at": "2026-10-24T08:37:02+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"چکاوه\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"anchor\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": -0.334,
+        "max_qty": 100000,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-24:sell:چکاوه#8",
+      "day": "2026-10-24",
+      "symbol": "چکاوه",
+      "side": "sell",
+      "qty": 100000,
+      "price": 21140.0,
+      "reason": "queue_break",
+      "status": "rejected",
+      "created_at": "2026-10-24T08:37:49+03:30",
+      "updated_at": "2026-10-24T08:38:07+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"چکاوه\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"anchor\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": -0.334,
+        "max_qty": 100000,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-24:sell:چکاوه#9",
+      "day": "2026-10-24",
+      "symbol": "چکاوه",
+      "side": "sell",
+      "qty": 100000,
+      "price": 21140.0,
+      "reason": "queue_break",
+      "status": "rejected",
+      "created_at": "2026-10-24T08:38:54+03:30",
+      "updated_at": "2026-10-24T08:39:12+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"چکاوه\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"anchor\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": -0.334,
+        "max_qty": 100000,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-24:sell:چکاوه#10",
+      "day": "2026-10-24",
+      "symbol": "چکاوه",
+      "side": "sell",
+      "qty": 100000,
+      "price": 21140.0,
+      "reason": "queue_break",
+      "status": "rejected",
+      "created_at": "2026-10-24T08:39:58+03:30",
+      "updated_at": "2026-10-24T08:40:17+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"چکاوه\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"anchor\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": -0.334,
+        "max_qty": 100000,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-24:sell:چکاوه#11",
+      "day": "2026-10-24",
+      "symbol": "چکاوه",
+      "side": "sell",
+      "qty": 140076,
+      "price": 21140.0,
+      "reason": "stop",
+      "status": "rejected",
+      "created_at": "2026-10-24T08:41:12+03:30",
+      "updated_at": "2026-10-24T08:41:35+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"چکاوه\", \"inputs\": \"{\\\"c\\\":false,\\\"p\\\":false}\", \"clicked\": \"none\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": -99.999,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-24:sell:چکاوه#12",
+      "day": "2026-10-24",
+      "symbol": "چکاوه",
+      "side": "sell",
+      "qty": 140076,
+      "price": 21140.0,
+      "reason": "stop",
+      "status": "rejected",
+      "created_at": "2026-10-24T08:42:15+03:30",
+      "updated_at": "2026-10-24T08:42:34+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"چکاوه\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"anchor\", \"message\": \"خطا در انجام 2 مورد از سفارشات\", \"placed\": false, \"rejected\": true}",
+      "extra": {
+        "pnl_pct": -99.999,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-24:buy:تپسی",
+      "day": "2026-10-24",
+      "symbol": "تپسی",
+      "side": "buy",
+      "qty": 36987,
+      "price": 31670.0,
+      "reason": "score=0.6229",
+      "status": "rejected",
+      "created_at": "2026-10-24T09:21:45+03:30",
+      "updated_at": "2026-10-24T09:22:03+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"ui\", \"reason\": \"symbol_row_not_found\"}",
+      "extra": {
+        "score": 0.6229
+      }
+    },
+    {
+      "ref": "2026-10-24:sell:چکاوه#13",
+      "day": "2026-10-24",
+      "symbol": "چکاوه",
+      "side": "sell",
+      "qty": 100000,
+      "price": 20835.0,
+      "reason": "stop",
+      "status": "rejected",
+      "created_at": "2026-10-24T10:57:45+03:30",
+      "updated_at": "2026-10-24T10:58:00+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"چکاوه\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"anchor\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": -3.609,
+        "max_qty": 100000,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-24:sell:چکاوه#14",
+      "day": "2026-10-24",
+      "symbol": "چکاوه",
+      "side": "sell",
+      "qty": 100000,
+      "price": 20835.0,
+      "reason": "stop",
+      "status": "rejected",
+      "created_at": "2026-10-24T10:58:41+03:30",
+      "updated_at": "2026-10-24T10:58:56+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "{\"path\": \"tab2\", \"picked\": \"چکاوه\", \"inputs\": \"{\\\"c\\\":true,\\\"p\\\":true}\", \"clicked\": \"anchor\", \"placed\": false, \"rejected\": false}",
+      "extra": {
+        "pnl_pct": -3.609,
+        "max_qty": 100000,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-24:sell:چکاوه#15",
+      "day": "2026-10-24",
+      "symbol": "چکاوه",
+      "side": "sell",
+      "qty": 140076,
+      "price": 20835.0,
+      "reason": "stop",
+      "status": "intent",
+      "created_at": "2026-10-24T11:03:01+03:30",
+      "updated_at": "2026-10-24T11:03:01+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "",
+      "extra": {
+        "pnl_pct": -3.609,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-24:sell:چکاوه#16",
+      "day": "2026-10-24",
+      "symbol": "چکاوه",
+      "side": "sell",
+      "qty": 140076,
+      "price": 20835.0,
+      "reason": "stop",
+      "status": "intent",
+      "created_at": "2026-10-24T11:06:43+03:30",
+      "updated_at": "2026-10-24T11:06:43+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "",
+      "extra": {
+        "pnl_pct": -3.609,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-24:sell:چکاوه#17",
+      "day": "2026-10-24",
+      "symbol": "چکاوه",
+      "side": "sell",
+      "qty": 140076,
+      "price": 20835.0,
+      "reason": "stop",
+      "status": "intent",
+      "created_at": "2026-10-24T11:10:25+03:30",
+      "updated_at": "2026-10-24T11:10:25+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "",
+      "extra": {
+        "pnl_pct": -3.609,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-24:sell:چکاوه#18",
+      "day": "2026-10-24",
+      "symbol": "چکاوه",
+      "side": "sell",
+      "qty": 140076,
+      "price": 20835.0,
+      "reason": "stop",
+      "status": "intent",
+      "created_at": "2026-10-24T11:14:07+03:30",
+      "updated_at": "2026-10-24T11:14:07+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "",
+      "extra": {
+        "pnl_pct": -3.609,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-24:sell:چکاوه#19",
+      "day": "2026-10-24",
+      "symbol": "چکاوه",
+      "side": "sell",
+      "qty": 140076,
+      "price": 20835.0,
+      "reason": "stop",
+      "status": "intent",
+      "created_at": "2026-10-24T11:17:49+03:30",
+      "updated_at": "2026-10-24T11:17:49+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "",
+      "extra": {
+        "pnl_pct": -3.609,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-24:sell:چکاوه#20",
+      "day": "2026-10-24",
+      "symbol": "چکاوه",
+      "side": "sell",
+      "qty": 140076,
+      "price": 20835.0,
+      "reason": "stop",
+      "status": "intent",
+      "created_at": "2026-10-24T11:21:30+03:30",
+      "updated_at": "2026-10-24T11:21:30+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "",
+      "extra": {
+        "pnl_pct": -3.609,
+        "max_qty": 0,
+        "chunk": 1
+      }
+    },
+    {
+      "ref": "2026-10-24:buy:تپسی#2",
+      "day": "2026-10-24",
+      "symbol": "تپسی",
+      "side": "buy",
+      "qty": 1000,
+      "price": 31110.0,
+      "reason": "score=0.7000",
+      "status": "cancelled",
+      "created_at": "2026-10-24T11:40:33+03:30",
+      "updated_at": "2026-10-24T11:40:33+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 0,
+      "note": "dry_run",
+      "extra": {
+        "score": 0.7
+      }
+    }
+  ],
+  "last_sync": {
+    "at": "2026-10-24T08:40:38+03:30",
+    "imported": 4,
+    "skipped": 0,
+    "orders": 20,
+    "diffs": {
+      "چکاوه": {
+        "ledger": 338689,
+        "broker": 140076,
+        "delta": -198613
+      }
+    },
+    "cash_broker": 1213237301,
+    "seeded": [
+      "چکاوه"
+    ]
+  }
+}

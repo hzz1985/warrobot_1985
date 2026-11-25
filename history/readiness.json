@@ -1,0 +1,66 @@
+{
+ "at": "2026-11-24 09:56:27",
+ "verdict": false,
+ "checks": [
+  {
+   "check": "تقویم فردا",
+   "ok": true,
+   "detail": "2026-11-25 · روز معاملاتی"
+  },
+  {
+   "check": "سرویس‌ها",
+   "ok": true,
+   "detail": "{'warrobot': 'online', 'warsched': 'online', 'tse-web': 'online', 'tse-proxy': 'online', 'tse-v6': 'online'}"
+  },
+  {
+   "check": "وب‌اپ",
+   "ok": true,
+   "detail": "HTTP 5077"
+  },
+  {
+   "check": "ورود کارگزار",
+   "ok": false,
+   "detail": "موجودی None"
+  },
+  {
+   "check": "کشف قیمت آ س پ",
+   "ok": true,
+   "detail": "19140 · ceiling_locked · باند 18040-19140"
+  },
+  {
+   "check": "کشف قیمت آریا",
+   "ok": true,
+   "detail": "68520 · ceiling_locked · باند 64540-68520"
+  },
+  {
+   "check": "کشف قیمت آسیا",
+   "ok": true,
+   "detail": "5550 · ceiling_locked · باند 5230-5550"
+  },
+  {
+   "check": "تمرین bind آ س پ",
+   "ok": false,
+   "detail": "login_blocked"
+  },
+  {
+   "check": "تمرین bind آریا",
+   "ok": false,
+   "detail": "login_blocked"
+  },
+  {
+   "check": "تمرین bind آسیا",
+   "ok": false,
+   "detail": "login_blocked"
+  },
+  {
+   "check": "فروش‌های سررسیدشده",
+   "ok": true,
+   "detail": "ندارد"
+  },
+  {
+   "check": "زمان‌بند",
+   "ok": true,
+   "detail": "همهٔ کارهای صبح موجود"
+  }
+ ]
+}

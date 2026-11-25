@@ -1,0 +1,37 @@
+==============================================================================
+TSE BOT v2 — HONEST BACKTEST
+==============================================================================
+period            : 1404-06-01 .. 1404-12-06  (Jalali)
+fill model        : open_if_not_locked
+signal days       : 127
+signals generated : 381
+entries filled    : 59
+missed (locked)   : 1
+
+trades            : 59
+fill rate         : 15.5%
+win rate          : 79.7%
+avg per trade     : +5.713%
+median per trade  : +7.027%
+std               : 6.37%
+profit factor     : 8.572
+best / worst      : +20.98% / -7.19%
+avg holding days  : 5.2
+total return      : +200.53%  (slot-based, compounded)
+max drawdown      : -2.40%
+mean 95% CI       : [+4.139%, +7.341%]
+
+control (equal-weight, next open -> close after 5 sessions):
+  n=98846  avg=-0.201%  median=-0.577%  win=46.9%
+  strategy edge over control: +5.914% per trade
+
+exit reasons:
+  queue_break 36
+  target     10
+  stop       6
+  time       5
+  stop_gap   2
+
+by Jalali year:
+  1404  n=59   avg=+5.71%  win=80%
+==============================================================================

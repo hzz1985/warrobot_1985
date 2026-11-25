@@ -1,0 +1,32 @@
+{
+ "agent": "a13_slots",
+ "at": "2026-11-25 00:03:26",
+ "total_assets": 1687719280.0,
+ "target_per_slot": 562573093.0,
+ "cash": 0.0,
+ "reserved": 0,
+ "slots": [
+  {
+   "symbol": "آباد",
+   "value": 1687719280.0,
+   "pnl_pct": -0.02,
+   "kind": "filled",
+   "deviation_pct": 200.0,
+   "within_tolerance": false
+  }
+ ],
+ "open_slots": 2,
+ "ok": true,
+ "deviation": [
+  {
+   "symbol": "آباد",
+   "value": 1687719280.0,
+   "pnl_pct": -0.02,
+   "kind": "filled",
+   "deviation_pct": 200.0,
+   "within_tolerance": false
+  }
+ ],
+ "tolerance_pct": 5.0,
+ "note": "انحراف اسلات‌ها گزارش شد؛ تصمیم با مالک است"
+}

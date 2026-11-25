@@ -1,0 +1,150 @@
+{"symbol": "آباد", "isin": "IRO1ABAD0001", "budget": 111864724.0, "qty": 0, "price": null, "message": "", "submitted": false}
+{"symbol": "آردینه", "isin": "IRO3ARDZ0001", "budget": 111864724.0, "qty": 0, "price": null, "message": "", "submitted": false}
+{"symbol": "آرمان", "isin": "IRO7ARMP0001", "budget": 111864724.0, "qty": 0, "price": null, "message": "", "submitted": false}
+{"symbol": "آباد", "isin": "IRO1ABAD0001", "budget": 111864724.0, "price": null, "qty": null, "message": "error:Unterminated string starting at: line 1 column 1841 (char 18", "submitted": false}
+{"symbol": "آردینه", "isin": "IRO3ARDZ0001", "budget": 111864724.0, "price": null, "qty": null, "message": "error:Unterminated string starting at: line 1 column 1840 (char 18", "submitted": false}
+{"symbol": "آرمان", "isin": "IRO7ARMP0001", "budget": 111864724.0, "price": null, "qty": 55522, "message": "", "submitted": false}
+{"symbol": "آباد", "isin": "IRO1ABAD0001", "budget": 41811123.0, "price": null, "qty": 22111, "message": "سفارش خرید آباد1 با موفقیت در سیستم ثبت شد.", "submitted": true}
+{"symbol": "آردینه", "isin": "IRO3ARDZ0001", "budget": 41811123.0, "price": null, "qty": 887, "message": "سفارش خرید آردینه1 با موفقیت در سیستم ثبت شد.", "submitted": true}
+{"symbol": "آرمان", "isin": "IRO7ARMP0001", "budget": 41811123.0, "price": null, "qty": 20752, "message": "", "submitted": false}
+{"symbol": "آریا", "qty": 16614, "price": 65610.0, "budget": 1106409987.0, "message": "isin_mismatch expected=IRO3APOZ0001 found=IRO1ABAD0001,IRO3ARDZ0001,IRO3AVPP0001", "ok": false}
+{"symbol": "آلومینا", "qty": 4011, "price": 271700.0, "budget": 1106409987.0, "message": "isin_mismatch expected=IRO1ALMN0001 found=IRO1ABAD0001,IRO3ARDZ0001,IRO3AVPP0001", "ok": false}
+{"symbol": "آباد", "isin": "IRO1ABAD0001", "budget": 1106409987.0, "price": null, "qty": 568331, "message": "سفارش خرید آباد1 با موفقیت در سیستم ثبت شد.", "submitted": true}
+{"symbol": "آبین", "isin": "IRO7ABYP0001", "budget": 1106409987.0, "price": null, "qty": 0, "message": "isin_mismatch expected=IRO7ABYP0001 found=IRO1ABAD0001,IRO3AVPP0001,IRO3ARDZ0001", "submitted": false}
+{"symbol": "آردینه", "isin": "IRO3ARDZ0001", "budget": 1106409987.0, "price": null, "qty": 22799, "message": "", "submitted": false}
+{"symbol": "آریا", "isin": "IRO3APOZ0001", "budget": 1106409987.0, "price": null, "qty": 0, "message": "isin_mismatch expected=IRO3APOZ0001 found=IRO1ABAD0001,IRO3ARDZ0001,IRO3AVPP0001", "submitted": false}
+{"symbol": "آلومینا", "isin": "IRO1ALMN0001", "budget": 1106409987.0, "price": null, "qty": 0, "message": "isin_mismatch expected=IRO1ALMN0001 found=IRO1ABAD0001,IRO3ARDZ0001,IRO3AVPP0001", "submitted": false}
+{"symbol": "آپ", "isin": "IRO1APPE0001", "budget": 1106409987.0, "price": null, "qty": null, "message": null, "submitted": false}
+{"symbol": "آباد", "isin": "IRO1ABAD0001", "budget": 1074587346.0, "price": null, "qty": 551984, "message": "", "submitted": false}
+{"symbol": "آبین", "isin": "IRO7ABYP0001", "budget": 1074587346.0, "price": null, "qty": 0, "message": "isin_mismatch expected=IRO7ABYP0001 found=IRO1ABAD0001,IRO3ARDZ0001,IRO3AVPP0001", "submitted": false}
+{"symbol": "آردینه", "isin": "IRO3ARDZ0001", "budget": 1074587346.0, "price": null, "qty": 22144, "message": "", "submitted": false}
+{"symbol": "آریا", "isin": "IRO3APOZ0001", "budget": 1074587346.0, "price": null, "qty": 0, "message": "isin_mismatch expected=IRO3APOZ0001 found=IRO1ABAD0001,IRO3ARDZ0001,IRO3AVPP0001", "submitted": false}
+{"symbol": "آلومینا", "isin": "IRO1ALMN0001", "budget": 1074587346.0, "price": null, "qty": 0, "message": "isin_mismatch expected=IRO1ALMN0001 found=IRO1ABAD0001,IRO3ARDZ0001,IRO3AVPP0001", "submitted": false}
+{"symbol": "آپ", "isin": "IRO1APPE0001", "budget": 1074587346.0, "price": null, "qty": 0, "message": "isin_mismatch expected=IRO1APPE0001 found=IRO1ABAD0001,IRO3ARDZ0001,IRO3AVPP0001", "submitted": false}
+{"symbol": "آباد", "isin": "IRO1ABAD0001", "budget": 65082877.0, "price": null, "qty": 33431, "message": "سفارش خرید آباد1 با موفقیت در سیستم ثبت شد.", "submitted": true}
+{"symbol": "آبین", "isin": "IRO7ABYP0001", "budget": 65082877.0, "price": null, "qty": 3544, "message": "", "submitted": false}
+{"symbol": "آردینه", "isin": "IRO3ARDZ0001", "budget": 65082877.0, "price": null, "qty": 1341, "message": "", "submitted": false}
+{"symbol": "آریا", "isin": "IRO3APOZ0001", "budget": 65082877.0, "price": null, "qty": 948, "message": "", "submitted": false}
+{"symbol": "آلومینا", "isin": "IRO1ALMN0001", "budget": 65082877.0, "price": null, "qty": 229, "message": "", "submitted": false}
+{"symbol": "آپ", "isin": "IRO1APPE0001", "budget": 65082877.0, "price": null, "qty": 6590, "message": "", "submitted": false}
+{"symbol": "اتکاسا", "qty": 84229, "price": 8660.0, "budget": 740370926.0, "message": "", "ok": false}
+{"symbol": "اتکام", "qty": 316043, "price": 2308.0, "budget": 740370926.0, "message": null, "ok": false}
+{"symbol": "آباد", "isin": "IRO1ABAD0001", "budget": 740370918.0, "price": null, "qty": 369331, "message": "سفارش خرید آباد1 با موفقیت در سیستم ثبت شد.", "submitted": true}
+{"symbol": "آبین", "isin": "IRO7ABYP0001", "budget": 740370918.0, "price": null, "qty": 39153, "message": "", "submitted": false}
+{"symbol": "آریا", "isin": "IRO3APOZ0001", "budget": 740370918.0, "price": null, "qty": 10481, "message": "", "submitted": false}
+{"symbol": "آلومینا", "isin": "IRO1ALMN0001", "budget": 740370918.0, "price": null, "qty": 2531, "message": "", "submitted": false}
+{"symbol": "آواپارس", "isin": "IRO7AVPP0001", "budget": 740370918.0, "price": null, "qty": 100889, "message": "", "submitted": false}
+{"symbol": "آبین", "qty": 38026, "price": 18630.0, "message": "سفارش خرید افران1 با موفقیت در سیستم ثبت شد.", "submitted": true}
+{"symbol": "آریا", "qty": 10180, "price": 69590.0, "message": "", "submitted": false}
+{"symbol": "آلومینا", "qty": 2458, "price": 288100.0, "message": "", "submitted": false}
+{"symbol": "آواپارس", "qty": 97984, "price": 7230.0, "message": "سفارش خرید با خطا مواجه شد. مانده کافی نمیباشد", "submitted": false}
+{"symbol": "اتکاسا", "qty": 81804, "price": 8660.0, "message": "", "submitted": false}
+{"symbol": "اخشان", "qty": 24396, "price": 19710.0, "budget": 488077200.0, "message": "bind_mismatch wanted=اخشان got=", "ok": false}
+{"symbol": "الکتروماد", "qty": 50993, "price": 9430.0, "budget": 488077200.0, "message": "bind_mismatch wanted=الکتروماد got=", "ok": false}
+{"symbol": "آباد", "isin": "IRO1ABAD0001", "budget": 490376105.0, "price": null, "qty": 244622, "message": "", "submitted": false}
+{"symbol": "آبین", "isin": "IRO7ABYP0001", "budget": 490376105.0, "price": null, "qty": 0, "message": "bind_mismatch wanted=آبین got=", "submitted": false}
+{"symbol": "آریا", "isin": "IRO3APOZ0001", "budget": 490376105.0, "price": null, "qty": 0, "message": "bind_mismatch wanted=آریا got=", "submitted": false}
+{"symbol": "آلومینا", "isin": "IRO1ALMN0001", "budget": 490376105.0, "price": null, "qty": 0, "message": "bind_mismatch wanted=آلومینا got=", "submitted": false}
+{"symbol": "آواپارس", "isin": "IRO7AVPP0001", "budget": 490376105.0, "price": null, "qty": 64936, "message": "سفارش خرید آواپارس1 با موفقیت در سیستم ثبت شد.", "submitted": true}
+{"symbol": "آواک", "isin": "IRO5AVKS0001", "budget": 490376105.0, "price": null, "qty": 0, "message": "bind_mismatch wanted=آواک got=", "submitted": false}
+{"symbol": "ارفع", "qty": 11406, "price": 13960.0, "budget": 161627591.0, "message": "", "ok": false}
+{"symbol": "آباد", "isin": "IRO1ABAD0001", "budget": 161628011.0, "price": null, "qty": 78288, "message": "سفارش خرید آباد1 با موفقیت در سیستم ثبت شد.", "submitted": true}
+{"symbol": "آبین", "isin": "IRO7ABYP0001", "budget": 161628011.0, "price": null, "qty": 0, "message": "bind_mismatch wanted=آبین got=", "submitted": false}
+{"symbol": "آریا", "isin": "IRO3APOZ0001", "budget": 161628011.0, "price": null, "qty": 0, "message": "bind_mismatch wanted=آریا got=", "submitted": false}
+{"symbol": "آواپارس", "isin": "IRO7AVPP0001", "budget": 161628011.0, "price": null, "qty": 20788, "message": "سفارش خرید آواپارس1 با موفقیت در سیستم ثبت شد.", "submitted": true}
+{"symbol": "اتکام", "isin": "IRO1ETKA0001", "budget": 161628011.0, "price": null, "qty": 0, "message": "bind_mismatch wanted=اتکام got=", "submitted": false}
+{"symbol": "آباد", "isin": "IRO1ABAD0001", "budget": 161628011.0, "price": null, "qty": null, "message": null, "submitted": false}
+{"symbol": "آبین", "isin": "IRO7ABYP0001", "budget": 161628011.0, "price": null, "qty": null, "message": null, "submitted": false}
+{"symbol": "آریا", "isin": "IRO3APOZ0001", "budget": 161628011.0, "price": null, "qty": null, "message": null, "submitted": false}
+{"symbol": "آواپارس", "isin": "IRO7AVPP0001", "budget": 161628011.0, "price": null, "qty": null, "message": null, "submitted": false}
+{"symbol": "اخابر", "isin": "IRO1MKBT0001", "budget": 161628011.0, "price": null, "qty": null, "message": null, "submitted": false}
+{"symbol": "آواپارس", "isin": "IRO7AVPP0001", "budget": 368033930.0, "price": null, "qty": null, "message": null, "submitted": false}
+{"symbol": "آردینه", "isin": "IRO3ARDZ0001", "budget": 92605901.0, "price": null, "qty": null, "message": null, "submitted": false}
+{"symbol": "آواپارس", "isin": "IRO7AVPP0001", "budget": 796929034.0, "price": null, "qty": 152753, "message": "", "submitted": false}
+{"at": "2026-11-15 20:47:53", "symbol": "آواپارس", "isin": "IRO7AVPP0001", "budget": 532990286.0, "price": null, "qty": 62887, "message": "", "submitted": false}
+{"at": "2026-11-15 20:54:20", "symbol": "آواپارس", "isin": "IRO7AVPP0001", "budget": 532990286.0, "price": null, "qty": 62887, "message": "", "submitted": false}
+{"at": "2026-11-15 21:22:48", "symbol": "آواپارس", "isin": "IRO7AVPP0001", "budget": 532990286.0, "price": null, "qty": 62887, "message": "سفارش خرید آواپارس1 با موفقیت در سیستم ثبت شد.", "submitted": true}
+{"at": "2026-11-15 21:31:02", "symbol": null, "source": "snapshot_balance", "free_balance": 475607738.0, "submitted": false}
+{"at": "2026-11-15 21:32:12", "symbol": null, "source": "open_order_guard", "submitted": false, "open_orders": 1}
+{"at": "2026-11-15 21:40:07", "symbol": null, "source": "snapshot_balance", "free_balance": 475607738.0, "submitted": false}
+{"at": "2026-11-15 21:47:11", "symbol": null, "source": "snapshot_balance", "free_balance": 475607738.0, "submitted": false}
+{"at": "2026-11-15 21:48:29", "symbol": null, "source": "snapshot_balance", "free_balance": 475607738.0, "submitted": false}
+{"at": "2026-11-15 21:52:19", "symbol": null, "source": "snapshot_balance", "free_balance": 1002621373.0, "submitted": false}
+{"at": "2026-11-15 22:10:30", "symbol": null, "source": "snapshot_balance", "free_balance": 1002621373.0, "submitted": false}
+{"at": "2026-11-15 22:14:34", "symbol": "آواپارس", "isin": "IRO7AVPP0001", "budget": 608495754.0, "price": null, "qty": 69709, "message": "", "submitted": false}
+{"symbol": "آرمان", "qty": 532811, "price": 2260.0, "budget": 1222215986.0, "message": "bind_mismatch wanted=آرمان got=", "ok": false}
+{"at": "2026-11-16 20:22:50", "symbol": null, "source": "snapshot_balance", "free_balance": 63185273.0, "submitted": false}
+{"at": "2026-11-16 20:37:47", "symbol": null, "source": "snapshot_balance", "free_balance": 0.0, "submitted": false}
+{"at": "2026-11-16 20:45:12", "symbol": null, "source": "snapshot_balance", "free_balance": 0.0, "submitted": false}
+{"at": "2026-11-16 21:14:27", "symbol": null, "source": "snapshot_balance", "free_balance": 0.0, "submitted": false}
+{"at": "2026-11-16 21:22:31", "symbol": "آواپارس", "isin": "IRO7AVPP0001", "budget": 608495754.0, "price": null, "qty": null, "message": null, "submitted": false}
+{"at": "2026-11-16 21:28:21", "symbol": "آواپارس", "isin": "IRO7AVPP0001", "budget": 608495754.0, "price": null, "qty": null, "message": null, "submitted": false}
+{"at": "2026-11-16 21:52:57", "symbol": null, "source": "snapshot_balance", "free_balance": 0.0, "submitted": false}
+{"at": "2026-11-16 21:53:34", "symbol": null, "source": "snapshot_balance", "free_balance": 0.0, "submitted": false}
+{"at": "2026-11-16 21:55:07", "symbol": null, "source": "snapshot_balance", "free_balance": 0.0, "submitted": false}
+{"at": "2026-11-16 21:58:35", "symbol": null, "source": "snapshot_balance", "free_balance": 400946601.0, "submitted": false}
+{"at": "2026-11-16 21:58:58", "symbol": null, "source": "open_order_guard", "submitted": false, "open_orders": 1}
+{"at": "2026-11-16 22:01:25", "symbol": null, "source": "snapshot_balance", "free_balance": 400946601.0, "submitted": false}
+{"at": "2026-11-16 22:01:48", "symbol": null, "source": "open_order_guard", "submitted": false, "open_orders": 1}
+{"at": "2026-11-16 22:02:13", "symbol": null, "source": "snapshot_balance", "free_balance": 400946601.0, "submitted": false}
+{"at": "2026-11-16 22:02:38", "symbol": null, "source": "open_order_guard", "submitted": false, "open_orders": 1}
+{"at": "2026-11-16 22:06:30", "symbol": null, "source": "snapshot_balance", "free_balance": 400946601.0, "submitted": false}
+{"at": "2026-11-16 22:06:52", "symbol": null, "source": "open_order_guard", "submitted": false, "open_orders": 1}
+{"at": "2026-11-16 22:10:34", "symbol": null, "source": "snapshot_balance", "free_balance": 400946601.0, "submitted": false}
+{"at": "2026-11-16 22:24:38", "symbol": null, "source": "snapshot_balance", "free_balance": 400946593.0, "submitted": false}
+{"at": "2026-11-16 22:26:41", "symbol": null, "source": "snapshot_balance", "free_balance": 400946593.0, "submitted": false}
+{"at": "2026-11-16 22:29:01", "symbol": null, "source": "snapshot_balance", "free_balance": 400946593.0, "submitted": false}
+{"at": "2026-11-16 22:31:21", "symbol": null, "source": "snapshot_balance", "free_balance": 400946593.0, "submitted": false}
+{"at": "2026-11-16 22:40:25", "symbol": null, "source": "snapshot_balance", "free_balance": 400946593.0, "submitted": false}
+{"at": "2026-11-17 20:49:09", "symbol": "آواپارس", "isin": "IRO7AVPP0001", "budget": 10308642.0, "price": null, "qty": 1182, "message": "no_order_response", "submitted": false}
+{"at": "2026-11-17 20:52:14", "symbol": "آواپارس", "isin": "IRO7AVPP0001", "budget": 10308642.0, "price": null, "qty": 1182, "message": "no_order_response", "submitted": false}
+{"at": "2026-11-17 20:58:07", "symbol": "آواپارس", "isin": "IRO7AVPP0001", "budget": 10308642.0, "price": null, "qty": 1182, "message": "no_order_response", "submitted": false}
+{"at": "2026-11-17 21:01:13", "symbol": "آواپارس", "isin": "IRO7AVPP0001", "budget": 10308642.0, "price": null, "qty": 1182, "message": "no_order_response", "submitted": false}
+{"at": "2026-11-20 20:13:25", "symbol": "آواپارس", "isin": "IRO7AVPP0001", "budget": 168717866.0, "price": null, "qty": 18932, "message": "no_order_response", "submitted": false}
+{"at": "2026-11-20 20:14:25", "symbol": "آ س پ", "isin": "IRO3ASPZ0001", "budget": 710376842.0, "price": null, "qty": 0, "message": "bind_mismatch wanted=آ س پ got=", "submitted": false}
+{"at": "2026-11-20 20:15:18", "symbol": "آباد", "isin": "IRO1ABAD0001", "budget": 710376842.0, "price": null, "qty": 288728, "message": "no_order_response", "submitted": false}
+{"at": "2026-11-20 20:20:45", "symbol": "آ س پ", "isin": "IRO3ASPZ0001", "budget": 529823850.0, "price": null, "qty": 0, "message": "bind_mismatch wanted=آ س پ got=", "submitted": false}
+{"at": "2026-11-20 20:21:38", "symbol": "آباد", "isin": "IRO1ABAD0001", "budget": 529823850.0, "price": null, "qty": 215344, "message": "no_order_response", "submitted": false}
+{"at": "2026-11-20 20:22:41", "symbol": "آبادا", "isin": "IRO1NBAB0001", "budget": 529823850.0, "price": null, "qty": 0, "message": "bind_mismatch wanted=آبادا got=", "submitted": false}
+{"at": "2026-11-20 20:48:42", "symbol": "آ س پ", "isin": "IRO3ASPZ0001", "budget": 529823850.0, "price": null, "qty": 0, "message": "bind_mismatch wanted=آ س پ got=", "submitted": false}
+{"at": "2026-11-20 20:49:36", "symbol": "آباد", "isin": "IRO1ABAD0001", "budget": 529823850.0, "price": null, "qty": 215344, "message": "no_order_response", "submitted": false}
+{"at": "2026-11-20 20:50:37", "symbol": "آبادا", "isin": "IRO1NBAB0001", "budget": 529823850.0, "price": null, "qty": 0, "message": "bind_mismatch wanted=آبادا got=", "submitted": false}
+{"at": "2026-11-20 20:55:25", "symbol": "آ س پ", "isin": "IRO3ASPZ0001", "budget": 529823850.0, "price": null, "qty": 0, "message": "bind_mismatch wanted=آ س پ got=", "submitted": false}
+{"at": "2026-11-20 20:56:20", "symbol": "آباد", "isin": "IRO1ABAD0001", "budget": 529823850.0, "price": null, "qty": 215344, "message": "no_order_response", "submitted": false}
+{"at": "2026-11-20 20:57:20", "symbol": "آبادا", "isin": "IRO1NBAB0001", "budget": 529823850.0, "price": null, "qty": 0, "message": "bind_mismatch wanted=آبادا got=", "submitted": false}
+{"at": "2026-11-20 21:01:36", "symbol": "آ س پ", "isin": "IRO3ASPZ0001", "budget": 529823850.0, "price": null, "qty": 0, "message": "bind_mismatch wanted=آ س پ got=", "submitted": false}
+{"at": "2026-11-20 21:02:30", "symbol": "آباد", "isin": "IRO1ABAD0001", "budget": 529823850.0, "price": null, "qty": 215344, "message": "no_order_response", "submitted": false}
+{"at": "2026-11-20 21:03:46", "symbol": "آبادا", "isin": "IRO1NBAB0001", "budget": 529823850.0, "price": null, "qty": 0, "message": "bind_mismatch wanted=آبادا got=", "submitted": false}
+{"at": "2026-11-20 21:06:57", "symbol": "آ س پ", "isin": "IRO3ASPZ0001", "budget": 529823850.0, "price": null, "qty": 0, "message": "bind_mismatch wanted=آ س پ got=", "submitted": false}
+{"at": "2026-11-20 21:07:51", "symbol": "آباد", "isin": "IRO1ABAD0001", "budget": 529823850.0, "price": null, "qty": 215344, "message": "no_order_response", "submitted": false}
+{"at": "2026-11-20 21:08:51", "symbol": "آبادا", "isin": "IRO1NBAB0001", "budget": 529823850.0, "price": null, "qty": 0, "message": "bind_mismatch wanted=آبادا got=", "submitted": false}
+{"at": "2026-11-20 21:16:03", "symbol": "آ س پ", "isin": "IRO3ASPZ0001", "budget": 529823850.0, "price": null, "qty": 0, "message": "bind_mismatch wanted=آ س پ got=", "submitted": false}
+{"at": "2026-11-20 21:16:59", "symbol": "آباد", "isin": "IRO1ABAD0001", "budget": 529823850.0, "price": null, "qty": 215344, "submitted": false, "verified_by_open_orders": true, "orderid": "3026112100003148", "message": "no_order_response"}
+{"at": "2026-11-20 21:17:59", "symbol": "آبادا", "isin": "IRO1NBAB0001", "budget": 529823850.0, "price": null, "qty": 0, "message": "bind_mismatch wanted=آبادا got=", "submitted": false}
+{"at": "2026-11-20 21:28:24", "symbol": null, "source": "snapshot_balance", "free_balance": 1673127947.0, "submitted": false}
+{"at": "2026-11-20 21:30:48", "symbol": "آ س پ", "isin": "IRO3ASPZ0001", "budget": 363912044.0, "price": null, "qty": 0, "message": "bind_mismatch wanted=آ س پ got=", "submitted": false}
+{"at": "2026-11-20 21:31:42", "symbol": "آبادا", "isin": "IRO1NBAB0001", "budget": 363912044.0, "price": null, "qty": 0, "message": "bind_mismatch wanted=آبادا got=", "submitted": false}
+{"at": "2026-11-20 21:32:36", "symbol": "آردینه", "isin": "IRO3ARDZ0001", "budget": 363912044.0, "price": null, "qty": 6949, "submitted": false, "verified_by_open_orders": true, "orderid": "3026112100003339", "message": "no_order_response"}
+{"at": "2026-11-20 21:42:09", "symbol": null, "source": "snapshot_balance", "free_balance": 1673127947.0, "submitted": false}
+{"at": "2026-11-21 21:01:03", "symbol": "آباد", "isin": "IRO1ABAD0001", "budget": 529823850.0, "price": null, "qty": 203110, "price_source": "ceiling_locked", "message": "no_order_response", "submitted": false}
+{"at": "2026-11-21 21:02:11", "symbol": "آردینه", "isin": "IRO3ARDZ0001", "budget": 529823850.0, "price": null, "qty": 9539, "price_source": "ceiling_locked", "message": "no_order_response", "submitted": false}
+{"at": "2026-11-21 21:03:19", "symbol": "آرمان", "isin": "IRO7ARMP0001", "budget": 529823850.0, "price": null, "qty": 199462, "price_source": "ceiling_locked", "message": "no_order_response", "submitted": false}
+{"at": "2026-11-21 21:07:43", "symbol": "آباد", "isin": "IRO1ABAD0001", "budget": 529823850.0, "price": null, "qty": 203110, "price_source": "ceiling_locked", "message": "no_order_response", "submitted": false}
+{"at": "2026-11-21 21:08:51", "symbol": "آردینه", "isin": "IRO3ARDZ0001", "budget": 529823850.0, "price": null, "qty": 9539, "price_source": "ceiling_locked", "message": "no_order_response", "submitted": false}
+{"at": "2026-11-21 21:09:59", "symbol": "آرمان", "isin": "IRO7ARMP0001", "budget": 529823850.0, "price": null, "qty": 199462, "price_source": "ceiling_locked", "message": "no_order_response", "submitted": false}
+{"at": "2026-11-21 21:20:09", "symbol": "آباد", "isin": "IRO1ABAD0001", "budget": 529823850.0, "price": null, "qty": 203110, "price_source": "ceiling_locked", "submitted": false, "verified_by_open_orders": true, "orderid": "3026112200003656", "message": "no_order_response"}
+{"at": "2026-11-21 21:21:17", "symbol": "آردینه", "isin": "IRO3ARDZ0001", "budget": 529823850.0, "price": null, "qty": 9539, "price_source": "ceiling_locked", "submitted": false, "verified_by_open_orders": true, "orderid": "3026112220003835", "message": "no_order_response"}
+{"at": "2026-11-21 21:22:25", "symbol": "آرمان", "isin": "IRO7ARMP0001", "budget": 529823850.0, "price": null, "qty": 199462, "price_source": "ceiling_locked", "message": "no_order_response", "submitted": false}
+{"symbol": "آواک", "qty": 476779, "price": 2703.0, "budget": 1308066329.0, "message": "bind_mismatch wanted=آواک got=", "ok": false}
+{"symbol": "اتکاسا", "qty": 115065, "price": 11200.0, "budget": 1308066329.0, "message": "no_order_response", "ok": false}
+{"symbol": "اتکام", "qty": 463407, "price": 2781.0, "budget": 1308066329.0, "message": "bind_mismatch wanted=اتکام got=", "ok": false}
+{"symbol": "اوان", "qty": 84066, "price": 15330.0, "budget": 1308066329.0, "message": "bind_mismatch wanted=اوان got=", "ok": false}
+{"symbol": "بالبر", "qty": 43058, "price": 29930.0, "budget": 1308066329.0, "message": "bind_mismatch wanted=بالبر got=", "ok": false}
+{"symbol": "بانیان", "qty": 57739, "price": 22320.0, "budget": 1308066329.0, "message": "bind_mismatch wanted=بانیان got=", "ok": false}
+{"at": "2026-11-22 21:02:10", "symbol": "آ س پ", "isin": "IRO3ASPZ0001", "budget": 529823850.0, "price": null, "qty": 28493, "price_source": "best_ask", "message": "no_order_response", "submitted": false}
+{"at": "2026-11-22 21:03:17", "symbol": "آباد", "isin": "IRO1ABAD0001", "budget": 529823850.0, "price": null, "qty": 197202, "price_source": "ceiling_locked", "message": "no_order_response", "submitted": false}
+{"at": "2026-11-22 21:04:25", "symbol": "آردینه", "isin": "IRO3ARDZ0001", "budget": 529823850.0, "price": null, "qty": 9261, "price_source": "ceiling_locked", "message": "no_order_response", "submitted": false}
+{"at": "2026-11-22 21:08:50", "symbol": "آ س پ", "isin": "IRO3ASPZ0001", "budget": 529823850.0, "price": null, "qty": 28493, "price_source": "best_ask", "message": "no_order_response", "submitted": false}
+{"at": "2026-11-22 21:09:56", "symbol": "آباد", "isin": "IRO1ABAD0001", "budget": 529823850.0, "price": null, "qty": 197202, "price_source": "ceiling_locked", "message": "no_order_response", "submitted": false}
+{"at": "2026-11-22 21:11:05", "symbol": "آردینه", "isin": "IRO3ARDZ0001", "budget": 529823850.0, "price": null, "qty": 9261, "price_source": "ceiling_locked", "message": "no_order_response", "submitted": false}
+{"at": "2026-11-22 22:08:08", "symbol": "آباد", "isin": "IRO1ABAD0001", "budget": 1666937662, "price": 2657.0, "qty": 629746, "submitted": true, "source": "owner_manual", "message": "ثبت دستی مالک — پر شد: ۶۲۹٬۷۴۶ @ میانگین ۲٬۶۵۷"}

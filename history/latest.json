@@ -1,0 +1,133 @@
+{
+ "at": "2026-11-25 00:20:25",
+ "repair": true,
+ "reports": [
+  {
+   "agent": "a1_login",
+   "at": "2026-11-25 00:18:47",
+   "orphans": 0,
+   "attempts": [
+    {
+     "try": 1,
+     "ok": false,
+     "balance": null
+    },
+    {
+     "try": 2,
+     "ok": false,
+     "balance": null
+    },
+    {
+     "try": 3,
+     "ok": false,
+     "balance": null
+    }
+   ],
+   "ok": false,
+   "escalate": "login_failed_after_3_attempts"
+  },
+  {
+   "agent": "a2_preopen",
+   "at": "2026-11-25 00:19:33",
+   "checks": {
+    "rehearsal": {
+     "at": "2026-11-25 00:08:05",
+     "passed": 5,
+     "total": 8
+    },
+    "preready": {
+     "at": "2026-11-24 20:46:59",
+     "passed": 1,
+     "total": 5
+    }
+   },
+   "actions": [],
+   "orders": {
+    "submitted_today": 0,
+    "open_orders": 0
+   },
+   "ok": false,
+   "in_session": true,
+   "pending_order": true,
+   "escalate": "no order and no open order today"
+  },
+  {
+   "agent": "a3_webapp",
+   "at": "2026-11-25 00:19:59",
+   "actions": [],
+   "http": {
+    "status": 200,
+    "len": 54396,
+    "has_positions": true,
+    "has_tabs": true
+   },
+   "pnl_age_min": 1.2,
+   "prices_age_min": 14.2,
+   "consistency": {
+    "ok": true,
+    "mismatch": [],
+    "at": "2026-11-25 00:18:44"
+   },
+   "market_open": true,
+   "ok": true
+  },
+  {
+   "agent": "a4",
+   "ok": false,
+   "error": "run() got an unexpected keyword argument 'repair'",
+   "at": "2026-11-25 00:19:59"
+  },
+  {
+   "agent": "a10_sales",
+   "at": "2026-11-25 00:20:25",
+   "broker_trades": 0,
+   "broker_sells": 0,
+   "missing": [],
+   "recorded": [],
+   "ok": true
+  },
+  {
+   "agent": "a11",
+   "ok": false,
+   "error": "run() got an unexpected keyword argument 'repair'",
+   "at": "2026-11-25 00:20:25"
+  },
+  {
+   "agent": "a12",
+   "ok": false,
+   "error": "run() got an unexpected keyword argument 'repair'",
+   "at": "2026-11-25 00:20:25"
+  },
+  {
+   "agent": "a13",
+   "ok": false,
+   "error": "run() got an unexpected keyword argument 'repair'",
+   "at": "2026-11-25 00:20:25"
+  },
+  {
+   "agent": "a14",
+   "ok": false,
+   "error": "run() got an unexpected keyword argument 'repair'",
+   "at": "2026-11-25 00:20:25"
+  },
+  {
+   "agent": "a15",
+   "ok": false,
+   "error": "run() got an unexpected keyword argument 'repair'",
+   "at": "2026-11-25 00:20:25"
+  },
+  {
+   "agent": "a16",
+   "ok": false,
+   "error": "run() got an unexpected keyword argument 'repair'",
+   "at": "2026-11-25 00:20:25"
+  },
+  {
+   "agent": "a17",
+   "ok": false,
+   "error": "run() got an unexpected keyword argument 'repair'",
+   "at": "2026-11-25 00:20:25"
+  }
+ ],
+ "ok": false
+}

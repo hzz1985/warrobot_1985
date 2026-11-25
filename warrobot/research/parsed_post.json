@@ -1,0 +1,55 @@
+{
+ "date": "2026/11/14",
+ "time": "15:07",
+ "commodities": {
+  "گواهی های سپرده کالایی 2026/11/14 - 15": {
+   "cert_price_toman": 32865300.0,
+   "global_usd": 3883.43,
+   "premium_pct": -2.8,
+   "nobubble_toman": 33823232.0
+  },
+  "نقره": {
+   "cert_price_toman": 434500.0,
+   "global_usd": 48.74,
+   "nobubble_toman": 424498.0,
+   "premium_pct": 2.4
+  },
+  "مس کاتد": {
+   "cert_price_toman": 3210900.0,
+   "global_usd": 6.09,
+   "premium_pct": -2.9
+  },
+  "گواهی سپرده سکه امامی": {
+   "cert_price_toman": 251500010.0,
+   "premium_pct": 2.5
+  },
+  "زعفران": {
+   "cert_price_toman": 282999.0,
+   "global_usd": 1.04,
+   "price_usd": 1.04,
+   "price_status": "ارزان"
+  },
+  "قیر (گواهی سپرده)": {
+   "cert_price_toman": 126110.0,
+   "global_usd": 95.84,
+   "price_usd": 0.66,
+   "ratio_pct": 68.6
+  },
+  "پسته": {
+   "cert_price_toman": 3179995.0,
+   "global_usd": 11.74,
+   "price_usd": 11.74,
+   "premium_pct": 6.7
+  },
+  "شمش روی": {
+   "cert_price_toman": 741100.0,
+   "global_usd": 3769.6,
+   "premium_pct": -20.2
+  },
+  "گندله سنگ آهن": {
+   "cert_price_toman": 20015.0,
+   "global_usd": 95.5,
+   "premium_pct": 26.3
+  }
+ }
+}

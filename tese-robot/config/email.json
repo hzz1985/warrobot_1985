@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "host": "smtp.gmail.com",
+  "port": 465,
+  "user": "hzamani.40@gmail.com",
+  "app_password": "sgzj eqep yngg dzdz",
+  "to": [
+    "hzamani.40@gmail.com"
+  ],
+  "min_interval_sec": 600
+}

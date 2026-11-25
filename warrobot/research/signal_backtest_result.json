@@ -1,0 +1,82 @@
+{
+ "data": {
+  "symbols": 790,
+  "trades": 5824,
+  "period": "1404-01-05 .. 1405-08-20"
+ },
+ "rules": {
+  "vol_ratio": 1.8,
+  "high_prox": 0.9,
+  "target": 0.08,
+  "stop": -0.04,
+  "max_hold": 10,
+  "fees_roundtrip": 0.01
+ },
+ "metrics": {
+  "win_rate_pct": 49.93,
+  "avg_return_pct": 0.892,
+  "median_return_pct": -0.168,
+  "avg_hold_days": 4.66,
+  "max_drawdown_pct": -31.61,
+  "sharpe_annualised": -9.0,
+  "signals_per_year": 3640.0,
+  "pct_up3_in_3days": 55.61,
+  "target_exits": 2588,
+  "stop_exits": 2698,
+  "time_exits": 538
+ },
+ "by_year": {
+  "1404": {
+   "trades": 3554,
+   "win_pct": 46.99,
+   "avg_ret_pct": 0.501
+  },
+  "1405": {
+   "trades": 2270,
+   "win_pct": 54.54,
+   "avg_ret_pct": 1.504
+  }
+ },
+ "most_active_symbols": [
+  [
+   "دابور",
+   17
+  ],
+  [
+   "شپلی",
+   16
+  ],
+  [
+   "قاسم",
+   16
+  ],
+  [
+   "تکاردان",
+   15
+  ],
+  [
+   "دتولید",
+   15
+  ],
+  [
+   "دفرا",
+   15
+  ],
+  [
+   "دلقما",
+   15
+  ],
+  [
+   "رتاپ",
+   15
+  ],
+  [
+   "شکام",
+   15
+  ],
+  [
+   "فسازان",
+   15
+  ]
+ ]
+}

@@ -1,0 +1,18 @@
+# secrets and machine state
+state/
+credentials.json
+pw_cookies.json
+history/*.log
+.env
+*.key
+*.pem
+node_modules/
+venv/
+.venv/
+__pycache__/
+data/
+logs/
+pw-profile/
+ocr/*.traineddata
+*.db
+*.sqlite

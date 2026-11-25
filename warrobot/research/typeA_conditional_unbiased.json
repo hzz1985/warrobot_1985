@@ -1,0 +1,53 @@
+{
+ "events_total": 331,
+ "events_with_price": 246,
+ "labels": {
+  "positive": 139,
+  "negative": 20,
+  "neutral": 86
+ },
+ "pre_event_features": {
+  "vol_ratio": {
+   "n": 246,
+   "mean": 0.919,
+   "median": 0.645,
+   "p90": 2.164,
+   "min": 0.006,
+   "max": 10.993
+  },
+  "prox_high": {
+   "n": 246,
+   "mean": 0.86,
+   "median": 0.872,
+   "p90": 1.0,
+   "min": 0.538,
+   "max": 1.0
+  },
+  "ret20": {
+   "n": 246,
+   "mean": 0.07,
+   "median": 0.012,
+   "p90": 0.468,
+   "min": -0.321,
+   "max": 0.713
+  },
+  "volume_ratio_5d": {
+   "n": 246,
+   "mean": 0.997,
+   "median": 0.737,
+   "p90": 2.156,
+   "min": 0.062,
+   "max": 4.122
+  }
+ },
+ "signal_fired_before_event_pct": 9.35,
+ "conditional_test": {
+  "symbol_days": 15615,
+  "base_rate_pct": 6.69,
+  "signal_days": 1305,
+  "hit_rate_pct": 6.36,
+  "lift": 0.95,
+  "avg_ret3_after_signal_with_event_pct": 3.318,
+  "avg_ret3_after_signal_no_event_pct": 1.338
+ }
+}

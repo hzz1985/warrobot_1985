@@ -1,0 +1,62 @@
+{
+  "day": "2026-10-23",
+  "mode": "live",
+  "session": "closed_day",
+  "account": {
+    "at": "2026-10-23T13:10:02+03:30",
+    "positions": [
+      {
+        "symbol": "چکاوه",
+        "qty": 81539,
+        "avg_cost": 21742.27,
+        "cost": 1772842953.53,
+        "realized": 0.0,
+        "invested": 1772842953.53,
+        "fees": 17552900.53,
+        "buys": 1,
+        "sells": 0,
+        "first_ts": "2026-10-21T10:28:57+03:30",
+        "last_ts": "2026-10-21T10:28:57+03:30",
+        "last_price": 21460.0,
+        "unrealized": -23016013.53,
+        "unrealized_pct": -1.298,
+        "total_pnl": -23016013.53,
+        "total_pct": -1.298
+      },
+      {
+        "symbol": "خساپا",
+        "qty": 138299,
+        "avg_cost": 149.0,
+        "cost": 20606551.0,
+        "realized": 0.0,
+        "invested": 20606551.0,
+        "fees": 0.0,
+        "buys": 0,
+        "sells": 0,
+        "first_ts": null,
+        "last_ts": "2026-10-19T08:20:24+03:30",
+        "last_price": 626.0,
+        "unrealized": 65968623.0,
+        "unrealized_pct": 320.134,
+        "total_pnl": 65968623.0,
+        "total_pct": 320.134
+      }
+    ],
+    "cash_ledger": -7698223555.22,
+    "exposure": 1836402114.0,
+    "unrealized": 42952609.47,
+    "realized_total": 59747613.51,
+    "equity": 1836402114.0,
+    "cash_broker": 0.0,
+    "mode": "live"
+  },
+  "orders_today": [],
+  "last_sync": {
+    "at": "2026-10-21T08:20:15+03:30",
+    "imported": 2,
+    "skipped": 7,
+    "orders": 20,
+    "diffs": {},
+    "cash_broker": 625245379
+  }
+}

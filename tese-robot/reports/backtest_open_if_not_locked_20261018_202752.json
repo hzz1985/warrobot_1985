@@ -1,0 +1,1679 @@
+{
+  "start": "1404-06-01",
+  "end": "1405-07-25",
+  "fill_model": "open_if_not_locked",
+  "signal_days": 227,
+  "signals": 681,
+  "filled": 101,
+  "missed_locked": 1,
+  "trades": [
+    {
+      "symbol": "لطیف",
+      "signal_day": "1404-06-01",
+      "entry_day": "1404-06-03",
+      "exit_day": "1404-06-18",
+      "entry": 1848.5289999999998,
+      "exit": 1892.0,
+      "days": 10,
+      "reason": "time",
+      "ret_pct": 1.1307591891073887,
+      "locked_entry": false
+    },
+    {
+      "symbol": "بزندگی",
+      "signal_day": "1404-06-01",
+      "entry_day": "1404-06-03",
+      "exit_day": "1404-06-18",
+      "entry": 1938.7989999999998,
+      "exit": 1932.0,
+      "days": 10,
+      "reason": "time",
+      "ret_pct": -1.5393408829962762,
+      "locked_entry": false
+    },
+    {
+      "symbol": "غسالم",
+      "signal_day": "1404-06-01",
+      "entry_day": "1404-06-03",
+      "exit_day": "1404-06-04",
+      "entry": 2886.6339999999996,
+      "exit": 2800.0349799999995,
+      "days": 1,
+      "reason": "stop",
+      "ret_pct": -4.157057654075558,
+      "locked_entry": false
+    },
+    {
+      "symbol": "غشهد",
+      "signal_day": "1404-06-04",
+      "entry_day": "1404-06-05",
+      "exit_day": "1404-06-16",
+      "entry": 4576.688999999999,
+      "exit": 4741.0,
+      "days": 6,
+      "reason": "queue_break",
+      "ret_pct": 2.3545037930997603,
+      "locked_entry": false
+    },
+    {
+      "symbol": "گشان",
+      "signal_day": "1404-06-15",
+      "entry_day": "1404-06-17",
+      "exit_day": "1404-06-26",
+      "entry": 15114.206999999999,
+      "exit": 16629.0,
+      "days": 6,
+      "reason": "queue_break",
+      "ret_pct": 8.709918734851918,
+      "locked_entry": false
+    },
+    {
+      "symbol": "سبزوا",
+      "signal_day": "1404-06-18",
+      "entry_day": "1404-06-22",
+      "exit_day": "1404-06-26",
+      "entry": 4334.965999999999,
+      "exit": 4622.0,
+      "days": 4,
+      "reason": "queue_break",
+      "ret_pct": 5.349541362141519,
+      "locked_entry": false
+    },
+    {
+      "symbol": "ولبهمن",
+      "signal_day": "1404-06-18",
+      "entry_day": "1404-06-22",
+      "exit_day": "1404-07-05",
+      "entry": 1400.1879999999999,
+      "exit": 1489.0,
+      "days": 10,
+      "reason": "time",
+      "ret_pct": 5.074359199512446,
+      "locked_entry": false
+    },
+    {
+      "symbol": "غنیلی",
+      "signal_day": "1404-06-26",
+      "entry_day": "1404-06-29",
+      "exit_day": "1404-07-08",
+      "entry": 3435.2749999999996,
+      "exit": 3898.0,
+      "days": 8,
+      "reason": "queue_break",
+      "ret_pct": 12.116292934549833,
+      "locked_entry": false
+    },
+    {
+      "symbol": "بشهاب",
+      "signal_day": "1404-06-26",
+      "entry_day": "1404-06-29",
+      "exit_day": "1404-07-02",
+      "entry": 2994.9579999999996,
+      "exit": 3205.0,
+      "days": 4,
+      "reason": "queue_break",
+      "ret_pct": 5.736687582858058,
+      "locked_entry": false
+    },
+    {
+      "symbol": "فرود",
+      "signal_day": "1404-07-02",
+      "entry_day": "1404-07-05",
+      "exit_day": "1404-07-19",
+      "entry": 2169.4889999999996,
+      "exit": 2455.0,
+      "days": 7,
+      "reason": "queue_break",
+      "ret_pct": 11.810463466991905,
+      "locked_entry": false
+    },
+    {
+      "symbol": "دهدشت",
+      "signal_day": "1404-07-05",
+      "entry_day": "1404-07-06",
+      "exit_day": "1404-07-08",
+      "entry": 7321.9,
+      "exit": 7300.0,
+      "days": 2,
+      "reason": "queue_break",
+      "ret_pct": -1.4883778089191724,
+      "locked_entry": false
+    },
+    {
+      "symbol": "دی",
+      "signal_day": "1404-07-08",
+      "entry_day": "1404-07-09",
+      "exit_day": "1404-07-21",
+      "entry": 613.8359999999999,
+      "exit": 676.0,
+      "days": 7,
+      "reason": "target",
+      "ret_pct": 8.687872763419492,
+      "locked_entry": false
+    },
+    {
+      "symbol": "چکارن",
+      "signal_day": "1404-07-08",
+      "entry_day": "1404-07-09",
+      "exit_day": "1404-07-21",
+      "entry": 2532.575,
+      "exit": 2730.0,
+      "days": 8,
+      "reason": "queue_break",
+      "ret_pct": 6.50959547788148,
+      "locked_entry": false
+    },
+    {
+      "symbol": "وپسا",
+      "signal_day": "1404-07-19",
+      "entry_day": "1404-07-20",
+      "exit_day": "1404-07-26",
+      "entry": 1354.05,
+      "exit": 1516.0,
+      "days": 4,
+      "reason": "target",
+      "ret_pct": 8.687872763419492,
+      "locked_entry": false
+    },
+    {
+      "symbol": "سفاسی",
+      "signal_day": "1404-07-21",
+      "entry_day": "1404-07-22",
+      "exit_day": "1404-08-03",
+      "entry": 2462.365,
+      "exit": 3015.0,
+      "days": 7,
+      "reason": "queue_break",
+      "ret_pct": 20.982705053404782,
+      "locked_entry": false
+    },
+    {
+      "symbol": "فافزا",
+      "signal_day": "1404-07-21",
+      "entry_day": "1404-07-22",
+      "exit_day": "1404-08-04",
+      "entry": 9983.862,
+      "exit": 9684.34614,
+      "days": 8,
+      "reason": "stop",
+      "ret_pct": -4.157057654075558,
+      "locked_entry": false
+    },
+    {
+      "symbol": "وساپا",
+      "signal_day": "1404-07-26",
+      "entry_day": "1404-07-27",
+      "exit_day": "1404-08-05",
+      "entry": 4730.147999999999,
+      "exit": 5203.162799999999,
+      "days": 6,
+      "reason": "target",
+      "ret_pct": 8.687872763419492,
+      "locked_entry": false
+    },
+    {
+      "symbol": "سیستم",
+      "signal_day": "1404-08-03",
+      "entry_day": "1404-08-04",
+      "exit_day": "1404-08-18",
+      "entry": 26847.300999999996,
+      "exit": 27524.0,
+      "days": 10,
+      "reason": "time",
+      "ret_pct": 1.2976384797440677,
+      "locked_entry": false
+    },
+    {
+      "symbol": "ثاصفا",
+      "signal_day": "1404-08-04",
+      "entry_day": "1404-08-05",
+      "exit_day": "1404-08-06",
+      "entry": 16318.809999999998,
+      "exit": 15829.245699999998,
+      "days": 1,
+      "reason": "stop",
+      "ret_pct": -4.157057654075558,
+      "locked_entry": false
+    },
+    {
+      "symbol": "هجرت",
+      "signal_day": "1404-08-05",
+      "entry_day": "1404-08-06",
+      "exit_day": "1404-08-12",
+      "entry": 1937.7959999999998,
+      "exit": 2099.0,
+      "days": 4,
+      "reason": "queue_break",
+      "ret_pct": 7.026860755216702,
+      "locked_entry": false
+    },
+    {
+      "symbol": "دسبحا",
+      "signal_day": "1404-08-06",
+      "entry_day": "1404-08-07",
+      "exit_day": "1404-08-14",
+      "entry": 2138.3959999999997,
+      "exit": 2469.0,
+      "days": 5,
+      "reason": "queue_break",
+      "ret_pct": 14.08311219032765,
+      "locked_entry": false
+    },
+    {
+      "symbol": "شکبیر",
+      "signal_day": "1404-08-12",
+      "entry_day": "1404-08-13",
+      "exit_day": "1404-08-18",
+      "entry": 79876.91399999999,
+      "exit": 86932.0,
+      "days": 3,
+      "reason": "queue_break",
+      "ret_pct": 7.534246720347593,
+      "locked_entry": false
+    },
+    {
+      "symbol": "کنور",
+      "signal_day": "1404-08-14",
+      "entry_day": "1404-08-17",
+      "exit_day": "1404-08-18",
+      "entry": 2472.3949999999995,
+      "exit": 2398.2231499999994,
+      "days": 1,
+      "reason": "stop",
+      "ret_pct": -4.157057654075558,
+      "locked_entry": false
+    },
+    {
+      "symbol": "غدام",
+      "signal_day": "1404-08-18",
+      "entry_day": "1404-08-19",
+      "exit_day": "1404-08-27",
+      "entry": 38618.509,
+      "exit": 42207.0,
+      "days": 6,
+      "reason": "queue_break",
+      "ret_pct": 7.988469413265165,
+      "locked_entry": false
+    },
+    {
+      "symbol": "بهیر",
+      "signal_day": "1404-08-18",
+      "entry_day": "1404-08-19",
+      "exit_day": "1404-08-25",
+      "entry": 3189.5399999999995,
+      "exit": 3440.0,
+      "days": 4,
+      "reason": "queue_break",
+      "ret_pct": 6.566031552615748,
+      "locked_entry": false
+    },
+    {
+      "symbol": "ددانا",
+      "signal_day": "1404-08-18",
+      "entry_day": "1404-08-19",
+      "exit_day": "1404-08-24",
+      "entry": 5081.197999999999,
+      "exit": 5240.0,
+      "days": 3,
+      "reason": "queue_break",
+      "ret_pct": 1.8951638928668801,
+      "locked_entry": false
+    },
+    {
+      "symbol": "دیران",
+      "signal_day": "1404-08-24",
+      "entry_day": "1404-08-25",
+      "exit_day": "1404-09-01",
+      "entry": 3525.5449999999996,
+      "exit": 3805.0,
+      "days": 4,
+      "reason": "queue_break",
+      "ret_pct": 6.6391813476707195,
+      "locked_entry": false
+    },
+    {
+      "symbol": "سفارود",
+      "signal_day": "1404-08-25",
+      "entry_day": "1404-08-26",
+      "exit_day": "1404-09-09",
+      "entry": 5897.639999999999,
+      "exit": 6487.4039999999995,
+      "days": 8,
+      "reason": "target",
+      "ret_pct": 8.687872763419492,
+      "locked_entry": false
+    },
+    {
+      "symbol": "فسدید",
+      "signal_day": "1404-08-27",
+      "entry_day": "1404-08-28",
+      "exit_day": "1404-09-15",
+      "entry": 95686.19999999998,
+      "exit": 105150.0,
+      "days": 10,
+      "reason": "time",
+      "ret_pct": 8.579633892999517,
+      "locked_entry": false
+    },
+    {
+      "symbol": "لازما",
+      "signal_day": "1404-09-01",
+      "entry_day": "1404-09-02",
+      "exit_day": "1404-09-10",
+      "entry": 61734.649999999994,
+      "exit": 67200.0,
+      "days": 3,
+      "reason": "queue_break",
+      "ret_pct": 7.554524959230435,
+      "locked_entry": false
+    },
+    {
+      "symbol": "لازما",
+      "signal_day": "1404-09-09",
+      "entry_day": "1404-09-10",
+      "exit_day": "1404-09-15",
+      "entry": 67401.59999999999,
+      "exit": 73050.0,
+      "days": 3,
+      "reason": "queue_break",
+      "ret_pct": 7.0874107300365585,
+      "locked_entry": false
+    },
+    {
+      "symbol": "شفا",
+      "signal_day": "1404-09-10",
+      "entry_day": "1404-09-11",
+      "exit_day": "1404-09-22",
+      "entry": 9934.714999999998,
+      "exit": 10263.0,
+      "days": 7,
+      "reason": "queue_break",
+      "ret_pct": 2.0721634070734796,
+      "locked_entry": false
+    },
+    {
+      "symbol": "فسا",
+      "signal_day": "1404-09-15",
+      "entry_day": "1404-09-16",
+      "exit_day": "1404-09-17",
+      "entry": 581.7399999999999,
+      "exit": 564.2877999999998,
+      "days": 1,
+      "reason": "stop",
+      "ret_pct": -4.157057654075558,
+      "locked_entry": false
+    },
+    {
+      "symbol": "آپ",
+      "signal_day": "1404-09-15",
+      "entry_day": "1404-09-16",
+      "exit_day": "1404-09-22",
+      "entry": 10341.932999999999,
+      "exit": 10031.675009999999,
+      "days": 4,
+      "reason": "stop",
+      "ret_pct": -4.157057654075558,
+      "locked_entry": false
+    },
+    {
+      "symbol": "غدانه",
+      "signal_day": "1404-09-17",
+      "entry_day": "1404-09-18",
+      "exit_day": "1404-10-08",
+      "entry": 9868.517,
+      "exit": 12043.0,
+      "days": 7,
+      "reason": "queue_break",
+      "ret_pct": 20.57886635300199,
+      "locked_entry": false
+    },
+    {
+      "symbol": "فبیرا",
+      "signal_day": "1404-09-22",
+      "entry_day": "1404-09-23",
+      "exit_day": "1404-10-06",
+      "entry": 1142.417,
+      "exit": 1290.0,
+      "days": 9,
+      "reason": "queue_break",
+      "ret_pct": 11.571547521066105,
+      "locked_entry": false
+    },
+    {
+      "symbol": "ثشاهد",
+      "signal_day": "1404-09-22",
+      "entry_day": "1404-09-23",
+      "exit_day": "1404-10-07",
+      "entry": 8713.061,
+      "exit": 9584.367100000001,
+      "days": 10,
+      "reason": "target",
+      "ret_pct": 8.687872763419492,
+      "locked_entry": false
+    },
+    {
+      "symbol": "غناب",
+      "signal_day": "1404-10-06",
+      "entry_day": "1404-10-07",
+      "exit_day": "1404-10-09",
+      "entry": 745.2289999999999,
+      "exit": 772.0,
+      "days": 2,
+      "reason": "queue_break",
+      "ret_pct": 2.3566249414729734,
+      "locked_entry": false
+    },
+    {
+      "symbol": "غناب",
+      "signal_day": "1404-10-07",
+      "entry_day": "1404-10-08",
+      "exit_day": "1404-10-15",
+      "entry": 759.271,
+      "exit": 816.0,
+      "days": 4,
+      "reason": "queue_break",
+      "ret_pct": 6.189542546792537,
+      "locked_entry": false
+    },
+    {
+      "symbol": "غناب",
+      "signal_day": "1404-10-08",
+      "entry_day": "1404-10-09",
+      "exit_day": "1404-10-15",
+      "entry": 774.3159999999999,
+      "exit": 816.0,
+      "days": 3,
+      "reason": "queue_break",
+      "ret_pct": 4.126274233059557,
+      "locked_entry": false
+    },
+    {
+      "symbol": "ومشان",
+      "signal_day": "1404-10-08",
+      "entry_day": "1404-10-10",
+      "exit_day": "1404-10-20",
+      "entry": 11685.953,
+      "exit": 11601.0,
+      "days": 5,
+      "reason": "queue_break",
+      "ret_pct": -1.9111381822394025,
+      "locked_entry": false
+    },
+    {
+      "symbol": "دشیری",
+      "signal_day": "1404-10-14",
+      "entry_day": "1404-10-16",
+      "exit_day": "1404-10-24",
+      "entry": 242031.92399999997,
+      "exit": 272195.0,
+      "days": 6,
+      "reason": "target",
+      "ret_pct": 8.687872763419492,
+      "locked_entry": false
+    },
+    {
+      "symbol": "آرمان",
+      "signal_day": "1404-10-15",
+      "entry_day": "1404-10-16",
+      "exit_day": "1404-10-28",
+      "entry": 1713.1239999999998,
+      "exit": 1884.4363999999998,
+      "days": 7,
+      "reason": "target",
+      "ret_pct": 8.687872763419492,
+      "locked_entry": false
+    },
+    {
+      "symbol": "تاپکیش",
+      "signal_day": "1404-10-20",
+      "entry_day": "1404-10-21",
+      "exit_day": "1404-10-24",
+      "entry": 1433.2869999999998,
+      "exit": 1560.0,
+      "days": 3,
+      "reason": "queue_break",
+      "ret_pct": 7.5424287040490645,
+      "locked_entry": false
+    },
+    {
+      "symbol": "غگز",
+      "signal_day": "1404-10-24",
+      "entry_day": "1404-10-28",
+      "exit_day": "1404-11-04",
+      "entry": 2631.872,
+      "exit": 2950.0,
+      "days": 4,
+      "reason": "queue_break",
+      "ret_pct": 10.750489887076387,
+      "locked_entry": false
+    },
+    {
+      "symbol": "وآفر",
+      "signal_day": "1404-10-24",
+      "entry_day": "1404-10-28",
+      "exit_day": "1404-11-01",
+      "entry": 15208.488999999998,
+      "exit": 14286.0,
+      "days": 3,
+      "reason": "stop_gap",
+      "ret_pct": -7.186108644609845,
+      "locked_entry": false
+    },
+    {
+      "symbol": "دیران",
+      "signal_day": "1404-10-28",
+      "entry_day": "1404-10-29",
+      "exit_day": "1404-11-04",
+      "entry": 5291.8279999999995,
+      "exit": 5444.0,
+      "days": 3,
+      "reason": "queue_break",
+      "ret_pct": 1.6484592889014715,
+      "locked_entry": false
+    },
+    {
+      "symbol": "محتشم",
+      "signal_day": "1404-11-01",
+      "entry_day": "1404-11-04",
+      "exit_day": "1404-11-06",
+      "entry": 7839.447999999999,
+      "exit": 8290.0,
+      "days": 2,
+      "reason": "queue_break",
+      "ret_pct": 4.48584288178866,
+      "locked_entry": false
+    },
+    {
+      "symbol": "پشاهن",
+      "signal_day": "1404-11-01",
+      "entry_day": "1404-11-05",
+      "exit_day": "1404-11-08",
+      "entry": 67381.54,
+      "exit": 70751.0,
+      "days": 3,
+      "reason": "queue_break",
+      "ret_pct": 3.7480765352956302,
+      "locked_entry": false
+    },
+    {
+      "symbol": "بهیر",
+      "signal_day": "1404-11-04",
+      "entry_day": "1404-11-05",
+      "exit_day": "1404-11-07",
+      "entry": 3738.1809999999996,
+      "exit": 3562.0,
+      "days": 2,
+      "reason": "stop_gap",
+      "ret_pct": -5.849638249361422,
+      "locked_entry": false
+    },
+    {
+      "symbol": "قجام",
+      "signal_day": "1404-11-06",
+      "entry_day": "1404-11-07",
+      "exit_day": "1404-11-11",
+      "entry": 9157.39,
+      "exit": 9120.0,
+      "days": 2,
+      "reason": "queue_break",
+      "ret_pct": -1.5962766284055574,
+      "locked_entry": false
+    },
+    {
+      "symbol": "وثوق",
+      "signal_day": "1404-11-07",
+      "entry_day": "1404-11-08",
+      "exit_day": "1404-11-18",
+      "entry": 17402.05,
+      "exit": 19230.0,
+      "days": 5,
+      "reason": "target",
+      "ret_pct": 8.687872763419492,
+      "locked_entry": false
+    },
+    {
+      "symbol": "وتعاون",
+      "signal_day": "1404-11-08",
+      "entry_day": "1404-11-11",
+      "exit_day": "1404-11-20",
+      "entry": 1710.1149999999998,
+      "exit": 1881.1264999999999,
+      "days": 6,
+      "reason": "target",
+      "ret_pct": 8.687872763419492,
+      "locked_entry": false
+    },
+    {
+      "symbol": "غگز",
+      "signal_day": "1404-11-11",
+      "entry_day": "1404-11-12",
+      "exit_day": "1404-11-19",
+      "entry": 3151.4259999999995,
+      "exit": 3496.0,
+      "days": 4,
+      "reason": "queue_break",
+      "ret_pct": 9.610640095486511,
+      "locked_entry": false
+    },
+    {
+      "symbol": "ثنور",
+      "signal_day": "1404-11-18",
+      "entry_day": "1404-11-19",
+      "exit_day": "1404-12-02",
+      "entry": 2653.9379999999996,
+      "exit": 2940.0,
+      "days": 7,
+      "reason": "queue_break",
+      "ret_pct": 9.457357990089822,
+      "locked_entry": false
+    },
+    {
+      "symbol": "رتاپ",
+      "signal_day": "1404-11-19",
+      "entry_day": "1404-11-20",
+      "exit_day": "1404-12-04",
+      "entry": 4095.2489999999993,
+      "exit": 4506.0,
+      "days": 4,
+      "reason": "queue_break",
+      "ret_pct": 8.71745520279461,
+      "locked_entry": false
+    },
+    {
+      "symbol": "تکشا",
+      "signal_day": "1404-11-19",
+      "entry_day": "1404-11-21",
+      "exit_day": "1405-03-05",
+      "entry": 9618.769999999999,
+      "exit": 11690.0,
+      "days": 7,
+      "reason": "queue_break",
+      "ret_pct": 20.08351026212043,
+      "locked_entry": false
+    },
+    {
+      "symbol": "وپاسار",
+      "signal_day": "1404-12-02",
+      "entry_day": "1404-12-03",
+      "exit_day": "1405-02-29",
+      "entry": 5125.329999999999,
+      "exit": 5637.862999999999,
+      "days": 4,
+      "reason": "target",
+      "ret_pct": 8.687872763419492,
+      "locked_entry": false
+    },
+    {
+      "symbol": "وپسا",
+      "signal_day": "1404-12-04",
+      "entry_day": "1404-12-05",
+      "exit_day": "1405-03-05",
+      "entry": 1429.2749999999999,
+      "exit": 1674.0,
+      "days": 7,
+      "reason": "queue_break",
+      "ret_pct": 15.725231963417063,
+      "locked_entry": false
+    },
+    {
+      "symbol": "سفار",
+      "signal_day": "1405-02-29",
+      "entry_day": "1405-02-30",
+      "exit_day": "1405-03-12",
+      "entry": 165229.205,
+      "exit": 223510.0,
+      "days": 4,
+      "reason": "queue_break",
+      "ret_pct": 33.659105083488505,
+      "locked_entry": false
+    },
+    {
+      "symbol": "دکیمی",
+      "signal_day": "1405-03-05",
+      "entry_day": "1405-03-09",
+      "exit_day": "1405-03-23",
+      "entry": 19648.769999999997,
+      "exit": 26290.0,
+      "days": 10,
+      "reason": "time",
+      "ret_pct": 32.20370328757098,
+      "locked_entry": false
+    },
+    {
+      "symbol": "ولنوین",
+      "signal_day": "1405-03-05",
+      "entry_day": "1405-03-09",
+      "exit_day": "1405-03-11",
+      "entry": 2142.408,
+      "exit": 2266.0,
+      "days": 2,
+      "reason": "queue_break",
+      "ret_pct": 4.5071797214368825,
+      "locked_entry": false
+    },
+    {
+      "symbol": "سیلام",
+      "signal_day": "1405-03-11",
+      "entry_day": "1405-03-12",
+      "exit_day": "1405-03-30",
+      "entry": 13921.639999999998,
+      "exit": 18210.0,
+      "days": 10,
+      "reason": "queue_break",
+      "ret_pct": 29.243273782390645,
+      "locked_entry": false
+    },
+    {
+      "symbol": "زکوثر",
+      "signal_day": "1405-03-12",
+      "entry_day": "1405-03-13",
+      "exit_day": "1405-03-27",
+      "entry": 36950.52,
+      "exit": 49450.0,
+      "days": 10,
+      "reason": "time",
+      "ret_pct": 32.231262685910636,
+      "locked_entry": false
+    },
+    {
+      "symbol": "وحافظ",
+      "signal_day": "1405-03-23",
+      "entry_day": "1405-03-24",
+      "exit_day": "1405-03-26",
+      "entry": 2686.0339999999997,
+      "exit": 2840.0,
+      "days": 2,
+      "reason": "queue_break",
+      "ret_pct": 4.470876408763846,
+      "locked_entry": false
+    },
+    {
+      "symbol": "بتک",
+      "signal_day": "1405-03-26",
+      "entry_day": "1405-03-27",
+      "exit_day": "1405-03-31",
+      "entry": 180891.05,
+      "exit": 178850.0,
+      "days": 2,
+      "reason": "queue_break",
+      "ret_pct": -2.3077148385095225,
+      "locked_entry": false
+    },
+    {
+      "symbol": "وفتخار",
+      "signal_day": "1405-03-26",
+      "entry_day": "1405-03-30",
+      "exit_day": "1405-04-08",
+      "entry": 1291.8639999999998,
+      "exit": 1446.0,
+      "days": 6,
+      "reason": "queue_break",
+      "ret_pct": 10.596122428806588,
+      "locked_entry": false
+    },
+    {
+      "symbol": "شغدیر",
+      "signal_day": "1405-03-30",
+      "entry_day": "1405-03-31",
+      "exit_day": "1405-04-22",
+      "entry": 28811.174999999996,
+      "exit": 38543.0,
+      "days": 10,
+      "reason": "time",
+      "ret_pct": 32.18219161395402,
+      "locked_entry": false
+    },
+    {
+      "symbol": "فمراد",
+      "signal_day": "1405-03-31",
+      "entry_day": "1405-04-01",
+      "exit_day": "1405-04-17",
+      "entry": 2368.0829999999996,
+      "exit": 2888.0,
+      "days": 8,
+      "reason": "queue_break",
+      "ret_pct": 20.500451032546163,
+      "locked_entry": false
+    },
+    {
+      "symbol": "جم پیلن",
+      "signal_day": "1405-04-08",
+      "entry_day": "1405-04-09",
+      "exit_day": "1405-04-17",
+      "entry": 171412.69999999998,
+      "exit": 179700.0,
+      "days": 3,
+      "reason": "queue_break",
+      "ret_pct": 3.5841925555133214,
+      "locked_entry": false
+    },
+    {
+      "symbol": "بپردیس",
+      "signal_day": "1405-04-17",
+      "entry_day": "1405-04-20",
+      "exit_day": "1405-05-28",
+      "entry": 1970.8949999999998,
+      "exit": 2546.0,
+      "days": 10,
+      "reason": "time",
+      "ret_pct": 27.63897714935972,
+      "locked_entry": false
+    },
+    {
+      "symbol": "ولراز",
+      "signal_day": "1405-04-17",
+      "entry_day": "1405-04-20",
+      "exit_day": "1405-04-24",
+      "entry": 2139.399,
+      "exit": 2372.0,
+      "days": 4,
+      "reason": "target",
+      "ret_pct": 8.687872763419492,
+      "locked_entry": false
+    },
+    {
+      "symbol": "کمینا",
+      "signal_day": "1405-04-22",
+      "entry_day": "1405-04-23",
+      "exit_day": "1405-04-24",
+      "entry": 9144.350999999999,
+      "exit": 8851.0,
+      "days": 1,
+      "reason": "stop_gap",
+      "ret_pct": -4.3625789170498415,
+      "locked_entry": false
+    },
+    {
+      "symbol": "فبستم",
+      "signal_day": "1405-04-24",
+      "entry_day": "1405-04-27",
+      "exit_day": "1405-04-28",
+      "entry": 15125.239999999998,
+      "exit": 14640.0,
+      "days": 1,
+      "reason": "stop_gap",
+      "ret_pct": -4.362722222982529,
+      "locked_entry": false
+    },
+    {
+      "symbol": "تاتمس",
+      "signal_day": "1405-04-24",
+      "entry_day": "1405-04-27",
+      "exit_day": "1405-05-03",
+      "entry": 11945.73,
+      "exit": 11550.0,
+      "days": 5,
+      "reason": "stop_gap",
+      "ret_pct": -4.466059084216312,
+      "locked_entry": false
+    },
+    {
+      "symbol": "شدوص",
+      "signal_day": "1405-04-28",
+      "entry_day": "1405-04-29",
+      "exit_day": "1405-05-12",
+      "entry": 4663.95,
+      "exit": 6190.0,
+      "days": 10,
+      "reason": "time",
+      "ret_pct": 31.13697663715922,
+      "locked_entry": false
+    },
+    {
+      "symbol": "گدنا",
+      "signal_day": "1405-05-03",
+      "entry_day": "1405-05-04",
+      "exit_day": "1405-05-18",
+      "entry": 4873.576999999999,
+      "exit": 5670.0,
+      "days": 6,
+      "reason": "queue_break",
+      "ret_pct": 14.95387895110689,
+      "locked_entry": false
+    },
+    {
+      "symbol": "فسرب",
+      "signal_day": "1405-05-12",
+      "entry_day": "1405-05-14",
+      "exit_day": "1405-05-18",
+      "entry": 1769.292,
+      "exit": 1843.0,
+      "days": 2,
+      "reason": "queue_break",
+      "ret_pct": 2.923423865171193,
+      "locked_entry": false
+    },
+    {
+      "symbol": "دهدشت",
+      "signal_day": "1405-05-18",
+      "entry_day": "1405-05-19",
+      "exit_day": "1405-05-28",
+      "entry": 8736.13,
+      "exit": 10060.0,
+      "days": 5,
+      "reason": "queue_break",
+      "ret_pct": 13.780358121960191,
+      "locked_entry": false
+    },
+    {
+      "symbol": "قشکر",
+      "signal_day": "1405-05-18",
+      "entry_day": "1405-05-19",
+      "exit_day": "1405-05-25",
+      "entry": 3861.5499999999997,
+      "exit": 4190.0,
+      "days": 3,
+      "reason": "queue_break",
+      "ret_pct": 7.211349865098371,
+      "locked_entry": false
+    },
+    {
+      "symbol": "پشاهن",
+      "signal_day": "1405-05-24",
+      "entry_day": "1405-05-26",
+      "exit_day": "1405-06-11",
+      "entry": 79076.51999999999,
+      "exit": 95200.0,
+      "days": 10,
+      "reason": "time",
+      "ret_pct": 18.95365845498347,
+      "locked_entry": false
+    },
+    {
+      "symbol": "آرمان",
+      "signal_day": "1405-05-27",
+      "entry_day": "1405-05-31",
+      "exit_day": "1405-06-15",
+      "entry": 1412.224,
+      "exit": 1752.0,
+      "days": 10,
+      "reason": "time",
+      "ret_pct": 22.579802612765356,
+      "locked_entry": false
+    },
+    {
+      "symbol": "کقزوی",
+      "signal_day": "1405-05-28",
+      "entry_day": "1405-05-31",
+      "exit_day": "1405-06-07",
+      "entry": 745.2289999999999,
+      "exit": 844.0,
+      "days": 5,
+      "reason": "queue_break",
+      "ret_pct": 11.902838666584415,
+      "locked_entry": false
+    },
+    {
+      "symbol": "فسدید",
+      "signal_day": "1405-06-07",
+      "entry_day": "1405-06-09",
+      "exit_day": "1405-06-22",
+      "entry": 95525.71999999999,
+      "exit": 118000.0,
+      "days": 9,
+      "reason": "queue_break",
+      "ret_pct": 22.05345882557266,
+      "locked_entry": false
+    },
+    {
+      "symbol": "شفام",
+      "signal_day": "1405-06-11",
+      "entry_day": "1405-06-14",
+      "exit_day": "1405-06-17",
+      "entry": 2530.5689999999995,
+      "exit": 2749.0,
+      "days": 3,
+      "reason": "queue_break",
+      "ret_pct": 7.335889577202237,
+      "locked_entry": false
+    },
+    {
+      "symbol": "ثاصفا",
+      "signal_day": "1405-06-15",
+      "entry_day": "1405-06-16",
+      "exit_day": "1405-06-24",
+      "entry": 17040.969999999998,
+      "exit": 18790.0,
+      "days": 6,
+      "reason": "queue_break",
+      "ret_pct": 8.948403824038209,
+      "locked_entry": false
+    },
+    {
+      "symbol": "گپارس",
+      "signal_day": "1405-06-17",
+      "entry_day": "1405-06-18",
+      "exit_day": "1405-06-29",
+      "entry": 244431.09999999998,
+      "exit": 271800.0,
+      "days": 7,
+      "reason": "target",
+      "ret_pct": 8.687872763419492,
+      "locked_entry": false
+    },
+    {
+      "symbol": "آینده",
+      "signal_day": "1405-06-22",
+      "entry_day": "1405-06-23",
+      "exit_day": "1405-07-06",
+      "entry": 4322.929999999999,
+      "exit": 4930.0,
+      "days": 10,
+      "reason": "time",
+      "ret_pct": 12.682667610679488,
+      "locked_entry": false
+    },
+    {
+      "symbol": "لکما",
+      "signal_day": "1405-06-24",
+      "entry_day": "1405-06-25",
+      "exit_day": "1405-06-31",
+      "entry": 1288.8549999999998,
+      "exit": 1291.0,
+      "days": 4,
+      "reason": "queue_break",
+      "ret_pct": -1.028401362890763,
+      "locked_entry": false
+    },
+    {
+      "symbol": "ومشان",
+      "signal_day": "1405-06-29",
+      "entry_day": "1405-06-30",
+      "exit_day": "1405-07-11",
+      "entry": 29588.499999999996,
+      "exit": 37320.0,
+      "days": 8,
+      "reason": "queue_break",
+      "ret_pct": 24.62555051427584,
+      "locked_entry": false
+    },
+    {
+      "symbol": "خصدرا",
+      "signal_day": "1405-06-31",
+      "entry_day": "1405-07-01",
+      "exit_day": "1405-07-12",
+      "entry": 2297.8729999999996,
+      "exit": 2654.0,
+      "days": 7,
+      "reason": "queue_break",
+      "ret_pct": 14.120403882640131,
+      "locked_entry": false
+    },
+    {
+      "symbol": "فزرین",
+      "signal_day": "1405-07-06",
+      "entry_day": "1405-07-07",
+      "exit_day": "1405-07-11",
+      "entry": 9949.759999999998,
+      "exit": 9651.267199999998,
+      "days": 2,
+      "reason": "stop",
+      "ret_pct": -4.157057654075558,
+      "locked_entry": false
+    },
+    {
+      "symbol": "فاذر",
+      "signal_day": "1405-07-11",
+      "entry_day": "1405-07-12",
+      "exit_day": "1405-07-19",
+      "entry": 1800.3849999999998,
+      "exit": 2077.0,
+      "days": 5,
+      "reason": "queue_break",
+      "ret_pct": 13.988099883495764,
+      "locked_entry": false
+    },
+    {
+      "symbol": "وفردا",
+      "signal_day": "1405-07-11",
+      "entry_day": "1405-07-12",
+      "exit_day": "1405-07-15",
+      "entry": 1914.7269999999999,
+      "exit": 2084.0,
+      "days": 3,
+      "reason": "queue_break",
+      "ret_pct": 7.542284256790177,
+      "locked_entry": false
+    },
+    {
+      "symbol": "وآتوس",
+      "signal_day": "1405-07-12",
+      "entry_day": "1405-07-13",
+      "exit_day": "1405-07-14",
+      "entry": 1544.62,
+      "exit": 1552.0,
+      "days": 1,
+      "reason": "time",
+      "ret_pct": -0.7207547788588009,
+      "locked_entry": false
+    },
+    {
+      "symbol": "سبهان",
+      "signal_day": "1405-07-14",
+      "entry_day": "1405-07-15",
+      "exit_day": "1405-07-22",
+      "entry": 5977.879999999999,
+      "exit": 6830.0,
+      "days": 5,
+      "reason": "queue_break",
+      "ret_pct": 12.891674423671518,
+      "locked_entry": false
+    },
+    {
+      "symbol": "ولانا",
+      "signal_day": "1405-07-15",
+      "entry_day": "1405-07-18",
+      "exit_day": "1405-07-21",
+      "entry": 5245.69,
+      "exit": 5088.319299999999,
+      "days": 3,
+      "reason": "stop",
+      "ret_pct": -4.157057654075558,
+      "locked_entry": false
+    },
+    {
+      "symbol": "وحافظ",
+      "signal_day": "1405-07-19",
+      "entry_day": "1405-07-20",
+      "exit_day": "1405-07-22",
+      "entry": 2693.055,
+      "exit": 2847.0,
+      "days": 2,
+      "reason": "queue_break",
+      "ret_pct": 4.455340178028733,
+      "locked_entry": false
+    },
+    {
+      "symbol": "وارس",
+      "signal_day": "1405-07-21",
+      "entry_day": "1405-07-22",
+      "exit_day": "1405-07-25",
+      "entry": 16730.039999999997,
+      "exit": 16228.138799999997,
+      "days": 1,
+      "reason": "stop",
+      "ret_pct": -4.157057654075558,
+      "locked_entry": false
+    },
+    {
+      "symbol": "تپولا",
+      "signal_day": "1405-07-22",
+      "entry_day": "1405-07-25",
+      "exit_day": "1405-07-25",
+      "entry": 20591.589999999997,
+      "exit": 20530.0,
+      "days": 0,
+      "reason": "time",
+      "ret_pct": -1.4883778089191613,
+      "locked_entry": false
+    },
+    {
+      "symbol": "وفتخار",
+      "signal_day": "1405-07-22",
+      "entry_day": "1405-07-25",
+      "exit_day": "1405-07-25",
+      "entry": 2267.783,
+      "exit": 2261.0,
+      "days": 0,
+      "reason": "time",
+      "ret_pct": -1.4883778089191724,
+      "locked_entry": false
+    }
+  ],
+  "equity_curve": [
+    [
+      "1404-06-04",
+      0.986143
+    ],
+    [
+      "1404-06-16",
+      0.993883
+    ],
+    [
+      "1404-06-18",
+      0.997629
+    ],
+    [
+      "1404-06-18",
+      0.99251
+    ],
+    [
+      "1404-06-26",
+      1.021326
+    ],
+    [
+      "1404-06-26",
+      1.039538
+    ],
+    [
+      "1404-07-02",
+      1.059416
+    ],
+    [
+      "1404-07-05",
+      1.077335
+    ],
+    [
+      "1404-07-08",
+      1.120846
+    ],
+    [
+      "1404-07-08",
+      1.115286
+    ],
+    [
+      "1404-07-19",
+      1.159192
+    ],
+    [
+      "1404-07-21",
+      1.192762
+    ],
+    [
+      "1404-07-21",
+      1.218644
+    ],
+    [
+      "1404-07-26",
+      1.253935
+    ],
+    [
+      "1404-08-03",
+      1.341638
+    ],
+    [
+      "1404-08-04",
+      1.323047
+    ],
+    [
+      "1404-08-05",
+      1.361362
+    ],
+    [
+      "1404-08-06",
+      1.342498
+    ],
+    [
+      "1404-08-12",
+      1.373943
+    ],
+    [
+      "1404-08-14",
+      1.438441
+    ],
+    [
+      "1404-08-18",
+      1.444663
+    ],
+    [
+      "1404-08-18",
+      1.480944
+    ],
+    [
+      "1404-08-18",
+      1.460423
+    ],
+    [
+      "1404-08-24",
+      1.469649
+    ],
+    [
+      "1404-08-25",
+      1.501815
+    ],
+    [
+      "1404-08-27",
+      1.541806
+    ],
+    [
+      "1404-09-01",
+      1.575927
+    ],
+    [
+      "1404-09-09",
+      1.621565
+    ],
+    [
+      "1404-09-10",
+      1.662399
+    ],
+    [
+      "1404-09-15",
+      1.709941
+    ],
+    [
+      "1404-09-15",
+      1.750338
+    ],
+    [
+      "1404-09-17",
+      1.726084
+    ],
+    [
+      "1404-09-22",
+      1.738006
+    ],
+    [
+      "1404-09-22",
+      1.713923
+    ],
+    [
+      "1404-10-06",
+      1.780032
+    ],
+    [
+      "1404-10-07",
+      1.831581
+    ],
+    [
+      "1404-10-08",
+      1.957221
+    ],
+    [
+      "1404-10-09",
+      1.972595
+    ],
+    [
+      "1404-10-15",
+      2.013294
+    ],
+    [
+      "1404-10-15",
+      2.040985
+    ],
+    [
+      "1404-10-20",
+      2.027983
+    ],
+    [
+      "1404-10-24",
+      2.086712
+    ],
+    [
+      "1404-10-24",
+      2.139175
+    ],
+    [
+      "1404-10-28",
+      2.201125
+    ],
+    [
+      "1404-11-01",
+      2.1484
+    ],
+    [
+      "1404-11-04",
+      2.225388
+    ],
+    [
+      "1404-11-04",
+      2.237616
+    ],
+    [
+      "1404-11-06",
+      2.271075
+    ],
+    [
+      "1404-11-07",
+      2.226791
+    ],
+    [
+      "1404-11-08",
+      2.254612
+    ],
+    [
+      "1404-11-11",
+      2.242615
+    ],
+    [
+      "1404-11-18",
+      2.307561
+    ],
+    [
+      "1404-11-19",
+      2.381484
+    ],
+    [
+      "1404-11-20",
+      2.450451
+    ],
+    [
+      "1404-12-02",
+      2.5277
+    ],
+    [
+      "1404-12-04",
+      2.601151
+    ],
+    [
+      "1405-02-29",
+      2.676479
+    ],
+    [
+      "1405-03-05",
+      2.855656
+    ],
+    [
+      "1405-03-05",
+      3.005342
+    ],
+    [
+      "1405-03-11",
+      3.050494
+    ],
+    [
+      "1405-03-12",
+      3.392751
+    ],
+    [
+      "1405-03-23",
+      3.756948
+    ],
+    [
+      "1405-03-26",
+      3.812937
+    ],
+    [
+      "1405-03-27",
+      4.22259
+    ],
+    [
+      "1405-03-30",
+      4.634198
+    ],
+    [
+      "1405-03-31",
+      4.59855
+    ],
+    [
+      "1405-04-08",
+      4.760972
+    ],
+    [
+      "1405-04-17",
+      5.086313
+    ],
+    [
+      "1405-04-17",
+      5.14708
+    ],
+    [
+      "1405-04-22",
+      5.699228
+    ],
+    [
+      "1405-04-24",
+      5.864275
+    ],
+    [
+      "1405-04-24",
+      5.778998
+    ],
+    [
+      "1405-04-28",
+      5.694957
+    ],
+    [
+      "1405-05-03",
+      5.610177
+    ],
+    [
+      "1405-05-12",
+      6.192457
+    ],
+    [
+      "1405-05-18",
+      6.501128
+    ],
+    [
+      "1405-05-18",
+      6.564479
+    ],
+    [
+      "1405-05-25",
+      6.722275
+    ],
+    [
+      "1405-05-28",
+      7.341598
+    ],
+    [
+      "1405-05-28",
+      7.678831
+    ],
+    [
+      "1405-06-07",
+      7.983497
+    ],
+    [
+      "1405-06-11",
+      8.487885
+    ],
+    [
+      "1405-06-15",
+      9.126735
+    ],
+    [
+      "1405-06-17",
+      9.34991
+    ],
+    [
+      "1405-06-22",
+      10.037237
+    ],
+    [
+      "1405-06-24",
+      10.336627
+    ],
+    [
+      "1405-06-29",
+      10.635972
+    ],
+    [
+      "1405-06-31",
+      10.599512
+    ],
+    [
+      "1405-07-06",
+      11.047612
+    ],
+    [
+      "1405-07-11",
+      11.954457
+    ],
+    [
+      "1405-07-11",
+      11.788806
+    ],
+    [
+      "1405-07-12",
+      12.343681
+    ],
+    [
+      "1405-07-14",
+      12.314026
+    ],
+    [
+      "1405-07-15",
+      12.623612
+    ],
+    [
+      "1405-07-19",
+      13.212213
+    ],
+    [
+      "1405-07-21",
+      13.029133
+    ],
+    [
+      "1405-07-22",
+      13.589024
+    ],
+    [
+      "1405-07-22",
+      13.790837
+    ],
+    [
+      "1405-07-25",
+      13.599739
+    ],
+    [
+      "1405-07-25",
+      13.532267
+    ],
+    [
+      "1405-07-25",
+      13.46513
+    ]
+  ],
+  "final_equity": 13.465130121616415,
+  "max_drawdown": -4.332989971523804,
+  "stats": {
+    "trades": 101,
+    "win_rate_pct": 77.23,
+    "avg_pct": 7.967,
+    "median_pct": 7.542,
+    "std_pct": 9.522,
+    "profit_factor": 11.422,
+    "best_pct": 33.66,
+    "worst_pct": -7.19,
+    "avg_days": 5.1,
+    "total_return_pct": 1246.51,
+    "max_drawdown_pct": -4.33,
+    "expectancy_ci95": [
+      6.154,
+      9.825
+    ],
+    "fill_rate_pct": 14.8,
+    "bench_avg_pct": 1.171
+  },
+  "by_reason": {
+    "time": 16,
+    "stop": 9,
+    "queue_break": 59,
+    "target": 12,
+    "stop_gap": 5
+  },
+  "by_year": {
+    "1404": {
+      "n": 59,
+      "sum": 337.0571138554163,
+      "wins": 47,
+      "avg": 5.713,
+      "win_rate": 79.7
+    },
+    "1405": {
+      "n": 42,
+      "sum": 467.5829816432313,
+      "wins": 31,
+      "avg": 11.133,
+      "win_rate": 73.8
+    }
+  },
+  "benchmark": {
+    "n": 171351,
+    "avg_5d_pct": 1.171,
+    "median_5d_pct": 0.813,
+    "win_rate_pct": 54.0
+  }
+}

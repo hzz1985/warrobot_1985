@@ -1,0 +1,47 @@
+// Port-80 reverse proxy so TeseRobot is reachable on the SAME address as the
+// PDF app, from any network that allows only port 80.
+//
+//   http://<host>/        -> PDF Manager      (127.0.0.1:3000)
+//   http://<host>/tse     -> TeseRobot        (127.0.0.1:5077)
+//
+// Streaming is used in both directions, so PDF uploads (multipart POST) and
+// login forms keep working unchanged.
+const http = require('http');
+
+const PDF = { host: '127.0.0.1', port: 3000 };
+const TSE = { host: '127.0.0.1', port: 5077 };
+const TSE_PREFIX = '/tse';
+
+function forward(req, res, target, path) {
+  const headers = Object.assign({}, req.headers, {
+    host: target.host + ':' + target.port,
+    'x-forwarded-host': req.headers.host || '',
+    'x-forwarded-proto': 'http',
+  });
+  const opts = { host: target.host, port: target.port, method: req.method, path: path, headers };
+  const proxyReq = http.request(opts, (proxyRes) => {
+    res.writeHead(proxyRes.statusCode || 502, proxyRes.headers);
+    proxyRes.pipe(res);
+  });
+  proxyReq.on('error', () => {
+    if (!res.headersSent) {
+      res.writeHead(502, { 'content-type': 'text/plain; charset=utf-8' });
+    }
+    res.end('upstream error: ' + target.port);
+  });
+  req.pipe(proxyReq);
+}
+
+http.createServer((req, res) => {
+  const url = req.url || '/';
+  if (url === TSE_PREFIX || url.startsWith(TSE_PREFIX + '/') || url.startsWith(TSE_PREFIX + '?')) {
+    let p = url.slice(TSE_PREFIX.length);
+    if (!p) p = '/';
+    if (!p.startsWith('/')) p = '/' + p;
+    forward(req, res, TSE, p);
+  } else {
+    forward(req, res, PDF, url);
+  }
+}).listen(80, '0.0.0.0', () => {
+  console.log('proxy :80  /tse -> 5077   / -> 3000');
+});

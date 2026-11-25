@@ -1,0 +1,135 @@
+{
+ "generated_at": "2026-11-24 09:18:23",
+ "bot_start": "2026-11-13",
+ "days_running": 10,
+ "periods": {
+  "m1": {
+   "label": "۱ ماهه",
+   "available": false,
+   "start": "2026-11-13",
+   "end": "2026-11-24",
+   "period_end": "2026-12-13",
+   "days_left": 19,
+   "trades": 2,
+   "pnl_rial": 21493337.0,
+   "points": [
+    {
+     "date": "2026-11-13",
+     "symbol": "آردینه",
+     "pnl_rial": -84168857.0,
+     "cum": -84168857.0
+    },
+    {
+     "date": "2026-11-17",
+     "symbol": "آواپارس",
+     "pnl_rial": 105662194.0,
+     "cum": 21493337.0
+    }
+   ]
+  },
+  "m3": {
+   "label": "۳ ماهه",
+   "available": false,
+   "start": "2026-11-13",
+   "end": "2026-11-24",
+   "period_end": "2027-02-11",
+   "days_left": 79,
+   "trades": 2,
+   "pnl_rial": 21493337.0,
+   "points": [
+    {
+     "date": "2026-11-13",
+     "symbol": "آردینه",
+     "pnl_rial": -84168857.0,
+     "cum": -84168857.0
+    },
+    {
+     "date": "2026-11-17",
+     "symbol": "آواپارس",
+     "pnl_rial": 105662194.0,
+     "cum": 21493337.0
+    }
+   ]
+  },
+  "m6": {
+   "label": "۶ ماهه",
+   "available": false,
+   "start": "2026-11-13",
+   "end": "2026-11-24",
+   "period_end": "2027-05-12",
+   "days_left": 169,
+   "trades": 2,
+   "pnl_rial": 21493337.0,
+   "points": [
+    {
+     "date": "2026-11-13",
+     "symbol": "آردینه",
+     "pnl_rial": -84168857.0,
+     "cum": -84168857.0
+    },
+    {
+     "date": "2026-11-17",
+     "symbol": "آواپارس",
+     "pnl_rial": 105662194.0,
+     "cum": 21493337.0
+    }
+   ]
+  },
+  "m9": {
+   "label": "۹ ماهه",
+   "available": false,
+   "start": "2026-11-13",
+   "end": "2026-11-24",
+   "period_end": "2027-08-10",
+   "days_left": 259,
+   "trades": 2,
+   "pnl_rial": 21493337.0,
+   "points": [
+    {
+     "date": "2026-11-13",
+     "symbol": "آردینه",
+     "pnl_rial": -84168857.0,
+     "cum": -84168857.0
+    },
+    {
+     "date": "2026-11-17",
+     "symbol": "آواپارس",
+     "pnl_rial": 105662194.0,
+     "cum": 21493337.0
+    }
+   ]
+  },
+  "y1": {
+   "label": "۱ ساله",
+   "available": false,
+   "start": "2026-11-13",
+   "end": "2026-11-24",
+   "period_end": "2027-11-13",
+   "days_left": 354,
+   "trades": 2,
+   "pnl_rial": 21493337.0,
+   "points": [
+    {
+     "date": "2026-11-13",
+     "symbol": "آردینه",
+     "pnl_rial": -84168857.0,
+     "cum": -84168857.0
+    },
+    {
+     "date": "2026-11-17",
+     "symbol": "آواپارس",
+     "pnl_rial": 105662194.0,
+     "cum": 21493337.0
+    }
+   ]
+  }
+ },
+ "reconciliation": {
+  "ledger_trades": 0,
+  "realized_trades": 2,
+  "problems": [],
+  "ok": true,
+  "note": "no broker rows captured yet",
+  "checked_at": "2026-11-24 09:18:23"
+ }
+}

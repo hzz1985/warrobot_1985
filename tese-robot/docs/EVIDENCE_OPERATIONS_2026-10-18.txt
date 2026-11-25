@@ -1,0 +1,1078 @@
+================================================================================
+TSE STRATEGY - LIVE OPERATION AUDIT
+Window analysed: 2026-10-04 .. 2026-10-18   (read-only audit, nothing modified)
+Host: C:\TSE_Strategy  (Windows)   Report generated 2026-10-18
+================================================================================
+
+0. HOW TO READ THIS / COVERAGE CAVEATS
+--------------------------------------------------------------------------------
+0.1  All bot log timestamps are TEHRAN time (UTC+03:30). All file mtimes are the
+     host clock (America/Los_Angeles, UTC-07:00 in October). Offset = 10h30m.
+     Proof: bourse_ml/logs/sell_retry.log last line 2026-10-18 05:50:11 (Tehran)
+     has file mtime 2026-10-17 19:20 -> 05:50 - 10:30 = 19:20 the previous day.
+     Every timestamp quoted below is TEHRAN unless explicitly marked "host".
+
+0.2  Iran trading week = Sat..Wed; Thu/Fri closed. 2026-10-15 = Thu, 2026-10-16 =
+     Fri. Jalali dates seen in broker data map as:
+        1405/07/08 = 2026-09-30   1405/07/11 = 2026-10-03  1405/07/12 = 2026-10-04
+        1405/07/21 = 2026-10-13   1405/07/22 = 2026-10-14  1405/07/25 = 2026-10-17
+
+0.3  What actually exists for the requested window (this matters):
+     - auto\logs\auto_2026-10-*.log  : only 10-13, 10-14, 10-16, 10-17, 10-18
+     - auto\logs\arch_2026-10-*.log  : only 10-13, 10-14, 10-16, 10-17, 10-18
+     - auto\logs\robot_*_*.log       : only 10-14 (x2) and 10-17 (x4)
+     - auto\reports\ARCH_*.txt       : 10-13..10-18 (6 files)
+     - data\logs\                    : 44 files, 10-08 .. 10-18
+     - data\trade_journal\           : 12 files, 10-13 .. 10-17
+     - bourse_ml\logs\               : 11 files, 10-14 .. 10-18
+     - broker order dumps            : 10-14 (EMPTY) and 10-17 only
+     => There is NO log coverage for 10-04..10-07 and 10-09..10-12 apart from
+        data\logs\{robot_auto,keep_alive,nightly}_*.log and one broker fill on
+        10-04. Statements about those days are limited to what those files show.
+
+0.4  Three independent schedulers were alive at the same time (a structural cause
+     of the duplicates seen later):
+       (a) "runner" (data\logs\runner_YYYYMMDD.log) fired keep_alive.py 08:00,
+           position_manager_loop.py 09:00, robot_auto.py 09:00, nightly_job.py
+           21:00, burst_run.py 21:00, arch_daily.py 13:00, weekly_report.py 14:00,
+           auto\run_plan.py 23:55, auto\run_buy.py 07:20.
+       (b) auto\auto_runner.py (own logs auto\logs\auto_*.log) -> run_plan /
+           run_buy / robot_auto.py rounds at 08:45, 09:00, 09:20, 09:45.
+       (c) bourse_ml daemon (30-min slots: HEALER, READY08, BUYCHECK, CLOSECHECK,
+           REPORT20, NIGHT21, RECONCILE) + pagewatch (3 min) + sell_retry (10 min).
+
+
+================================================================================
+A. CHRONOLOGICAL TIMELINE (2026-10-04 .. 2026-10-18)
+================================================================================
+
+--- 2026-10-04 (Sun) ---------------------------------------------------------
+No bot logs exist for this date. Only broker evidence:
+  BUY  کیان1  34,925 @ 113,124  time 09:14:54  jdate 1405/07/12
+      order 3026100420003196  "سفارش بصورت کامل انجام شد"
+      (bourse_ml\data\broker_orders_2026-10-17.json:146-155)
+This is the entry leg of the only closed trade in the whole window.
+
+--- 2026-10-05 .. 2026-10-07 -------------------------------------------------
+No bot logs. (bourse_ml, auto and runner logs all start later.)
+
+--- 2026-10-08 (Thu) / 2026-10-09 (Fri) --------------------------------------
+data\logs\robot_auto_20261008.log:4   "Not a trading day (thursday). Exit."
+data\logs\robot_auto_20261009.log:4   "Not a trading day (friday). Exit."
+data\logs\keep_alive_20261009.log:7   "Not a trading day (friday). Exit."
+nightly_20261008.log:4-13  picks for 2026-10-10: تپسی 0.9283, دشیری 0.8991, زنجان 0.8878
+nightly_20261009.log:10-12 same three picks.
+
+--- 2026-10-10 (Sat) -- first live attempt of the window ---------------------
+08:00:02 keep_alive connects, then every 15 min declares "SESSION may be lost":
+  keep_alive_20261010.log:10  "  ⚠ Session may be lost! URL: https://online.meibours.ir/Account/Login"
+  keep_alive_20261010.log:11  "--- Refresh #1990675 ---"        (counter is corrupt: 1,990,675)
+09:00:02 robot_auto runs with picks تپسی/دشیری/زنجان:
+  robot_auto_20261010.log:5  "Picks: ['تپسی', 'دشیری', 'زنجان']"
+  robot_auto_20261010.log:7  "  URL: https://online.meibours.ir/Login"
+  robot_auto_20261010.log:9  "Cannot navigate to trading page. Exit."
+  => no order.
+21:00 nightly v3: download ok=782 fail=8; 3 picks قاروم 0.8237, درازی 0.6167,
+  ثالوند 0.4651 (nightly_20261010.log:43,49-51).
+
+--- 2026-10-11 (Sun) ---------------------------------------------------------
+08:00 keep_alive -> 3 consecutive session failures -> EXITS the process:
+  keep_alive_20261011.log:27-29 "⚠️ 3 CONSECUTIVE SESSION FAILURES ... Exiting to
+  avoid confusing robot_auto."
+09:00 robot_auto: picks قاروم 0.824 / درازی 0.617 / ثالوند 0.465, none >= 0.85:
+  robot_auto_20261011.log:8  "⚠️ NO PICKS PASS ML THRESHOLD" -> no orders.
+08:00-08:30 keep_alive died after 3 consecutive failures:
+  keep_alive_20261011.log:12,17,22 "⚠️ SESSION EXPIRED - login required"
+  keep_alive_20261011.log:27-30 "⚠️ 3 CONSECUTIVE SESSION FAILURES ⚠️ / Session
+  not recoverable. Manual login required. / Exiting to avoid confusing robot_auto."
+21:00 nightly -> قاروم, ثالوند, پلوله (nightly_20261011.log:34-36).
+
+--- 2026-10-12 (Mon) ---------------------------------------------------------
+08:00:08 -> 09:29:13 keep_alive: 44 consecutive "SESSION EXPIRED" every 2 min:
+  keep_alive_20261012.log:12,27,118-121,224-227  (never exits: "NOT exiting; this
+  process keeps polling until the session returns.")
+09:00 robot_auto: picks سفارود 0.677 / واحصا 0.561 / کابگن 0.491 -> none >= 0.85,
+  robot_auto_20261012.log:8 "⚠️ NO PICKS PASS ML THRESHOLD" -> no orders.
+21:00 nightly v3 -> "Prediction FAILED:" with an EMPTY error string, 0 picks:
+  nightly_20261012.log:31 "Prediction FAILED: " / :33 "0 picks"
+  (this repeats every night from 10-12 to 10-17 - see F-13).
+
+--- 2026-10-13 (Tue) -- TRADING DAY #1 ---------------------------------------
+PICKS (ARCH_2026-10-13.txt:5): gen=2026-10-12 23:40:03 src=s1_new n=2/3
+  شپاس 0.775, شکبیر 0.736, ثنام 0.702  (robot_auto_20261013.log:5-6)
+
+08:00:03 keep_alive again 34 consecutive session failures up to 09:08:30
+  (keep_alive_20261013.log:12 ... :190).
+
+09:00:00 runner fires robot_auto (runner_20261013.log:9-14). Run #1:
+  robot_auto_20261013.log:14-19
+    "[1/3] Symbol: شپاس (score=0.7751)"
+    "❌ No price: {'error': \"TypeError: Cannot read properties of undefined
+     (reading 'symbolInformation')\"}"
+  process dies: runner_20261013.log:14 "DONE rc=1 elapsed=17.4s".
+  => nothing submitted in run #1.
+
+09:23:24 run #2 (NOT scheduled in runner_20261013.log - unlogged trigger):
+  robot_auto_20261013.log:23-24 START 09:23:24
+  09:23:34 شپاس 85 @ 59,450, total 505,325 toman -> addOrder
+      Checkbox {"found":false} / Confirm {"clicked":false} /
+      "⚠ No confirm modal (maybe error)" / "Server response: type=None"
+      (robot_auto_20261013.log:41-47)
+      BROKER: order 3026101320005433, 85 @ 59,450, 09:23:34, FILLED 85.
+  09:23:50 شکبیر 30 @ 168,100, total 504,300 toman (robot_auto_20261013.log:53)
+      Checkbox {"found":true,"checked":true} / Confirm {"clicked":true,"text":"تایید"}
+      (robot_auto_20261013.log:56-57)
+      BROKER: NO ORDER EVER. (5,043,000 rial < the 50,000,000 rial minimum.)
+  09:24:06 ثنام 1,911 @ 2,617, total 500,109 toman (robot_auto_20261013.log:64)
+      Checkbox {"found":false} -> no confirm (robot_auto_20261013.log:67-69)
+      BROKER: NO ORDER EVER. (5,001,087 rial < 50,000,000 min.)
+  SUMMARY: "No successful orders - active_positions not updated"
+      (robot_auto_20261013.log:78)
+
+09:53:12 and 09:57:58 - TWO MORE شپاس BUYS, present at the broker but in NO bot
+log and in NO orders_log.json entry:
+      order 3026101320013508  85 @ 59,450  09:53:12  FILLED 85
+      order 3026101320013596  88 @ 59,450  09:57:58  FILLED 88
+      (broker_orders_2026-10-17.json:124-143)
+      => شپاس total held 85+85+88 = 258.
+
+10:38:19 SELL کیان1 34,925 @ 114,147 - FILLED (order 3026101300013025).
+      Recorded as exit_reason "manual_sell", pnl_pct +0.87
+      (data\closed_positions.json:2-10). Not produced by any logged bot run.
+
+11:40:01 شپاس 85 @ 59,450 -> status "منقضی شده" (expired, 0 filled)
+      order 3026101300014387  (broker_orders_2026-10-17.json:90-100)
+11:40:20 شکبیر 400 @ 168,100 -> expired, order 3026101300014390
+11:40:31 شکبیر 600 @ 168,100 -> expired, order 3026101320015628
+      (broker_orders_2026-10-17.json:68-89)
+      NONE of these three is in orders_log.json or in any robot log.
+
+11:52:11 run #3 (logged) with the 50M-min "MinValueFix":
+  11:52:24 شکبیر "MinValueFix: target=52,000,000 rial -> count 30 -> 310"
+           -> 310 @ 168,100, 5,211,100 toman (robot_auto_20261013.log:102-103)
+           Checkbox {"found":true} Confirm {"clicked":true} (:106-107)
+           BROKER: order 3026101300017370  310 @ 168,100  11:52:31  EXPIRED, 0 filled.
+  11:52:43 ثنام "MinValueFix: target=52,000,000 rial -> count 1911 -> 19871"
+           -> 19,871 @ 2,617, 5,200,241 toman (robot_auto_20261013.log:114-115)
+           Checkbox {"found":false} -> no confirm (:118-120)
+           BROKER: NO ثنام ORDER EVER.
+  SUMMARY "No successful orders" (:128).
+
+12:13:29 auto\auto_runner.py run_plan (auto_2026-10-13.log:1):
+  "plan done status=waiting_data" (items وشکبیر 168,100 / ثنام 2,617, no counts).
+12:54:22 plan validated: bp=3,779,682,288 slots=2
+  شکبیر count=10,000 valueT=168,100,000 ; ثنام count=707,981 valueT=185,278,627
+  (auto_2026-10-13.log:13-16 / ARCH_2026-10-13.txt ITEM lines)
+13:13:15 plan rebuilt; 13:13:18 "[MODE] buy start" -> "[GATE] deadline hit, abort"
+  (auto_2026-10-13.log:29-30). Repeated at 13:19:31 (:31-32), 13:19:59 (:33-34),
+  14:21:21 (:39-40). Deadline is 12:20 -> every fire was after the deadline.
+14:29:50 / 14:31:48 plan rebuilt again, no buy start (:41-48).
+
+21:00 nightly v3: download ok=782 fail=8, then
+  nightly_20261013.log:31 "Prediction FAILED: " / :33 "0 picks".
+21:34:25 burst_run.py finished -> picks for 10-14 (ARCH_2026-10-14.txt:4).
+23:55:00 run_plan (runner_20261013.log:32-36) -> both items fail with the driver
+  error: auto_2026-10-13.log:50-51
+  "[ITEM] وایرا None price=None ... browser:Message: Unable to obtain driver for
+   chrome"
+  "[ITEM] حتوکا None ... same"
+  auto_2026-10-13.log:52 "plan done status=waiting_data".
+
+--- 2026-10-14 (Wed) -- TRADING DAY #2 (the overspend) ----------------------
+PICKS: وایرا 0.7693 (gen 2026-10-13 21:34:25) - ARCH_2026-10-14.txt:4
+
+01:18:27 sync: auto_2026-10-14.log:4 "PFL sync held=خساپا,شپاس"
+  plan for 10-14 was re-priced twice: وایرا price=3,680 at 01:18:55
+  (auto_2026-10-14.log:2) then price=3,790 in the 09:15 plan
+  (ARCH_2026-10-14.txt ITEM px=3790 cnt=300000 val=1137000000).
+
+07:20:00 buy start (auto_2026-10-14.log:8) -> 07:20:09 "GATE partial try=1" (:10)
+07:29:36 / 07:39:00 / 07:53:31 / 08:02:55
+  "[REFR] browser err Message: Unable to obtain driver for chrome; For
+   documentation on this error, please visit"   (auto_2026-10-14.log:11,13,17,19)
+07:44:04 "[REFR] not logged in" (:15)
+08:09:44 / 08:11:31 / 08:15:24  three more buy starts, "bp=None items=0" (:22,25,28)
+08:17:02 .. 09:12:04  TWENTY consecutive "[GATE] not ready, retry in 300s"
+  (auto_2026-10-14.log:31,33,35,37,39,41,43,45,47,49,51,53,55,57,59,61,63,65,
+   67,69,71) - 55 minutes lost.
+09:15:35 GATE validated (bp=4,005,769,804) -> "late-login catchup - firing now"
+  (:74-75)
+
+09:15:36 ROBOT RUN #1 (robot_2026-10-14_091604.log / robot_auto_20261014.log:1-37)
+  وایرا 300,000 @ 3,790, total 113,700,000 toman
+  "MinValueFix: MarketType.FaraBourseBase target=1,309,075,099 rial
+   -> count 1320 -> 345403" then "Price: 3,790 rial, Count: 300000"
+  (robot_2026-10-14_091604.log:20-21)
+  Checkbox {"found":false} / Confirm {"clicked":false} / "⚠ No confirm modal
+  (maybe error)" / "Server response: type=None" (:24-27)
+  BROKER: order 3026101400003825  300,000 @ 3,790  09:15:51  FILLED 300,000
+  (broker_orders_2026-10-17.json:47-56)
+
+09:20:05 ROBOT RUN #2 (robot_2026-10-14_092028.log)
+  identical order; BROKER order 3026101400003955  300,000 @ 3,790  09:20:14
+  FILLED (broker_orders_2026-10-17.json:36-45)
+
+09:31:47 ROBOT RUN #3 - log truncated after "Connecting to Chrome"/"URL":
+  robot_auto_20261014.log:75-76
+  "[2026-10-14 09:31:47] Connecting to Chrome (9222)..."
+  "[2026-10-14 09:31:48]   URL: https://online.meibours.ir/Home/Index/page-4"
+  BROKER order 3026101400004155  300,000 @ 3,790  09:31:55  FILLED
+  (broker_orders_2026-10-17.json:25-34). No orders_log entry for this one.
+
+  RESULT: 900,000 وایرا for 3,411,000,000 rial + 12,600,000 fees =
+          3,423,600,000 rial, i.e. 2.6x the 1,309,075,099 slot target and 85% of
+          the 4,005,769,804 buying power.
+
+13:00:00 arch_daily -> ARCH_2026-10-14.txt records only ONE order line
+  "ORDER 2026-10-14 وایرا cnt=300000 tot=1137000000 resp={"msg": null,
+   "type": null, "visible_modals": 0}"  (under-reports 3 fills, see F-14).
+
+15:21:55 / 15:22:58 / 15:26:42 healer runs and patches the code:
+  bourse_ml\logs\healer_2026-10-14.log:3-6
+  "parse_submits fix applied=True" / "FIXED ok=True (robot duplicate-order bug)"
+  "FIXED ok=True (record order fill into journal)"
+  fixes\FIX_20261014_152302_parse_submits_space.txt:1
+  fixes\FIX_20261014_152645_journal_fill_missing.txt:1
+
+14:56:07 bourse_ml FATAL: bourse_ml_2026-10-14.log:1
+  "FATAL can't subtract offset-naive and offset-aware datetimes"
+  (also fixes\ERROR_20261014_145607.txt)
+14:59:03 health: pages=["https://online.meibours.ir/Home/OrderList"], logged_in=True,
+  data=(True,17.9), orders_today=2  (bourse_ml_2026-10-14.log:5-11)  <-- 2, not 3
+15:34:07 NIGHT21 ALERT: "LOGIN_PAGE (manual login needed before 07:20);
+  PICKS_NOT_FOR_TOMORROW" (bourse_ml_2026-10-14.log:15)
+15:42:56 logged_in=False, pages=["https://online.meibours.ir/Login"] (:20-21)
+23:55:01 run_plan -> "not logged in": auto_2026-10-14.log:200
+  "[PFL] not logged in - skip" / :202 "[ITEM] وسرمد None ... ok=None
+  not_logged_in" / :203 status=waiting_data.
+
+--- 2026-10-15 (Thu, closed) -------------------------------------------------
+09:00 pm_loop_20261015.log:4 "Not a trading day (thursday). Exit."
+21:00 nightly_20261015.log:15 "Prediction FAILED: " / 0 picks.
+23:55 buy_plan never fired: runner_20261015.log ends at :21 "WAIT target 23:55
+  now 23:00:02 sleep 3297.3s" - the process was gone before 23:55.
+
+--- 2026-10-16 (Fri, closed) -------------------------------------------------
+07:20:00 auto: auto_2026-10-16.log:1 "not a trading day - skip"
+07:20:00 runner still fired run_buy (runner_20261016.log:3-5, rc=0 in 0.5s)
+13:00 arch_daily -> ARCH_2026-10-16.txt
+21:00 nightly_20261016.log:14 "Prediction FAILED: " / 0 picks.
+23:55:30 sync -> auto_2026-10-16.log:2 "PFL sync held=خساپا,وایرا"
+  (**شپاس disappeared from holdings** - see F-12)
+23:55:37 plan for 10-17: auto_2026-10-16.log:3-4
+  "PLAN built for=2026-10-17 slots=1 bp=582381070 items=1"
+  "ITEM وسرمد FaraBourseBase price=1652 count=115207 valueT=19032196 ok=True"
+  (bp collapsed from 4,005,769,804 to 582,381,070 because of the 10-14 overspend)
+
+--- 2026-10-17 (Sat) -- TRADING DAY #3 --------------------------------------
+PICKS: وسرمد 0.8242 (gen 2026-10-16 21:13:46) - ARCH_2026-10-17.txt:4
+
+07:20:00 buy start (auto_2026-10-17.log:1) -> 07:20:10 "GATE partial try=1" (:3)
+07:29:36 browser err + "not ready, retry in 300s" (:4-5)
+07:34:44 "[PAGE] switch to page-4 via anchor" (arch_2026-10-17.log:6)
+07:35:20 "[REFR] status=validated target=190320610" -> "GATE validated" (:12-13)
+
+08:45:05 round 08:45 -> وسرمد
+  08:45:06 "Market status: before_open (08:45)" (robot_2026-10-17_084534.log:4)
+  08:45:21 "MinValueFix: MarketType.FaraBourseBase target=190,320,610 rial
+             -> count 2940 -> 111888" (:20)
+  "Price: 1,701 rial, Count: 111888, Total: 19,032,149 toman" (:21)
+  Checkbox {"found":false} / Confirm {"clicked":false} /
+  "⚠ No confirm modal (maybe error)" / "Server response: type=None" (:24-27)
+  BROKER: order 3026101720002627  111,888 @ 1,701  08:45:26  FILLED
+  auto_2026-10-17.log:11 "[TRY] وسرمد submitted=False"
+
+09:00:05 round 09:00 -> وسرمد (robot_2026-10-17_090028.log)
+  identical order; BROKER order 3026101700002963  111,888 @ 1,701  09:00:14
+  FILLED. auto: "submitted=False" (auto_2026-10-17.log:14)
+  => 223,776 shares / 380,660,976 + 1,140,281 fees = 381,801,257 rial
+     = 2.0x the 190,320,610 slot target.
+
+09:20:13 round 09:20 -> وسرمد (robot_2026-10-17_092057.log)
+  order submitted at 09:20:42 (orders_log.json:183-202) but
+  BROKER HAS NO THIRD وسرمد ORDER. No server message captured.
+09:45:12 round 09:45 -> robot starts at URL "https://online.meibours.ir/"
+  (root, not page-4), "Navigating to trading page..." ->
+  robot_2026-10-17_094521.log:11 "Cannot navigate to trading page. Exit."
+  (12 lines total; the day's buy loop stops here)
+
+10:00:40 position_manager.py run #1 (data\logs\position_manager_20261017.log)
+  active_positions: وایرا x900000 @ 3790
+  :9 "read_price error: Message: no such element: Unable to locate element:
+      {"method":"css selector","selector":"input[id='305_inputText']"}"
+  :32 "No price for وایرا. Keeping old."
+  :37 "وایرا: pnl=+0.00%, days=0 → HOLD"     <-- +0.00% because price was stale
+
+10:38:40 PM run #2
+  :51 "read_price(history) وایرا = 3760" / :52 "current=3760 entry=3790 pnl=-0.79%"
+  :57 HOLD
+
+11:30:10-11 "broker reconcile" back-fills every journal's entry (all stamped
+  2026-10-17T11:30:11) - see data\trade_journal\*.json "notes".
+
+11:40:03-22 PFL sync (patched): 4 realtime rows -> held=وایرا,وسرمد,خساپا,شپاس
+  BML_FIX_SHAPAS_Claude.txt:2-7 / auto log equivalent
+  *** positions become: وایرا 1,800,000 @3838, وسرمد 223,776 @1721,
+      شپاس 258 @60196 ***   (BML_FIX_SHAPAS_Claude.txt:8-33)
+11:40:23 PM run #3 sees "وایرا x1800000 @ 3838" (position_manager_20261017.log:67)
+  :74 "وایرا: current=3760 entry=3838 pnl=-2.03%"
+  :77 "وسرمد: current=1652 entry=1721 pnl=-4.01%"
+  :80 "شپاس: current=58400 entry=60196 pnl=-2.98%"
+  :87-91 "EXIT SIGNAL: وسرمد / Reason: stop / PnL: -4.01% / Days held: 0 /
+          DRY_RUN - no order sent"
+11:40:32 "0 closed, 3 remaining"
+
+11:46:07-27 PFL sync #2 (second patch) -> وایرا back to 900,000:
+  BML_FIX_SHAPAS2_Claude.txt:8-16
+11:46:36 PM run #4:
+  :121-125 "EXIT SIGNAL: وایرا / stop / -3.07% / DRY_RUN - no order sent"
+  :128-132 "EXIT SIGNAL: شپاس / stop / -3.08% / DRY_RUN - no order sent"
+11:47:25 PM run #5:
+  :161-165 "EXIT SIGNAL: وایرا ... ONLY_SELL filter -> keep"
+  :168-172 "EXIT SIGNAL: شپاس ... SELLING شپاس (reason=stop, pnl=-3.08%)"
+  :173-196 "set_sell_order error: ... input[id='299_inputText']" ->
+            "SELL FAILED - keeping position"
+11:49:56 :202 "select_stock(شپاس) error: Message: element not interactable"
+
+12:03:51 PM run #6: وایرا kept by ONLY_SELL (:328); شپاس -> :336 select_stock
+  element not interactable -> :360 "Could not select شپاس" -> :361 SELL FAILED
+12:20:54 PM run #7: all three select_stock fail with
+  selector input[id*='element'][id*='value'] (:377,404,431) ->
+  "select failed for X - using fallback price" (:400,427,454);
+  وایرا kept (:466); شپاس SELLING (:473) -> :497 "Could not select شپاس" ->
+  :498 SELL FAILED.
+12:41:50 (manual/diagnostic run):
+  :504 "click_sell_tab error: ... [ng-click*='setOrderSide(86)']"
+  :527 "set_sell_order: form symbol mismatch"
+  :528 "click_sell error: ... a[id$='_btnBuySell']"
+12:46:38 broker page snapshot: "قدرت خرید: 200,579,813" (buying power)
+  (BML_PAGES_Claude.txt:2)
+13:00:01 bourse_ml CLOSECHECK: orders_log_today=3 (bourse_ml_2026-10-17.log:33-35)
+13:02:12 / 13:10:37 ": form symbol mismatch" again (:551-552)
+13:20:40 :553 "Set sell: count=258, price=57756, ids=373_inputText,379_inputText"
+  (this line is from a DRY verification - BML_VERIFYFIX4_Claude.txt:12-15
+   "SET=True ... DRY_OK=True"; NO sell order was ever sent - the broker dump has
+   zero شپاس sell and 258 shares are still held at 23:55)
+20:00 REPORT20 -> BML_DAILY_2026-10-17.txt
+21:00 NIGHT21 ALERT "PICKS_NOT_FOR_TOMORROW" (bourse_ml_2026-10-17.log:57)
+22:00 RECONCILE slot (:60)
+23:55:29 sync held=وایرا,وسرمد,خساپا,شپاس; plan for 10-18 "slots=0 bp=None items=0
+  status=waiting_data" (auto_2026-10-17.log:21-23)
+
+--- 2026-10-18 (Sun) -- no trading, 62 dead gate retries -------------------
+02:30 arch_daily -> ARCH_2026-10-18.txt "PLAN st=nothing_to_do bp=None slots=0"
+03:30:12 .. 05:50:11 position_manager retries the شپاس stop 15 times, every
+  10 minutes: data\logs\position_manager_20261018.log:1-30
+  "[TEHRAN 2026-10-18 03:30:12] SELLING شپاس (reason=stop, pnl=-3.08%)"
+  "[TEHRAN 2026-10-18 03:30:12]   Could not open trade page"
+  ... identical through 05:50:11.
+  Mirrored in bourse_ml\logs\sell_retry.log:1-15 (15 x "SELL_FAILED").
+  (These are the night hours - the market is closed.)
+07:20:00 auto buy start with slots=0 -> 62 identical retries every 5 minutes:
+  auto_2026-10-18.log:1-62
+  :2 "PLAN built for=2026-10-18 slots=0 bp=None items=0"
+  :3 .. :62 "[GATE] not ready, retry in 300s"  (07:20:00 .. 12:15:08)
+08:00 READY08 ALERT "PLAN_STATUS=nothing_to_do" (bourse_ml_2026-10-18.log:19)
+09:00 pm_loop exits immediately ("Outside active window (09:00)")
+09:30 BUYCHECK: orders_log_today=0 / plan_submitted=0 / plan_status=
+  nothing_to_do -> ALERT "no buy registered yet" (bourse_ml_2026-10-18.log:27)
+10:30:02 runner tried to fire pm_preopen (target 08:45) and skipped it:
+  runner_20261018.log:10-11 "SKIP 6302.6s late beyond grace 10min"
+13:00 CLOSECHECK -> BML_CLOSE_2026-10-18.txt (last state, section C)
+13:30 HEALER
+
+
+================================================================================
+B. EVERY DISTINCT FAILURE MODE OBSERVED LIVE (with exact lines)
+================================================================================
+
+B-1  CHROMEDRIVER CANNOT BE OBTAINED (kills whole pre-open window)
+  auto_2026-10-14.log:11  "[2026-10-14 07:29:36][REFR] browser err Message:
+      Unable to obtain driver for chrome; For documentation on this error,
+      please visit"
+  same at :13 (07:39:00), :17 (07:53:31), :19 (08:02:55)
+  auto_2026-10-17.log:4   "[2026-10-17 07:29:36][REFR] browser err Message:
+      Unable to obtain driver for chrome..."
+  auto_2026-10-13.log:50  "[2026-10-13 23:59:26][ITEM] وایرا None price=None
+      count=None valueT=0 ok=None browser:Message: Unable to obtain driver for
+      chrome"
+  => trading on 10-14 only started at 09:15:35, 1h55m after the intended 07:20.
+
+B-2  "not logged in" / SESSION EXPIRED (real + false positives)
+  auto_2026-10-14.log:15  "[2026-10-14 07:44:04][REFR] not logged in"
+  auto_2026-10-14.log:200 "[2026-10-14 23:55:01][PFL] not logged in - skip"
+  bourse_ml_2026-10-14.log:15 "ALERT: BourseML 21:00 :: LOGIN_PAGE (manual login
+      needed before 07:20); PICKS_NOT_FOR_TOMORROW"
+  bourse_ml_2026-10-14.log:21 "logged_in=False"
+  keep_alive_20261012.log:12 "⚠️ SESSION EXPIRED - login required" (x44:
+      :12,17,22,27,33,38,... ending :246-247 at 09:29:13)
+  keep_alive_20261013.log:12 (x34 up to :190)
+  keep_alive_20261011.log:27 "⚠️ 3 CONSECUTIVE SESSION FAILURES ⚠️"
+  NOTE: on 10-12/10-13 real orders were impossible during these windows, yet on
+  10-13 the robot still placed 5 orders at 09:23-11:52 -> the keep_alive verdict
+  was wrong (it reads the URL right after a navigation that transiently lands on
+  /Account/Login).
+
+B-3  ELEMENT NOT FOUND / NOT INTERACTABLE (hard-coded dynamic input ids)
+  position_manager_20261017.log:9   selector "input[id='305_inputText']"
+  position_manager_20261017.log:173 selector "input[id='299_inputText']"
+  position_manager_20261017.log:377 selector "input[id*='element'][id*='value']"
+  position_manager_20261017.log:504 selector "[ng-click*='setOrderSide(86)']"
+  position_manager_20261017.log:528 selector "a[id$='_btnBuySell']"
+  position_manager_20261017.log:202 "select_stock(شپاس) error: Message:
+      element not interactable"
+  The same page exposes the inputs as 93_inputText / 99_inputText
+  (BML_SELL_INPUTS_Claude.txt:3,20) and as 373_inputText / 379_inputText
+  (BML_ROOTFIX_Claude.txt:12-19): the id changes per selected symbol.
+
+B-4  "NO PRICE" FROM THE ANGULAR SCOPE
+  robot_auto_20261013.log:19 "❌ No price: {'error': \"TypeError: Cannot read
+      properties of undefined (reading 'symbolInformation')\"}"
+  (this is what made the 09:00 run die with rc=1: runner_20261013.log:14)
+
+B-5  NO CONFIRM MODAL / NO SERVER MESSAGE -> order recorded as "not submitted"
+      although it WAS filled (the single most damaging defect)
+  robot_2026-10-14_091604.log:24-27
+      "Checkbox: {"found":false}"
+      "Confirm: {"clicked":false}"
+      "⚠ No confirm modal (maybe error)"
+      "Server response: type=None"
+  robot_auto_20261014.log:32 "No successful orders - active_positions not updated"
+  robot_auto_20261017.log:106 "No successful orders - active_positions not updated"
+  auto_2026-10-17.log:11 "[2026-10-17 08:45:35][TRY] وسرمد submitted=False"
+  while broker_orders_2026-10-17.json:13-23 shows 111,888 @ 1,701 filled at
+  08:45:26 and 09:00:14.
+
+B-6  ORDERS BELOW THE 50,000,000 RIAL MARKET MINIMUM (silently never placed)
+  config: auto_2026-10-13.log:2
+      "base_market_min_rial": 50000000
+  robot_auto_20261013.log:53 "Price: 168,100 rial, Count: 30, Total: 504,300 toman"
+      (= 5,043,000 rial - one tenth of the minimum)
+  robot_auto_20261013.log:64 "Price: 2,617 rial, Count: 1911, Total: 500,109 toman"
+      (= 5,001,087 rial)
+  Neither order ever appears at the broker; the bot's own later correction proves
+  the minimum: robot_auto_20261013.log:102 "MinValueFix: MarketType.FaraBourseBase
+      target=52,000,000 rial -> count 30 -> 310" and :114 "... 1911 -> 19871".
+  The operator can be seen hand-fixing the same thing at the broker: two extra
+  شکبیر orders of 400 (67.2M rial) and 600 (100.8M rial) shares at 11:40:20 /
+  11:40:31 (broker_orders_2026-10-17.json:68-89), both "منقضی شده".
+  The exact server message was NOT captured - resp={"msg": null, "type": null,
+  "visible_modals": 0} (orders_log.json:31-35, 69-73).
+
+B-7  MARKET CLOSED - sell attempts outside trading hours (15 identical failures)
+  data\logs\position_manager_20261018.log:1-30
+      "[TEHRAN 2026-10-18 03:30:12] SELLING شپاس (reason=stop, pnl=-3.08%)"
+      "[TEHRAN 2026-10-18 03:30:12]   Could not open trade page"
+      ... every 10 min to 05:50:11
+  bourse_ml\logs\sell_retry.log:1-15
+      "2026-10-18 03:30:12 SELL_FAILED" ... "2026-10-18 05:50:11 SELL_FAILED"
+
+B-8  MARKET STILL "before_open" BUT ORDER SENT ANYWAY
+  robot_2026-10-17_084534.log:4 "Market status: before_open (08:45)"
+  and 15 lines later the 111,888-share order is submitted and filled at 08:45:26.
+
+B-9  WRONG SYMBOL IN THE SELL FORM -> every sell aborted
+  position_manager_20261017.log:527 "set_sell_order: form symbol mismatch"
+  position_manager_20261017.log:551 "set_sell_order: form symbol mismatch"
+  position_manager_20261017.log:552 "set_sell_order: form symbol mismatch"
+  (12:41:50, 13:02:12, 13:10:37 - i.e. all three real sell sessions on 10-17)
+
+B-10 SELL PRICE = LAST PRICE - 1% (not a market/limit-at-best order)
+  BML_ROOTFIX_Claude.txt:6 "PRICE=57756" with last price 58,340
+  position_manager_20261017.log:553 "Set sell: count=258, price=57756"
+  Formula in the code that was dumped: "p = int(cur * 0.99)" then clamped to
+  LowAllowedPrice / HighAllowedPrice (BML_DIAG_ORDERS_Claude.txt:43-47).
+  No sell was ever actually transmitted, so this is a latent mispricing, not a
+  realised bad fill.
+
+B-11 DUPLICATE ORDERS (same symbol/price/count, minutes apart, all filled)
+  وایرا : 3026101400003825 09:15:51 | 3026101400003955 09:20:14 |
+          3026101400004155 09:31:55   all 300,000 @ 3,790, all FILLED
+          (broker_orders_2026-10-17.json:25-56)
+  وسرمد : 3026101720002627 08:45:26 | 3026101700002963 09:00:14
+          both 111,888 @ 1,701, both FILLED (broker_orders_2026-10-17.json:13-23)
+  شپاس  : 3026101320005433 09:23:34 (85) | 3026101320013508 09:53:12 (85) |
+          3026101320013596 09:57:58 (88)  all FILLED
+          (broker_orders_2026-10-17.json:123-143)
+  orders_log.json proves the same item was re-submitted round after round:
+  :95-114 (09:16), :117-137 (09:20); :138-158 (08:45), :160-181 (09:00),
+  :182-202 (09:20).
+
+B-12 RETRY LOOPS
+  a) gate, 28 retries in 55 min on 10-14 (auto_2026-10-14.log:12..71)
+  b) gate, 62 retries on 10-18 that never stop
+     (auto_2026-10-18.log:3..62, 07:20:00 -> 12:15:08)
+  c) buy rounds after the 12:20 deadline on 10-13:
+     auto_2026-10-13.log:30,32,34,40 "[GATE] deadline hit, abort" at 13:13:18,
+     13:19:31, 13:19:59, 14:21:21
+  d) sell retry every 10 min x15 (position_manager_20261018.log:1-30)
+  e) keep_alive every 2 min x44 (keep_alive_20261012.log:12..247)
+
+B-13 STATE DOUBLE-COUNT (position 2x the truth)
+  auto\state\portfolio_snapshot_2026-10-14.json "positions":
+      {"symbol":"شپاس","count":516,...}  while "realtime" says
+      {"symbol":"شپاس","count":258,...} in the SAME file
+  BML_FIX_SHAPAS_Claude.txt:10-16  {"symbol":"وایرا","count":1800000,...}
+  BML_FIX_SHAPAS2_Claude.txt:11    {"symbol":"وایرا","count":900000,...} (11:46 fix)
+  position_manager_20261017.log:67 "  - وایرا x1800000 @ 3838"
+
+B-14 ENTRY PRICE = BROKER "BREAKEVEN" (fee-inclusive) INSTEAD OF AVG COST
+  data\active_positions.json:5,13,21  entry 3838 / 1721 / 60196
+  broker truth (BML_LIVE_REALTIME_Claude.txt:42-90):
+      وایرا مانده 900,000  ق میانگین 3,804  ق سربه سر فروش 3,838  قیمت 3,710
+      وسرمد 223,776        ق میانگین 1,706  ق سربه سر فروش 1,721  قیمت 1,701
+      شپاس 258             ق میانگین 59,666 ق سربه سر فروش 60,196 قیمت 58,340
+  Direct proof of the effect: the SAME price 3,760 produced
+      position_manager_20261017.log:52 "current=3760 entry=3790 pnl=-0.79%"
+      position_manager_20261017.log:74 "current=3760 entry=3838 pnl=-2.03%"
+  1.24 pp of loss was manufactured by the basis change.
+
+B-15 "days_held" IS ALWAYS 0 -> time exits never fire, stop fires on day 0
+  data\active_positions.json:7 "sent_at": "2026-10-17T11:40:12" for a position
+      bought on 2026-10-13
+  auto\state\portfolio_snapshot_2026-10-16.json "sent_at":
+      "1405/07/22T09:31:55+03:30"  (Jalali date inside an ISO string)
+  the code then does datetime.fromisoformat(sent_at) and swallows the exception
+  -> days_held = 0 (BML_DIAG_ORDERS_Claude.txt:199-207)
+  Every log line reads "Days held: 0" (position_manager_20261017.log:90,124,131,
+  164,171,327,334,465,472).
+
+B-16 ONLY_SELL FILTER SILENTLY SKIPS A QUALIFYING STOP
+  position_manager_20261017.log:165 "  ONLY_SELL filter -> keep"
+  position_manager_20261017.log:328 "  ONLY_SELL filter -> keep"
+  position_manager_20261017.log:466 "  ONLY_SELL filter -> keep"
+  while at the same instant شپاس with the same -3.08% goes to SELLING (:172).
+
+B-17 STALE PRICE CARRY-OVER (price never refreshed, PnL frozen)
+  position_manager_20261017.log:32 "No price for وایرا. Keeping old."
+  -> :37 "وایرا: pnl=+0.00%, days=0 → HOLD"  (a 3% loser shown as flat)
+  BML_CLOSE_2026-10-18.txt:3 still carries "current_price": 58340 for شپاس,
+  unchanged since 2026-10-17 12:20:57.
+
+B-18 NAVIGATION TO TRADING PAGE IMPOSSIBLE
+  robot_2026-10-17_094521.log:9-11
+      "[09:45:13]   URL: https://online.meibours.ir/"
+      "[09:45:13]   Navigating to trading page..."
+      "[09:45:19] Cannot navigate to trading page. Exit."
+  robot_auto_20261010.log:9 same message at 09:00:08.
+
+B-19 NIGHTLY PREDICTION DEAD FOR 6 CONSECUTIVE DAYS (empty exception text)
+  nightly_20261012.log:31 "Prediction FAILED: "  :33 "0 picks"
+  nightly_20261013.log:31 / nightly_20261014.log:32 / nightly_20261015.log:15 /
+  nightly_20261016.log:14 / nightly_20261017.log:31  - identical.
+  Picks only ever came from the parallel s1_new/burst_run path.
+
+B-20 POSITION-MANAGER LOOP NEVER LOOPS
+  pm_loop_20261017.log:4 "Trading day confirmed. Loop will run until 12:35 Tehran."
+  pm_loop_20261017.log:7 "Outside active window (09:00). Exiting loop."
+  same at pm_loop_20261013.log:7, 20261014.log:7, 20261018.log:7
+  => no intraday 5-minute monitoring ever ran from this script.
+
+B-21 WEEKLY REPORT CRASHES
+  runner_20261017.log:17-19
+      "[14:00:00] RUN ... weekly_report.py" ... "DONE rc=1 elapsed=0.7s"
+
+B-22 TIMEZONE FATAL IN bourse_ml
+  bourse_ml_2026-10-14.log:1 "[2026-10-14 14:56:07][BML] FATAL can't subtract
+      offset-naive and offset-aware datetimes"
+  (fixes\ERROR_20261014_145607.txt:1 same text)
+
+
+================================================================================
+C. OPEN POSITIONS AT THE LAST STATE (2026-10-18 13:00 snapshot)
+================================================================================
+Source: BML_CLOSE_2026-10-18.txt:3 = data\active_positions.json (identical)
+
+  BOT'S OWN BOOK (entry = broker breakeven price, fee-inclusive)
+  ----------------------------------------------------------------------------
+  symbol   count      entry    current    unrealized PnL (rial)   %
+  وایرا    900,000    3,838    3,710      -115,200,000            -3.33%
+  وسرمد    223,776    1,721    1,701      -4,475,520              -1.16%
+  شپاس     258        60,196   58,340     -478,848                -3.08%
+  ----------------------------------------------------------------------------
+  TOTAL (3 names)                          -120,154,368            -3.12% of
+                                                                  3,854,849,064
+  (cost basis at the bot's own entries: 900,000x3,838 + 223,776x1,721 +
+   258x60,196 = 3,454,200,000 + 385,118,496 + 15,530,568 = 3,854,849,064)
+  Market value: 3,339,000,000 + 380,642,976 + 15,051,720 = 3,734,694,696 rial
+
+  BROKER'S BOOK, same moment (BML_LIVE_REALTIME_Claude.txt, 10-17 12:46 = the
+  last full holdings read; counts unchanged at 10-18 13:00)
+  ----------------------------------------------------------------------------
+  symbol   count      avg cost  breakeven  last    net value      PnL (rial)  %
+  وایرا    900,000    3,804     3,838      3,710   3,309,613,461  -113,986,539  -3.33
+  وسرمد    223,776    1,706     1,721      1,701     377,292,937    -4,508,320  -1.18
+  شپاس     258        59,666    60,196     58,340     14,919,265      -474,563  -3.08
+  خساپا    138,299    149       150        669        91,707,745   +71,075,822 +344.49
+  ----------------------------------------------------------------------------
+  TOTAL all four: cost 3,841,427,008 | net sell value 3,793,533,408 |
+                  PnL -47,893,600 (-1.23%)
+  TOTAL excluding خساپا (the 3 the bot manages):
+                  cost 3,820,795,085 | PnL -118,969,422  (-3.11%)
+
+  *** خساپا 138,299 shares (avg 149 rial, +71.1M rial unrealised) is a real
+      holding that appears in auto\state\holdings.json but is deliberately
+      excluded from active_positions ("excluded from sell management: خساپا",
+      auto_2026-10-17.log:9 / arch_2026-10-17.log:9 / position_manager_20261017
+      equivalents). The bot therefore can never exit it. ***
+
+
+================================================================================
+D. REALISED PnL AND WIN/LOSS
+================================================================================
+D.1  The ONLY realised round trip in the window:
+     کیان (کیان1)  34,925 shares
+       entry 113,166 rial (broker fill was 113,124 at 2026-10-04 09:14:54,
+                            order 3026100420003196)
+       exit  114,147 rial (broker fill 2026-10-13 10:38:19, order 3026101300013025)
+       pnl_pct +0.87, exit_reason "manual_sell"
+       (data\closed_positions.json:2-10; broker_orders_2026-10-17.json:101-111,146-155)
+
+     Realised = (114,147 - 113,166) x 34,925 = +34,261,425 rial  (+0.87%)
+     Cost basis = 34,925 x 113,166 = 3,952,322,550 rial
+
+D.2  BUT closed_positions.json contains the SAME trade THREE TIMES, byte for byte:
+       lines 2-10, 11-19, 20-28 - all "1405/07/21T10:38:19+03:30", all +0.87.
+     Naive sum of the file  = 3 x 0.87% = +2.61% / +102,784,275 rial.
+     Truth                  = 1 trade / +0.87% / +34,261,425 rial.
+     Overstatement          = +68,522,850 rial (3x).
+
+D.3  Win/loss count:
+       literal records in closed_positions.json : 3 wins, 0 losses
+       distinct trades                          : 1 win,  0 losses  <-- correct
+     reports\Weekly_Compair_Report_14050718_14050722.txt:5 also says
+     "closed positions: 1", i.e. the reporter dedupes while the store does not.
+
+D.4  The trade journal records ZERO realised trades: all 12 files have
+     "exit": {"reason": null, "exit_price": null, "pnl_gross_pct": null,
+              "pnl_net_pct": null}
+     even though closed_positions.json holds the کیان exit.
+     Also: no journal file exists for کیان or قشرین at all.
+
+D.5  Not in any ledger (data gap, not a loss): the قشرین round trip of
+     2026-09-30 -> 2026-10-03
+       BUY  259,494 @ 3,530 (09:23:27) + 300,000 @ 3,530 (09:23:17)
+       SELL 300,000 @ 3,430 (09:23:50) + 300,000 @ 3,430 (09:24:01) +
+            300,000 @ 3,430 (09:24:12) + 259,494 @ 3,470 (11:19:19)
+     (broker_orders_2026-10-17.json:157-221)
+     Three identical 300,000-share sells 11 seconds apart are visible here too -
+     the duplicate pattern predates the requested window. 900,000 shares were
+     sold against 559,494 bought in the visible data, which cannot be reconciled
+     from these files (a pre-existing holding may explain it).
+     Neither leg is in closed_positions.json or the journal.
+
+D.6  Combined mark-to-market, bot basis, as of 2026-10-18 13:00:
+       realised   +34,261,425
+       unrealised -120,154,368
+       net         -85,892,943 rial
+     = -2.25% of the 3,820,795,085 rial the bot actually deployed in the window.
+     Broker basis (net of sell fees), the same 3 names: -84,708,000 approx.
+     Including the excluded خساپا (+71,075,822) the whole account is about
+     -13.6M rial on the bot's trades.
+
+
+================================================================================
+E. DISCREPANCIES BETWEEN THE BOT'S RECORDS AND THE BROKER'S RECORDS
+================================================================================
+
+E-1  COUNT: journal vs broker vs active_positions vs holdings
+  --------------------------------------------------------------------------
+  وایرا
+    journal   2026-10-14_وایرا_*.json  entry.requested_count 300000, one record,
+              "server_message": null, status "filled"
+    orders_log 2 entries (09:16, 09:20), both count 300000
+    broker     3 fills x 300000 = 900000 (…3825/…3955/…4155)
+    active     count 900000  (correct count, wrong provenance)
+    => journal under-records by 3x, orders_log by 1x, active is right by accident.
+
+  وسرمد
+    journal    2 files, both count 111888, and BOTH point at the SAME
+               "order_id": "3026101720002627"  (37e57f and a89dfa)
+    broker     2 DIFFERENT orders both filled: …2627 (08:45:26) and
+               …2963 (09:00:14); the 09:20 order never existed
+    active     count 223776 (= 2 x 111888, correct)
+    => one of the two journal records cites the wrong order id; the 09:20
+       submission has no broker counterpart at all.
+
+  شپاس
+    journal    entry.order_id "3026101320005433" (the 85-share 09:23 fill only)
+               plus three notes "broker reconcile: filled=88 vol=88",
+               "filled=85 vol=85", "filled=85 vol=85" (all stamped 11:30:11)
+    broker     3 fills 85 + 85 + 88 = 258
+    active     258  (correct)
+    => count is right, but the journal's entry block describes 1 of 3 fills and
+       the reconcile notes carry no order ids.
+
+  شکبیر
+    journal    3 files, entry.status null, no fill
+    broker     3 orders 310 / 600 / 400 - all "منقضی شده", done 0
+    active     absent (correct)
+    => consistent, except that 400 and 600 were not placed by the code.
+
+  ثنام
+    journal    2 files, no fill
+    orders_log 2 "submissions" (1,911 @ 2,617 at 09:24:13 and 19,871 @ 2,617
+               at 11:52:53)
+    broker     ZERO ثنام orders, ever
+    => the bot claims two submissions that the broker never saw, and captured no
+       error message either time ({"msg": null, "type": null,
+       "visible_modals": 0}).
+
+E-2  orders_log.json vs broker: rows present in one and not the other
+  In orders_log but NOT at broker:
+     شکبیر 30 @ 168,100  (orders_log.json:22-37)
+     ثنام 1,911 @ 2,617  (:38-53)
+     ثنام 19,871 @ 2,617 (:76-91)
+     وسرمد 111,888 @ 1,701 09:20 (orders_log.json:182-202)
+  At broker but NOT in orders_log:
+     وایرا 300,000 @ 3,790 09:31:55 (…4155)
+     شپاس 85 @ 59,450 09:53:12 (…13508)
+     شپاس 88 @ 59,450 09:57:58 (…13596)
+     شپاس 85 @ 59,450 11:40:01 (…14387, expired)
+     شکبیر 400 @ 168,100 11:40:20 (…14390, expired)
+     شکبیر 600 @ 168,100 11:40:31 (…15628, expired)
+  => orders_log.json accounts for only 6 of the 13 in-window broker tickets; it
+     omits 7 (the کیان sell plus the 6 listed above) and contains 4 phantom
+     submissions. It cannot be used for reconciliation.
+
+E-3  active_positions.json vs broker holdings
+  counts match exactly for the 3 managed names (900,000 / 223,776 / 258), but:
+    a) entry prices are the broker's "ق سربه سر فروش" (breakeven) column, not
+       "ق میانگین" (avg cost): 3,838 vs 3,804 / 1,721 vs 1,706 / 60,196 vs 59,666
+    b) the entire خساپا 138,299-share holding is missing from the file
+    c) "sent_at" is the sync timestamp, not the fill time (position_manager
+       20261017.log:67 shows and 3838/60196 appear nowhere in the trade data)
+  broker side: BML_LIVE_REALTIME_Claude.txt:28-90 and
+               auto\state\portfolio_snapshot_2026-10-17.json "realtime".
+
+E-4  holdings.json vs active_positions.json - two different portfolios
+  auto\state\holdings.json:{"held":["وایرا","وسرمد","خساپا","شپاس"]}
+  data\active_positions.json: وایرا, وسرمد, شپاس  (no خساپا)
+  Same 4 vs 3 mismatch visible in every PFL line:
+  auto_2026-10-17.log:21 "PFL sync held=وایرا,وسرمد,خساپا,شپاس"
+  vs arch_2026-10-17.log:38 "excluded from sell management: خساپا".
+
+E-5  closed_positions.json vs broker
+  entry_price 113,166 (bot) vs 113,124 (broker fill …3196) - 42 rial/share of
+  fees folded into the bot's entry.
+  exit_price 114,147 matches broker exactly.
+  count 34,925 matches.
+  exit_at "1405/07/21T10:38:19+03:30" - Jalali date in an ISO timestamp; the
+  broker says jdate 1405/07/21 time 10:38:19 (so the values are right, the
+  format is unusable for arithmetic).
+  3 duplicate rows vs 1 broker fill (E/D-2).
+
+E-6  Broker dumps themselves are lossy
+  bourse_ml\data\broker_orders_2026-10-14.json contains exactly "[]" even
+  though THREE وایرا orders filled that day.
+  bourse_ml\data\broker_orders_2026-10-17.json contains exactly 20 rows - the
+  same cap the logs report ("orders rows=20", auto_2026-10-14.log:3,
+  arch_2026-10-17.log:8) - so anything older than the 10th row of the widget is
+  silently dropped.
+  Parser also loses symbols: 8 of the 20 rows come out with "symbol": null
+  in BML_LIVE_ORDERS_Claude.txt:17,28,157,167,177,187,197,207
+  (the parser only matches names that are in the current holdings list,
+  BML_DIAG_SHAPAS_Claude.txt:60-64), and rows with a null symbol are dropped
+  from "today_orders" (BML_DIAG_SHAPAS_Claude.txt:90).
+
+E-7  buying power vs spend
+  10-17 07:20 plan bp = 582,381,070 (auto_2026-10-16.log:3)
+  10-17 actual spend  = 381,801,257  -> remaining should be ~200,579,813
+  broker "قدرت خرید: 200,579,813" at 12:46 (BML_PAGES_Claude.txt:2)
+  => the arithmetic is right; the defect is that no round-level budget check
+     stopped the SECOND full-size order (2 x 190.3M against a 190.3M slot).
+  10-14: bp 4,005,769,804, slot target 1,309,075,099, actual 3,423,600,000 (2.6x).
+
+E-8  Snapshot-to-snapshot self-contradiction (proves the sync is unreliable)
+  10-14 09:11 snapshot: realtime شپاس 258  vs  positions شپاس 516
+  10-16 23:57 snapshot: held = [خساپا, وایرا] - شپاس (held since 10-13) is GONE
+  10-17 11:40 positions: وایرا 1,800,000   10-17 11:46: وایرا 900,000
+  10-17 23:55: شپاس is back again.
+  ARCH_2026-10-15.txt / ARCH_2026-10-16.txt still print
+  "ACTIVE [{"symbol": "شپاس", "count": 516, "entry_price": 59666, ...}]" - a
+  position that never existed at 516 shares and an entry basis that was
+  replaced on 10-17.
+
+E-9  PnL % disagreement for the same price
+  3,760 with entry 3,790 -> -0.79% (position_manager_20261017.log:52)
+  3,760 with entry 3,838 -> -2.03% (position_manager_20261017.log:74)
+  1,652 with entry 1,721 -> -4.01% (:77)  while the broker shows وسرمد -1.18%
+  at 1,701 and the journal shows -1.511% at 1,695 for the same name.
+
+E-10 Journal self-inconsistency
+  12 journal files describe 5 distinct trades (ثنام x2, شکبیر x3, شپاس x2,
+  وایرا x2, وسرمد x3). All duplicates carry identical ml_score and identical
+  features_snapshot, only created_at differs (e.g. ثنام abe160 09:23:59 vs
+  7d0bfb 11:52:36). Monitoring was written into only one of each pair
+  (شپاس_71b222 5 points vs شپاس_3bd210 0; وایرا_fc5615 6 points vs
+  وایرا_e2eb72 0; وسرمد_aebf10 5 points vs 37e57f 0 and a89dfa 0), so the other
+  copies of the same trade show no monitoring at all.
+  وسرمد_aebf10 is even left at "status": "unknown" with filled_price null while
+  its siblings say "filled".
+
+
+================================================================================
+F. CONCRETE DEFECTS PROVEN BY THE LOGS (file:line)
+================================================================================
+
+F-1  An order is submitted even when the bot reports failure, and nothing
+     prevents the next scheduler round from sending it again.
+     robot_auto.py:379-383  (addOrder is CALLED -> the Angular scope posts)
+     robot_auto.py:387-388  ("if not confirm modal: log warning" - only a warning)
+     robot_auto.py:393-395  (reads a server response that is always null)
+     robot_auto.py:409      (status := response.type or "unknown")
+     robot_auto.py:601-606  (only status=="success" counts; else
+                             "No successful orders - active_positions not updated")
+     auto\auto_runner.py:511-517 (failed parse -> item stays in `remaining` ->
+                             re-fired next round)
+     LIVE PROOF: robot_2026-10-14_091604.log:24-27 says Checkbox found:false,
+       Confirm clicked:false, "No confirm modal", "type=None", while
+       broker_orders_2026-10-17.json:47-56 records that exact 300,000 @ 3,790
+       order FILLED at 09:15:51.
+     CONSEQUENCE: 3x وایرا, 2x وسرمد, 3x شپاس (B-11).
+
+F-2  The buy gate has no exit path for a legitimately empty plan -> it retries
+     all day and then alerts that no buy was registered.
+     auto\auto_runner.py:457-480 (loop breaks only on 'validated'/'partial';
+                                'nothing_to_do' falls into 'not ready')
+     auto_2026-10-18.log:2  "PLAN built ... slots=0 bp=None items=0"
+     auto_2026-10-18.log:3-62  62 x "[GATE] not ready, retry in 300s"
+     bourse_ml_2026-10-18.log:27 "ALERT: BourseML 09:30 :: no buy registered yet"
+
+F-3  The gate keeps firing after the daily deadline (separate process launches,
+     not just a loop).
+     auto_2026-10-13.log:30 "[2026-10-13 13:13:18][GATE] deadline hit, abort"
+     auto_2026-10-13.log:32 (13:19:31), :34 (13:19:59), :40 (14:21:21)
+     deadline = 12:20 (auto_2026-10-13.log:2).
+
+F-4  The buy loop ignores the planned count and re-derives it at submission
+     time, so plan and execution never agree.
+     ARCH_2026-10-13.txt ITEM شکبیر cnt=10000 / ثنام cnt=707981
+     robot_auto_20261013.log:53 "Count: 30" ; :102 "count 30 -> 310" ;
+       :64 "Count: 1911" ; :114 "count 1911 -> 19871"
+     ARCH_2026-10-17.txt:3 "ITEM وسرمد px=1652 cnt=115207"
+     robot_2026-10-17_090028.log:20-21 count 111888 @ 1,701 (+2.97% vs plan px)
+
+F-5  Order price/count come from the live page while the plan/budget uses the
+     previous close -> systematic slippage nobody accounts for.
+     (same lines as F-4; plan 1,652 vs fill 1,701 = +2.97% = +5,483,000 rial
+      on 111,888 shares.)
+
+F-6  Orders below the 50,000,000 rial market minimum are attempted and vanish
+     without any recorded reason.
+     auto_2026-10-13.log:2 "base_market_min_rial": 50000000
+     robot_auto_20261013.log:53 (30 x 168,100 = 5,043,000 rial)
+     robot_auto_20261013.log:64 (1,911 x 2,617 = 5,001,087 rial)
+     orders_log.json:31-35 / :69-73  "server_response": {"msg": null,
+       "type": null, "visible_modals": 0}
+     No such order at the broker; the bot's own fix at :102 proves the minimum.
+
+F-7  Hard-coded DOM ids for the price/count boxes (they are dynamic per symbol).
+     position_manager_20261017.log:9   input[id='305_inputText']
+     position_manager_20261017.log:173 input[id='299_inputText']
+     BML_SELL_INPUTS_Claude.txt:3,20  93_inputText / 99_inputText
+     BML_ROOTFIX_Claude.txt:12-19     373_inputText / 379_inputText
+
+F-8  The sell form is not verified before clicking, so three sell sessions died
+     on "form symbol mismatch" and no stop was ever executed.
+     position_manager_20261017.log:527, :551, :552
+     (the abort is the safe outcome; the defect is that it cannot recover, and
+      the same check does not exist on the buy path)
+
+F-9  Sell retry is scheduled outside market hours and has no market-hours guard.
+     bourse_ml\logs\sell_retry.log:1-15 (03:30:12 .. 05:50:11, 15 x SELL_FAILED)
+     data\logs\position_manager_20261018.log:1-30 (15 x "Could not open trade page")
+     bourse_ml fixes\BML_SETUP_RETRY_Claude.txt:1-4 (task created 02:55 Tehran)
+
+F-10 Positions are rebuilt from a realtime snapshot AND then incremented by the
+     same day's fills -> double counting.
+     BML_DIAG_SHAPAS_Claude.txt:94-96  (positions <- realtime rows, incl. count)
+     BML_DIAG_SHAPAS_Claude.txt:107-111 ("elif side==خرید and filled:
+                                          positions[sym]['count'] += done")
+     BML_FIX_SHAPAS_Claude.txt:10-16    وایرا 1800000
+     auto\state\portfolio_snapshot_2026-10-14.json  شپاس 516 vs realtime 258
+     BML_FIX_SHAPAS2_Claude.txt:11      وایرا 900000 (patched at 11:46)
+
+F-11 The order-date filter picks "the newest date present in the list", not
+     "today", so on a closed day it replays 3-day-old fills as new positions -
+     which is how وایرا 900,000 was re-created on 10-16 with a Jalali sent_at.
+     BML_DIAG_SHAPAS_Claude.txt:90-93 ("dmax = max(o['date'] ...); tod = [o for o
+     if o['date']==dmax]")
+     auto\state\portfolio_snapshot_2026-10-16.json "sent_at":
+     "1405/07/22T09:31:55+03:30"
+
+F-12 The holdings/positions sync depends on which page and what moment it reads,
+     so holdings silently change.
+     auto_2026-10-14.log:4  "PFL sync held=خساپا,شپاس"
+     auto_2026-10-16.log:2  "PFL sync held=خساپا,وایرا"      (شپاس lost)
+     auto_2026-10-17.log:21 "PFL sync held=وایرا,وسرمد,خساپا,شپاس" (شپاس back)
+     BML_LIVE_ORDERS_Claude.txt:3-11 "REALTIME" contains only خساپا on 10-17
+     while the OrderList page shows four rows (BML_LIVE_REALTIME_Claude.txt:3-11).
+
+F-13 Entry price uses the broker's breakeven (fee-inclusive) column, so every
+     PnL and every stop is ~1.2-1.3 pp too negative.
+     data\active_positions.json:5,13,21 (3838 / 1721 / 60196)
+     BML_LIVE_REALTIME_Claude.txt:42-90 (avg 3,804 / 1,706 / 59,666;
+       breakeven 3,838 / 1,721 / 60,196)
+     position_manager_20261017.log:52 (-0.79%) vs :74 (-2.03%) for price 3,760.
+
+F-14 The ARCH report drops orders.
+     ARCH_2026-10-13.txt has 2 "ORDER" lines for a day on which orders_log.json
+     holds 5 (orders_log.json:2-92) and the broker has 6 tickets.
+     ARCH_2026-10-14.txt has 1 "ORDER" line; orders_log has 2 and the broker has
+     3 fills on that date.
+     Same for "ACTIVE": ARCH_2026-10-15/16 print a 516-share شپاس position that
+     never existed.
+
+F-15 Realised PnL is triple counted and the exit timestamp is Jalali-in-ISO.
+     data\closed_positions.json:2-10, 11-19, 20-28 (three identical records)
+     :8 "exit_at": "1405/07/21T10:38:19+03:30"
+
+F-16 Journal duplicates every trade and never records an exit.
+     data\trade_journal\ : 12 files for 5 trades (ثنام x2, شکبیر x3, شپاس x2,
+     وایرا x2, وسرمد x3) - e.g. 2026-10-13_ثنام_abe160.json and
+     2026-10-13_ثنام_7d0bfb.json are identical apart from created_at.
+     Every file: "exit": {"reason": null, ...} despite closed_positions.json
+     holding a closed trade (D-4).
+
+F-17 Fill back-fill assigns one order id to two different broker tickets.
+     2026-10-17_وسرمد_37e57f.json order_id 3026101720002627
+     2026-10-17_وسرمد_a89dfa.json order_id 3026101720002627
+     broker has 3026101700002963 for the 09:00:14 fill
+     (broker_orders_2026-10-17.json:14-15).
+
+F-18 days_held is always 0 (two independent causes) -> no time-based exit can
+     ever fire.
+     data\active_positions.json:7 (sent_at = 2026-10-17T11:40 sync time)
+     BML_DIAG_ORDERS_Claude.txt:199-207 (fromisoformat(...) inside try/except,
+       exception -> days_held = 0)
+     every "Days held: 0" line, e.g. position_manager_20261017.log:90,124,131.
+
+F-19 ONLY_SELL allow-list silently overrides the stop logic.
+     position_manager_20261017.log:165, :328, :466
+     (same code path, same -3.08%, شپاس sells, وایرا does not)
+
+F-20 The 5-minute position loop never runs; the only monitoring that ever
+     happened was manual/ad-hoc position_manager.py invocations.
+     pm_loop_20261017.log:7 "Outside active window (09:00). Exiting loop."
+     pm_loop_20261013/14/18.log:7 identical
+     runner_20261018.log:10-11 "SKIP 6302.6s late beyond grace 10min ->
+     not running pm_preopen"
+
+F-21 Nightly model has been dead for 6 days, with the exception text lost.
+     nightly_20261012.log:31, nightly_20261013.log:31, nightly_20261014.log:32,
+     nightly_20261015.log:15, nightly_20261016.log:14, nightly_20261017.log:31
+     ("Prediction FAILED: " then "0 picks")
+
+F-22 bourse_ml crashes on naive/aware datetime subtraction.
+     bourse_ml_2026-10-14.log:1 ; fixes\ERROR_20261014_145607.txt:1
+
+F-23 Alerts report stale/false numbers because they read the bot's own files.
+     bourse_ml_2026-10-14.log:10 "orders_today=2" (broker filled 3)
+     bourse_ml_2026-10-17.log:24-26 "orders_log_today=3 / plan_submitted=0 /
+       plan_status=validated"  (2 fills happened, plan says 0 submitted)
+     bourse_ml_2026-10-18.log:27 "no buy registered yet" when slots=0
+
+F-24 Two schedulers can run robot_auto.py for the same day (legacy runner 09:00
+     plus auto_runner rounds), and a third unlogged trigger exists.
+     runner_20261013.log:9-10 fires robot_auto at 09:00:00 (crashes, :14 rc=1)
+     robot_auto_20261013.log:1 and :23 = two STARTs 23 minutes apart (09:00:00,
+       09:23:24), neither of which is in the auto\logs\auto_2026-10-13.log
+       (that file only starts at 12:13:29)
+     orders at 09:53:12 / 09:57:58 / 11:40:01 / 11:40:20 / 11:40:31 have no
+       originating log line anywhere.
+
+F-25 Seller price is a fixed -1% of last price, clamped to the allowed range;
+     it is never refreshed against the order book.
+     BML_DIAG_ORDERS_Claude.txt:43-47 ("p = int(cur * 0.99)" + LP/HP clamp)
+     BML_ROOTFIX_Claude.txt:6 "PRICE=57756" (58,340 x 0.99 = 57,756)
+     position_manager_20261017.log:553
+
+F-26 The broker dump is truncated at the widget's page size, so reconciliation
+     can never be complete.
+     broker_orders_2026-10-17.json has exactly 20 objects
+     "orders rows=20" appears in auto_2026-10-14.log:3, arch_2026-10-17.log:8,
+       :32, :37
+     broker_orders_2026-10-14.json is "[]" on a day with 3 fills.
+
+F-27 Weekly report and its statistics disagree with the stored data and the run
+     crashes.
+     runner_20261017.log:19 "DONE rc=1 elapsed=0.7s" (weekly_report.py)
+     reports\Weekly_Compair_Report_14050718_14050722.txt:4 "orders in range: 7"
+       (6 fills actually exist), :5 "closed positions: 1" (store has 3),
+       :7-13 every row carries "status=None" and "sim=('no_future_bars', ...)"
+       so the learning loop has zero evaluable trades, as the file itself admits
+       at :18 "less than 5 closed trades - learning suggestions disabled".
+
+F-28 The 50M minimum is applied by widening the count to 52,000,000 rial, i.e.
+     the bot inflates an order to satisfy the rule instead of skipping it - and
+     did so on a stock (شکبیر) that had no sellers, where the order then expired.
+     robot_auto_20261013.log:102-103 (30 -> 310, 5,211,100 toman)
+     broker_orders_2026-10-17.json:58-67 (310 @ 168,100, "منقضی شده", done 0)
+
+
+================================================================================
+G. BROKER TICKET INVENTORY FOR THE WINDOW (13 tickets, 9 filled, 4 expired)
+================================================================================
+From bourse_ml\data\broker_orders_2026-10-17.json (the only surviving 20-row dump):
+
+  #  order no            side  symbol   qty      price    time      result
+  1  3026101320005433    BUY   شپاس     85       59,450   09:23:34  FILLED   10-13
+  2  3026101320013508    BUY   شپاس     85       59,450   09:53:12  FILLED   10-13 (unlogged)
+  3  3026101320013596    BUY   شپاس     88       59,450   09:57:58  FILLED   10-13 (unlogged)
+  4  3026101300013025    SELL  کیان     34,925   114,147  10:38:19  FILLED   10-13 (manual)
+  5  3026101300014387    BUY   شپاس     85       59,450   11:40:01  EXPIRED  10-13 (unlogged)
+  6  3026101300014390    BUY   شکبیر    400      168,100  11:40:20  EXPIRED  10-13 (unlogged)
+  7  3026101320015628    BUY   شکبیر    600      168,100  11:40:31  EXPIRED  10-13 (unlogged)
+  8  3026101300017370    BUY   شکبیر    310      168,100  11:52:31  EXPIRED  10-13 (bot)
+  9  3026101400003825    BUY   وایرا    300,000  3,790    09:15:51  FILLED   10-14 (bot)
+ 10  3026101400003955    BUY   وایرا    300,000  3,790    09:20:14  FILLED   10-14 (bot)
+ 11  3026101400004155    BUY   وایرا    300,000  3,790    09:31:55  FILLED   10-14 (bot, unlogged run)
+ 12  3026101720002627    BUY   وسرمد    111,888  1,701    08:45:26  FILLED   10-17 (bot)
+ 13  3026101700002963    BUY   وسرمد    111,888  1,701    09:00:14  FILLED   10-17 (bot)
+
+  Bot-submitted tickets that NEVER appear at the broker at all (4):
+      شکبیر  30    @ 168,100  (orders_log.json:22-37)   10-13 09:23:57
+      ثنام   1,911 @ 2,617    (orders_log.json:38-53)   10-13 09:24:13
+      ثنام  19,871 @ 2,617    (orders_log.json:76-91)   10-13 11:52:53
+      وسرمد 111,888 @ 1,701   (orders_log.json:182-202) 10-17 09:20:52
+
+  Filled notional by symbol: وایرا 3,411,000,000 + وسرمد 380,660,976 +
+  شپاس 15,338,100 = 3,806,999,076 rial; fees 13,796,009 -> 3,820,795,085.
+  Expired/unfilled: شکبیر 310 + 400 + 600 and one 85-share شپاس (4 tickets).
+  Two tickets (400 / 600 شکبیر) were clearly hand-entered around the bot's own
+  310-share order and are not attributable to any code path.
+
+
+================================================================================
+H. ONE-PARAGRAPH SUMMARY OF WHAT THE BOT ACTUALLY DID
+================================================================================
+Between 2026-10-13 and 2026-10-18 the bot got 9 tickets filled at the broker and
+had 4 more expire, while 4 further submissions never reached the broker at all.
+Every buy fill was a duplicate of a single decision: three 300,000-share وایرا
+tickets (900,000 shares, 3.42bn rial, 85% of the account's buying power) fired at
+09:15, 09:20 and 09:31 on 10-14; two 111,888-share وسرمد tickets (223,776 shares,
+382m rial) fired at 08:45 and 09:00 on 10-17; and شپاس was bought three times
+(85 + 85 + 88 = 258 shares) on 10-13. The bot logged every one of those as
+"No successful orders" because it never sees the confirmation modal, so
+auto_runner kept re-queuing the item and re-firing it each round. That
+over-buying is why the 10-17 buying power had collapsed from 4,005,769,804 to
+582,381,070 rial, and why the 10-17 slot was itself filled twice. On 10-17 it
+correctly raised stop signals on all three positions (-3.07% وایرا, -4.01%
+وسرمد, -3.08% شپاس) and tried seven times between 11:47 and 13:20 to sell شپاس
+(automated SELLING cycles at 11:47:25, 12:03:51, 12:20:57, then diagnostic
+attempts at 12:41:50, 13:02:12, 13:10:37 and a dry "Set sell" at 13:20:40);
+all of them aborted on DOM problems (input[id='299_inputText'], "form symbol
+mismatch", "Could not select شپاس"), and the وایرا stop was silently vetoed by an
+ONLY_SELL filter. A retry task then fired 15 more times at 03:30-05:50 while the
+market was closed. On 10-18 the buy gate spun 62 times over five hours without
+ever giving up. No position was ever sold by the bot in the whole window: the
+only realised trade (کیان, +0.87%, +34.3m rial) was a manual sell, and it is
+recorded three times in closed_positions.json while the journal records none.
+Open exposure at the last snapshot (2026-10-18 13:00) is 3.735bn rial of stock
+showing -120.2m rial on the bot's inflated basis (-119.0m on the broker's), plus
+an untracked خساپا position of 138,299 shares worth +71.1m rial that the sell
+manager is forbidden to touch.
+================================================================================
+END OF REPORT
+================================================================================

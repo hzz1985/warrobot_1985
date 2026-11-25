@@ -1,0 +1,280 @@
+﻿<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f1419">
+<meta name="format-detection" content="telephone=no">
+<title>TeseRobot — کاندیدای خرید و فروش</title>
+<style>
+  :root { --bg:#0f1419; --card:#171e26; --line:#25303b; --txt:#e6edf3; --muted:#8b98a5;
+          --green:#2e7d32; --red:#c62828; --accent:#1f6feb;
+          --fs: clamp(13px, 0.55vw + 11px, 16px); }
+  * { box-sizing:border-box; }
+  html { -webkit-text-size-adjust:100%; }
+  body { margin:0; background:var(--bg); color:var(--txt); font-size:var(--fs);
+         font-family:Tahoma, "Segoe UI", sans-serif; overflow-x:hidden; }
+
+  header { padding:14px clamp(12px,3vw,24px); border-bottom:1px solid var(--line);
+           display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  h1 { font-size:clamp(15px,1.2vw + 10px,19px); margin:0; white-space:nowrap; }
+  .badge { font-size:clamp(10px,0.6vw + 8px,12px); padding:3px 10px; border-radius:999px;
+           background:#1b2733; color:var(--muted); white-space:nowrap; }
+  .badge.live { background:#3a1515; color:#ff8a80; }
+  .badge.dry { background:#14301c; color:#7ee2a8; }
+
+  .tabs { display:flex; gap:8px; padding:12px clamp(12px,3vw,24px) 0; }
+  .tab { flex:1 1 0; text-align:center; padding:12px 14px; border:1px solid var(--line);
+         border-bottom:none; border-radius:10px 10px 0 0; cursor:pointer;
+         color:var(--muted); background:#121922; font-size:clamp(12px,0.6vw + 10px,14px);
+         min-height:44px; }
+  .tab.active { background:var(--card); color:var(--txt); font-weight:bold; }
+
+  .panel { display:none; padding:clamp(14px,2.4vw,22px) clamp(12px,3vw,24px) 40px; }
+  .panel.active { display:block; }
+
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+          gap:clamp(8px,1.2vw,12px); margin-bottom:18px; }
+  .kpi { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px 14px; }
+  .kpi .lbl { color:var(--muted); font-size:0.8em; margin-bottom:6px; }
+  .kpi .val { font-size:clamp(16px,1.2vw + 12px,21px); font-weight:bold; }
+
+  .table-wrap { width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  table { width:100%; border-collapse:collapse; background:var(--card);
+          border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  th, td { padding:10px 12px; text-align:right; border-bottom:1px solid var(--line);
+           font-size:0.92em; white-space:nowrap; }
+  th { color:var(--muted); font-weight:normal; background:#121922; }
+  tr:last-child td { border-bottom:none; }
+  .pos { color:#7ee2a8; } .neg { color:#ff8a80; }
+
+  .chart { width:100%; height:auto; background:var(--card); border:1px solid var(--line);
+           border-radius:12px; margin-top:10px; display:block; }
+  .grid-line, .grid { stroke:#25303b; stroke-width:1; }
+  .zero { stroke:#55636f; stroke-width:1; stroke-dasharray:5 5; }
+  .line { fill:none; stroke:#1faa4b; stroke-width:4; stroke-linejoin:round; stroke-linecap:round; }        .chart-legend { display:flex; flex-wrap:wrap; gap:8px; align-items:center; font-size:12px; color:#cfd8e3; margin:6px 0 10px; }        .chart-legend .swatch { width:22px; height:4px; background:#1faa4b; border-radius:2px; display:inline-block; }        .chart-legend .sep { color:#3a4757; }        .legend-line { stroke:#1faa4b; stroke-width:4; }
+  .axis { fill:#8b98a5; font-size:11px; }        .point-label { fill:#e6edf3; font-size:12px; font-weight:600; }        .point-value { fill:#9aa7b4; font-size:10px; }
+        .zone { fill:#5b6b7c; font-size:12px; font-weight:700; }
+
+  .empty { padding:26px; text-align:center; color:var(--muted); background:var(--card);
+           border:1px dashed var(--line); border-radius:12px; }
+  .note { color:var(--muted); font-size:0.82em; margin:6px 0 14px; line-height:1.8; }
+  h2 { font-size:clamp(13px,0.7vw + 10px,15px); margin:20px 0 10px; color:#c9d4df; }
+
+  /* ---------------- mobile ---------------- */
+  @media (max-width: 700px) {
+    :root { --fs: 15px; }
+    header { padding:12px 14px; gap:8px; }
+    h1 { font-size:17px; }
+    .badge { font-size:11px; padding:3px 8px; }
+    .tabs { padding:10px 12px 0; gap:6px; }
+    .tab { padding:13px 10px; font-size:14px; }
+    .panel { padding:14px 12px 34px; }
+    .grid { grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px; }
+    .kpi { padding:10px 12px; }
+    .kpi .val { font-size:18px; }
+    h2 { font-size:14px; }
+    .note { font-size:12.5px; }
+
+    /* tables become cards: one block per row, label + value */
+    table.responsive { border:none; background:transparent; }
+    table.responsive tr.head { display:none; }
+    table.responsive tr { display:block; background:var(--card); border:1px solid var(--line);
+                          border-radius:12px; margin-bottom:10px; padding:4px 12px; }
+    table.responsive td { display:flex; justify-content:space-between; align-items:center;
+                          gap:12px; border-bottom:1px dashed #202a34; padding:9px 0;
+                          white-space:normal; text-align:left; }
+    table.responsive td:last-child { border-bottom:none; }
+    table.responsive td::before { content:attr(data-label); color:var(--muted);
+                                  font-size:12px; flex:0 0 auto; }
+    table.responsive td > * { margin-inline-start:auto; }
+    .chart { min-height:220px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>🤖 TeseRobot</h1>
+  <span class="badge {{ 'live' if mode == 'live' else 'dry' }}">حالت: {{ mode }}</span>
+  <span class="badge">پیک‌ها برای {{ for_date }}</span>
+  <span class="badge">ساخته‌شده {{ generated }}</span>
+  <span class="badge">اکنون {{ now }}</span>
+</header>
+
+<div class="tabs">
+  <div class="tab active" data-tab="buy">کاندیدای خرید</div>
+  <div class="tab" data-tab="sell">کاندیدای فروش</div>
+</div>
+
+<!-- ================= BUY ================= -->
+<section class="panel active" id="buy">
+  <div class="grid">
+    <div class="kpi"><div class="lbl">پوزیشن‌های باز</div><div class="val">{{ positions|length }} / {{ max_pos }}</div></div>
+    <div class="kpi"><div class="lbl">اسلات آزاد</div><div class="val">{{ free_slots }}</div></div>
+    <div class="kpi"><div class="lbl">حد سود (ناخالص)</div><div class="val">{{ target }}%</div></div>
+    <div class="kpi"><div class="lbl">حد ضرر</div><div class="val">{{ stop }}%</div></div>
+    <div class="kpi"><div class="lbl">سود/زیان کل از زمان خرید</div>
+      <div class="val {{ 'pos' if port_total >= 0 else 'neg' }}">{{ '%+.2f'|format(port_pct) }}%</div>
+      <div class="lbl">{{ '{:,.0f}'.format(port_total) }} ریال</div></div>
+  </div>
+
+  <h2>کاندیدهای خرید فردا — اسکن شبانه (قفل صف خرید)</h2>
+  <p class="note">امتیاز = احتمال اینکه فردا صف خرید شروع شود و ≥۳ روز دوام بیاورد.
+     فیلتر: احتمال ≥ ۰٫۷۰ و فیچر کامل (روزانه + درون‌روز + Burst).</p>
+  {% if picks.picks %}
+  <div class="table-wrap">
+  <table class="responsive">
+    <tr class="head"><th>#</th><th>نماد</th><th>احتمال صف ۳+ روزه</th><th>منبع فیچر</th>
+        <th>فاصله تا سقف</th><th>قفل امروز</th></tr>
+    {% for p in picks.picks %}
+    <tr>
+      <td data-label="رتبه">{{ p.rank }}</td>
+      <td data-label="نماد"><b>{{ p.symbol }}</b></td>
+      <td data-label="احتمال" class="pos">{{ '%.3f'|format(p.score) }}</td>
+      <td data-label="منبع فیچر">{{ p.feature_source }}{% if p.degraded %} (fallback){% endif %}</td>
+      <td data-label="فاصله تا سقف">{{ '%.2f'|format(p.dist_to_ceiling_pct) }}%</td>
+      <td data-label="قفل امروز">{{ 'بله' if p.queue_run_today else 'خیر' }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  </div>
+  {% else %}
+  <div class="empty">پیکی برای امروز موجود نیست.</div>
+  {% endif %}
+
+  <h2>پوزیشن‌های باز — سهم هر سهم از سبد (هدف: {{ '%.1f'|format(target_share) }}%)</h2>
+  {% if excluded %}<p class="note">خارج از حلقهٔ پایش و تصمیم‌گیری: <b>{{ excluded|join('، ') }}</b> — باگ کارگزار؛ نه فروخته می‌شود و نه اسلات می‌گیرد.</p>{% endif %}
+  {% if positions %}
+  <div class="table-wrap">
+  <table class="responsive">
+    <tr class="head"><th>نماد</th><th>تعداد</th><th>میانگین خرید</th><th>قیمت</th><th>سود/زیان فعلی</th><th>سود/زیان کل</th><th>ارزش</th><th>سهم از سبد</th></tr>
+    {% for p in positions %}
+    <tr>
+      <td data-label="نماد"><b>{{ p.symbol }}</b></td>
+      <td data-label="تعداد">{{ '{:,}'.format(p.qty) }}</td>
+      <td data-label="میانگین">{{ '{:,.0f}'.format(p.avg) }}</td>
+      <td data-label="قیمت">{{ '{:,.0f}'.format(p.price) }}</td>
+      <td data-label="سود/زیان فعلی" class="{{ 'pos' if p.pnl_pct >= 0 else 'neg' }}">{{ '%+.2f'|format(p.pnl_pct) }}%</td>
+      <td data-label="سود/زیان کل" class="{{ 'pos' if p.total_pct >= 0 else 'neg' }}">{{ '%+.2f'|format(p.total_pct) }}%
+        <small>({{ '{:,.0f}'.format(p.total_pnl) }})</small></td>
+      <td data-label="ارزش">{{ '{:,.0f}'.format(p.value) }}</td>
+      <td data-label="سهم از سبد" class="{{ 'neg' if p.off_balance else '' }}">{{ p.share_pct }}%{% if p.off_balance %} ⚠{% endif %}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  </div>
+  {% else %}
+  <div class="empty">هیچ پوزیشن بازی در دفتر ثبت نشده است.</div>
+  {% endif %}
+</section>
+
+<!-- ================= SELL ================= -->
+<section class="panel" id="sell">
+  <div class="grid">
+    <div class="kpi"><div class="lbl">حد سود</div><div class="val">{{ target }}%</div></div>
+    <div class="kpi"><div class="lbl">حد ضرر</div><div class="val">{{ stop }}%</div></div>
+    <div class="kpi"><div class="lbl">میانگین سود فروش‌ها</div>
+      <div class="val {{ 'pos' if avg_realised and avg_realised > 0 else 'neg' }}">
+        {{ ('%+.2f%%'|format(avg_realised)) if avg_realised is not none else '—' }}</div></div>
+    <div class="kpi"><div class="lbl">تعداد فروش</div><div class="val">{{ sells|length }}</div></div>
+  </div>
+
+  <h2>کاندیدهای فروش (حلقهٔ تصمیم)</h2>
+  {% if sell_rows %}
+  <div class="table-wrap">
+  <table class="responsive">
+    <tr class="head"><th>نماد</th><th>تعداد</th><th>میانگین</th><th>قیمت</th><th>سود/زیان فعلی</th><th>سود/زیان کل</th><th>تصمیم</th></tr>
+    {% for p in sell_rows %}
+    <tr>
+      <td data-label="نماد"><b>{{ p.symbol }}</b></td>
+      <td data-label="تعداد">{{ '{:,}'.format(p.qty) }}</td>
+      <td data-label="میانگین">{{ '{:,.0f}'.format(p.avg) }}</td>
+      <td data-label="قیمت">{{ '{:,.0f}'.format(p.price) }}</td>
+      <td data-label="سود/زیان فعلی" class="{{ 'pos' if p.pnl_pct >= 0 else 'neg' }}">{{ '%+.2f'|format(p.pnl_pct) }}%</td>
+      <td data-label="سود/زیان کل" class="{{ 'pos' if p.total_pct >= 0 else 'neg' }}">{{ '%+.2f'|format(p.total_pct) }}%</td>
+      <td data-label="تصمیم">{{ p.decision }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  </div>
+  {% else %}
+  <div class="empty">پوزیشنی برای ارزیابی وجود ندارد.</div>
+  {% endif %}
+
+  <h2>نمودار سود تحقق‌یافته به تفکیک فروش</h2>
+  <p class="note">هر نقطه یک فروش واقعی است و ارتفاع آن سود/زیان ریالی همان معامله؛
+     خط، جمع تجمعی تغییر دارایی است.</p>
+  <div class="chart-legend">
+    <span class="swatch"></span>
+    <span>سود/زیان تجمعی (ریال)</span>
+    <span class="sep">|</span>
+    <span><b>محور افقی:</b> تاریخ بسته شدن معامله</span>
+    <span class="sep">|</span>
+    <span><b>محور عمودی:</b> تغییر دارایی به ریال</span>
+  </div>
+  <p class="note">نسخهٔ نمودار: {{ chart_version }} — اگر این شماره را نمی‌بینی، صفحهٔ کش‌شده است (Ctrl+F5).</p>
+  {{ chart|safe }}
+
+  {% if sells %}
+  <h2>فروش‌های اخیر — تجمیع هر نماد (۵ نماد آخر)</h2>
+  <div class="table-wrap">
+  <table class="responsive">
+    <tr class="head"><th>زمان</th><th>نماد</th><th>تعداد</th><th>میانگین خرید</th><th>قیمت فروش</th><th>سود</th></tr>
+    {% for s in sells %}
+    <tr>
+      <td data-label="زمان">{{ s.ts }}</td>
+      <td data-label="نماد"><b>{{ s.symbol }}</b></td>
+      <td data-label="تعداد">{{ '{:,}'.format(s.qty) }}</td>
+      <td data-label="میانگین خرید">{{ '{:,.0f}'.format(s.avg) }}</td>
+      <td data-label="قیمت فروش">{{ '{:,.0f}'.format(s.price) }}</td>
+      <td data-label="سود" class="{{ 'pos' if s.pnl_pct >= 0 else 'neg' }}">{{ '%+.2f'|format(s.pnl_pct) }}%</td>
+    </tr>
+    {% endfor %}
+  </table>
+  </div>
+  {% endif %}
+</section>
+
+<script>
+  function activate(name) {
+    document.querySelectorAll('.tab').forEach(function (x) {
+      x.classList.toggle('active', x.dataset.tab === name);
+    });
+    document.querySelectorAll('.panel').forEach(function (x) {
+      x.classList.toggle('active', x.id === name);
+    });
+  }
+
+  document.querySelectorAll('.tab').forEach(function (t) {
+    t.addEventListener('click', function () {
+      activate(t.dataset.tab);
+      try { localStorage.setItem('tseTab', t.dataset.tab); } catch (e) {}
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+
+  // keep the chosen tab and the scroll position across the auto-refresh
+  try {
+    var saved = localStorage.getItem('tseTab');
+    if (saved) activate(saved);
+  } catch (e) {}
+  window.addEventListener('beforeunload', function () {
+    try { sessionStorage.setItem('tseScroll', String(window.scrollY)); } catch (e) {}
+  });
+  try {
+    var y = sessionStorage.getItem('tseScroll');
+    if (y) window.scrollTo(0, parseInt(y, 10));
+  } catch (e) {}
+
+  // server-rendered numbers: refresh so phone and desktop never drift apart
+  setTimeout(function () { location.reload(); }, 60000);
+</script>
+</body>
+</html>
+
+
+
+
+
+
+

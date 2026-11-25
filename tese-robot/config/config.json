@@ -1,0 +1,181 @@
+{
+  "schema": 2,
+  "mode": "live",
+  "timezone": "Asia/Tehran",
+  "paths": {
+    "state_dir": "state",
+    "log_dir": "logs",
+    "report_dir": "reports",
+    "market_data_dir": "data/daily",
+    "picks_dir": "data"
+  },
+  "market": {
+    "open": "09:00",
+    "close_auction_start": "12:00",
+    "close": "12:30",
+    "pre_open_start": "08:30",
+    "daily_limit_pct": 5.0,
+    "limit_pct_overrides": {},
+    "tick_rial": 10
+  },
+  "fees": {
+    "buy_pct": 1.0,
+    "sell_pct": 1.0,
+    "min_fee_rial": 0
+  },
+  "portfolio": {
+    "max_positions": 3,
+    "max_value_per_position_pct": 40.0,
+    "max_total_exposure_pct": 99.0,
+    "min_cash_buffer_pct": 0.0,
+    "deploy_fraction": 1.0,
+    "exclude_symbols": [
+      "خساپا"
+    ]
+  },
+  "buy": {
+    "max_picks_per_day": 3,
+    "min_score": 0.6,
+    "entry_price_mode": "ceiling",
+    "price_offset_pct": 0.0,
+    "min_order_rial": 5000000,
+    "min_order_rial_base_market": 50000000,
+    "attempts_tehran": [
+      "08:45",
+      "09:00",
+      "09:05"
+    ],
+    "deadline_tehran": "09:05",
+    "verify_timeout_sec": 45,
+    "max_cash_fraction_per_buy": 1.0,
+    "min_prob": 0.7,
+    "preopen_queue": {
+      "enabled": true,
+      "require_at_ceiling": true,
+      "max_dist_to_ceiling_pct": 0.25,
+      "require_no_ask_at_ceiling": true,
+      "min_queue_value_rial": 300000000,
+      "min_imbalance": 0.5
+    },
+    "preopen_attempt": "08:45",
+    "window_start": "09:01",
+    "window_end": "09:20",
+    "interval_sec": 10,
+    "retry_cooldown_sec": 20,
+    "enabled": true
+  },
+  "sell": {
+    "target_pct": 6.0,
+    "stop_pct": 3.0,
+    "max_hold_days": 10,
+    "trailing_stop_pct": null,
+    "trailing_arm_pct": 5.0,
+    "exit_on_queue_break": true,
+    "price_mode": "best_bid",
+    "price_offset_pct": -0.3,
+    "check_interval_sec": 60,
+    "max_attempts_per_day": 20,
+    "retry_cooldown_sec": 120,
+    "verify_timeout_sec": 45,
+    "allow_sell_only_window": [
+      "09:00",
+      "12:28"
+    ],
+    "blocked_symbols": [
+      "خساپا"
+    ],
+    "allow_pre_open_sell": true,
+    "pre_open_window": [
+      "08:30",
+      "09:00"
+    ],
+    "burst_exit": {
+      "enabled": true,
+      "refresh_sec": 180,
+      "min_profit_pct": 1.5,
+      "min_flk": -0.25,
+      "min_flc": 0.0,
+      "exit_on_queue_break_tape": true
+    },
+    "stop_price_mode": "floor"
+  },
+  "schedule": {
+    "preflight": "08:20",
+    "nightly_refresh": "20:30",
+    "picks": "21:20",
+    "close_report": "13:10",
+    "heartbeat_sec": 5,
+    "preopen_plan": "08:40",
+    "features": "21:00",
+    "login_watch": "08:10",
+    "keepalive_sec": 30,
+    "reallern": "21:25",
+    "clock_check": "08:00",
+    "live_scan": "09:00"
+  },
+  "signals": {
+    "source": "ride_locked",
+    "external_picks_path": "",
+    "top_n": 3,
+    "weights": {
+      "low_intraday_volume": 18.0,
+      "no_recent_down": 14.0,
+      "near_ceiling": 12.0,
+      "low_reopen": 10.0,
+      "rsi_mid": 10.0,
+      "volume_contraction": 14.0,
+      "range_compression": 10.0,
+      "dist_from_52w_high": 12.0
+    },
+    "model_path": "models/queue_v3.pkl",
+    "intraday_path": "data/reference/intraday_features_3months.csv",
+    "bfe_path": "data/reference/burst_feats_3m.csv",
+    "min_prob": 0.7,
+    "require_full_features": true,
+    "feature_top_n": 120
+  },
+  "risk": {
+    "max_daily_buys": 30,
+    "max_orders_per_symbol_per_day": 12,
+    "kill_switch_file": "state/STOP",
+    "max_unrealized_loss_pct": -12.0,
+    "alert_email": false,
+    "max_daily_orders_total": 40,
+    "manage_existing_positions": false
+  },
+  "broker": {
+    "kind": "selenium",
+    "debugger_address": "127.0.0.1:9333",
+    "chromedriver": "C:\\TSE_Strategy\\chromedriver.exe",
+    "trade_url": "https://online.meibours.ir/Home/Index/page-4",
+    "orderlist_rows": 200,
+    "page_settle_sec": 3.0,
+    "read_real_in_dry_run": true,
+    "never_navigate": true,
+    "keepalive_mode": "events_only",
+    "order_page": 2
+  },
+  "backtest": {
+    "target_pct": 10.0,
+    "stop_pct": 3.0,
+    "max_hold_days": 10,
+    "slippage_pct": 0.3,
+    "fill_model": "open_if_not_locked",
+    "start": "1404-06-01",
+    "end": "",
+    "top_n": 3,
+    "min_score": 0.6,
+    "exit_mode": "queue",
+    "gap_aware_stop": true
+  },
+  "ride": {
+    "events_path": "C:/Users/Administrator/Desktop/DeepSeek DeskTop/TSE_Robot_V2/data/events/events.csv.gz",
+    "model_path": "C:/Users/Administrator/Desktop/DeepSeek DeskTop/TeseRobot/models/ride_v1.pkl",
+    "min_prob": 0.5,
+    "top_n": 3,
+    "lookback": 3
+  },
+  "system": {
+    "clock_offset_sec": 1800
+  }
+}

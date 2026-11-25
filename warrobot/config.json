@@ -1,0 +1,64 @@
+{
+  "name": "WarRobot",
+  "schema": 1,
+  "mode": "live",
+  "timezone": "Asia/Tehran",
+  "fees": {
+    "buy_pct": 1.5,
+    "sell_pct": 0.5
+  },
+  "universe": {
+    "max_positions": 3,
+    "exclude_symbols": [
+      "خساپا"
+    ],
+    "max_picks_per_day": 6
+  },
+  "band": {
+    "max_dist_to_ceiling_pct": 0.25,
+    "min_queue_value_rial": 300000000,
+    "require_no_ask_at_ceiling": true,
+    "reject_stale_sessions": 1,
+    "min_big_to_small_ratio": 1.0
+  },
+  "buy": {
+    "enabled": true,
+    "preopen_attempt": "08:45",
+    "live_scan_at": "09:00",
+    "window_start": "08:45",
+    "window_end": "08:46",
+    "interval_sec": 10,
+    "price_mode": "panel_live",
+    "sizing": "free_balance",
+    "verify_timeout_sec": 45,
+    "preopen_second": 1,
+    "cancel_if_not_locked_at": "09:00:02",
+    "cancel_unfilled_at": "10:00",
+    "preopen_retry_sec": 3600,
+    "preopen_until": "08:46",
+    "order_path": "playwright",
+    "max_order_value_pct_of_free": 0.95,
+    "each_symbol_pct_of_total": 33.3333,
+    "rotate_on_unfilled": true
+  },
+  "sell": {
+    "target_pct": 25.0,
+    "stop_pct": 3.0,
+    "max_hold_days": 15,
+    "check_interval_sec": 60,
+    "price_mode": "best_bid",
+    "stop_price_mode": "floor",
+    "rule_locked": true
+  },
+  "schedule": {
+    "nightly_download": "20:30",
+    "nightly_scan": "21:20",
+    "email": true
+  },
+  "broker": {
+    "debugger_address": "127.0.0.1:9333",
+    "chromedriver": "C:\\TSE_Strategy\\chromedriver.exe",
+    "order_page": 2
+  },
+  "version": "5.0"
+}

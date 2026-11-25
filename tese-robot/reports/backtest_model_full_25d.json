@@ -1,0 +1,142 @@
+{
+  "report": {
+    "mode": "full",
+    "threshold": 0.5,
+    "test_dates": 25,
+    "picks": 75,
+    "missed_locked": 1,
+    "trades": 9,
+    "win_rate": 88.9,
+    "avg_pct": 13.326,
+    "median_pct": 10.762,
+    "total_return_pct": 47.19,
+    "max_drawdown_pct": -1.39,
+    "queue_ride_exits": 6,
+    "by_reason": {
+      "queue_break": 6,
+      "target": 1,
+      "stop": 1,
+      "time": 1
+    },
+    "avg_queue_days": 1.89
+  },
+  "trades": [
+    {
+      "symbol": "کویر",
+      "signal_day": "1405-06-14",
+      "entry_day": "1405-06-15",
+      "exit_day": "1405-06-29",
+      "ret_pct": 32.20370328757098,
+      "reason": "queue_break",
+      "days": 10,
+      "score": 0.8120434467841218,
+      "queue_days": 10,
+      "entry": 1964.8769999999997,
+      "exit": 2629.0
+    },
+    {
+      "symbol": "شپارس",
+      "signal_day": "1405-06-14",
+      "entry_day": "1405-06-15",
+      "exit_day": "1405-06-18",
+      "ret_pct": 7.5479053077074365,
+      "reason": "queue_break",
+      "days": 3,
+      "score": 0.8134029747063666,
+      "queue_days": 0,
+      "entry": 2449.3259999999996,
+      "exit": 2666.0
+    },
+    {
+      "symbol": "اتکاسا",
+      "signal_day": "1405-06-14",
+      "entry_day": "1405-06-15",
+      "exit_day": "1405-06-18",
+      "ret_pct": 7.383212932491512,
+      "reason": "queue_break",
+      "days": 3,
+      "score": 0.8688035679405554,
+      "queue_days": 0,
+      "entry": 5345.99,
+      "exit": 5810.0
+    },
+    {
+      "symbol": "پدرخش",
+      "signal_day": "1405-06-18",
+      "entry_day": "1405-06-21",
+      "exit_day": "1405-06-25",
+      "ret_pct": 8.687872763419492,
+      "reason": "target",
+      "days": 4,
+      "score": 0.8845806992972252,
+      "queue_days": 1,
+      "entry": 6609.7699999999995,
+      "exit": 7300.0
+    },
+    {
+      "symbol": "وبانک",
+      "signal_day": "1405-06-18",
+      "entry_day": "1405-06-21",
+      "exit_day": "1405-06-22",
+      "ret_pct": -4.157057654075558,
+      "reason": "stop",
+      "days": 1,
+      "score": 0.8815866510849018,
+      "queue_days": 0,
+      "entry": 12537.499999999998,
+      "exit": 12161.374999999998
+    },
+    {
+      "symbol": "ولملت",
+      "signal_day": "1405-06-22",
+      "entry_day": "1405-06-23",
+      "exit_day": "1405-07-12",
+      "ret_pct": 10.762426489202447,
+      "reason": "queue_break",
+      "days": 4,
+      "score": 0.9067024646899238,
+      "queue_days": 0,
+      "entry": 23470.199999999997,
+      "exit": 26310.0
+    },
+    {
+      "symbol": "ولراز",
+      "signal_day": "1405-06-25",
+      "entry_day": "1405-06-28",
+      "exit_day": "1405-07-21",
+      "ret_pct": 20.127481736605766,
+      "reason": "queue_break",
+      "days": 7,
+      "score": 0.9011849429221659,
+      "queue_days": 1,
+      "entry": 5576.679999999999,
+      "exit": 6780.0
+    },
+    {
+      "symbol": "ولراز",
+      "signal_day": "1405-06-29",
+      "entry_day": "1405-06-30",
+      "exit_day": "1405-07-21",
+      "ret_pct": 13.783440963463068,
+      "reason": "queue_break",
+      "days": 5,
+      "score": 0.9158078387482467,
+      "queue_days": 5,
+      "entry": 5887.61,
+      "exit": 6780.0
+    },
+    {
+      "symbol": "شدوص",
+      "signal_day": "1405-07-12",
+      "entry_day": "1405-07-13",
+      "exit_day": "1405-07-25",
+      "ret_pct": 23.591692467390303,
+      "reason": "time",
+      "days": 8,
+      "score": 0.8747104215415905,
+      "queue_days": 0,
+      "entry": 8194.509999999998,
+      "exit": 10250.0
+    }
+  ]
+}

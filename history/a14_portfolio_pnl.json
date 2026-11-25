@@ -1,0 +1,10 @@
+{
+ "agent": "a14_portfolio_pnl",
+ "at": "2026-11-25 05:00:33",
+ "source": "pnl.json (same as buy/sell tabs)",
+ "positions": [],
+ "fund": null,
+ "total_pnl_rial": 0,
+ "total_value": 0,
+ "ok": true
+}

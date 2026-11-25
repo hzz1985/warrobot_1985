@@ -1,0 +1,138 @@
+{
+  "day": "2026-10-19",
+  "mode": "live",
+  "session": "after_close",
+  "account": {
+    "at": "2026-10-19T13:10:10+03:30",
+    "positions": [
+      {
+        "symbol": "وایرا",
+        "qty": 900000,
+        "avg_cost": 3827.9,
+        "cost": 3445110000.0,
+        "realized": 0.0,
+        "invested": 3445110000.0,
+        "fees": 34110000.0,
+        "buys": 3,
+        "sells": 0,
+        "first_ts": "2026-10-14T12:00:00",
+        "last_ts": "2026-10-14T12:00:00"
+      },
+      {
+        "symbol": "وسرمد",
+        "qty": 223776,
+        "avg_cost": 1718.01,
+        "cost": 384449405.76,
+        "realized": 0.0,
+        "invested": 384449405.76,
+        "fees": 3806429.76,
+        "buys": 2,
+        "sells": 0,
+        "first_ts": "2026-10-17T12:00:00",
+        "last_ts": "2026-10-17T12:00:00"
+      },
+      {
+        "symbol": "خساپا",
+        "qty": 138299,
+        "avg_cost": 149.0,
+        "cost": 20606551.0,
+        "realized": 0.0,
+        "invested": 20606551.0,
+        "fees": 0.0,
+        "buys": 0,
+        "sells": 0,
+        "first_ts": null,
+        "last_ts": "2026-10-19T08:20:24+03:30"
+      },
+      {
+        "symbol": "شپاس",
+        "qty": 258,
+        "avg_cost": 60044.5,
+        "cost": 15491481.0,
+        "realized": 0.0,
+        "invested": 15491481.0,
+        "fees": 153381.0,
+        "buys": 3,
+        "sells": 0,
+        "first_ts": "2026-10-13T12:00:00",
+        "last_ts": "2026-10-13T12:00:00"
+      }
+    ],
+    "cash_ledger": -9909919383.51,
+    "exposure": 3865657437.76,
+    "unrealized": 0.0,
+    "realized_total": -79740281.55,
+    "equity": 3865657437.76,
+    "cash_broker": 0.0,
+    "mode": "live"
+  },
+  "orders_today": [
+    {
+      "ref": "2026-10-19:sell:شپاس",
+      "day": "2026-10-19",
+      "symbol": "شپاس",
+      "side": "sell",
+      "qty": 258,
+      "price": 56839.0,
+      "reason": "stop",
+      "status": "unverified",
+      "created_at": "2026-10-19T09:41:09+03:30",
+      "updated_at": "2026-10-19T09:41:58+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "not_found_in_orderlist",
+      "extra": {
+        "pnl_pct": -5.054
+      }
+    },
+    {
+      "ref": "2026-10-19:sell:شپاس#2",
+      "day": "2026-10-19",
+      "symbol": "شپاس",
+      "side": "sell",
+      "qty": 258,
+      "price": 55712.0,
+      "reason": "stop_net",
+      "status": "unverified",
+      "created_at": "2026-10-19T11:59:47+03:30",
+      "updated_at": "2026-10-19T12:00:35+03:30",
+      "broker_order_no": "",
+      "filled_qty": 0,
+      "attempts": 1,
+      "note": "not_found_in_orderlist",
+      "extra": {
+        "pnl_pct": -5.28,
+        "max_qty": 30000,
+        "chunk": 1
+      }
+    }
+  ],
+  "last_sync": {
+    "at": "2026-10-19T08:20:24+03:30",
+    "imported": 16,
+    "skipped": 0,
+    "orders": 20,
+    "diffs": {
+      "خساپا": {
+        "ledger": 0,
+        "broker": 138299,
+        "delta": 138299
+      },
+      "قشرین": {
+        "ledger": 559494,
+        "broker": 0,
+        "delta": -559494
+      },
+      "کیان": {
+        "ledger": 34925,
+        "broker": 0,
+        "delta": -34925
+      }
+    },
+    "cash_broker": 0.0,
+    "seeded": [
+      "خساپا"
+    ]
+  }
+}
