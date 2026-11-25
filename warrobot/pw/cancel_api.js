@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Cancel one order through the broker API (tries the plausible endpoints).
 //   node cancel_api.js <orderid> [symbol]
 // Prints one JSON line: {"ok":bool,"endpoint":...,"response":...}

@@ -103,6 +103,17 @@ def verify_session() -> dict:
 
 
 def main() -> int:
+    # Hark fix #2: never copy a cookie DB under the running shared broker Chrome
+    # (it overwrote the bot's live session and its verify step forced a new login).
+    # The session is kept by session_keeper.py; this is a manual tool only now.
+    try:
+        import broker_browser
+        if broker_browser.cdp_alive() and "--force" not in sys.argv:
+            print(json.dumps({"status": "skipped: shared broker browser is running "
+                                        "(session_keeper.py keeps the session)"}, ensure_ascii=False))
+            return 0
+    except Exception:
+        pass
     src = newest_cookies()
     result = {"at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
               "source": str(src) if src else None}

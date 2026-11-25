@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 ﻿const { chromium } = require("playwright");
 (async () => {
   try {

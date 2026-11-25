@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Open "پرتفوی لحظه ای پیشرفته" (advanced realtime portfolio) and read its grid —
 // it usually exposes the real average cost and the P/L per position.
 //   node advanced_portfolio.js

@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Read the symbol's trading state as the panel shows it (before ordering).
 //   node symbol_state.js <symbol>
 const { chromium } = require("playwright");

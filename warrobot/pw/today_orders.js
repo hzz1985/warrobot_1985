@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Round 4: discover how the panel loads "سفارشات امروز" and read it after a POST.
 const { chromium } = require("playwright");
 const fs = require("fs");

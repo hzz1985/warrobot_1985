@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 /** Open orders (thin, self-contained, robust login). Prints {"orders":[...]}. */
 const fs = require("fs"), path = require("path"), { execFileSync } = require("child_process");
 const { chromium } = require("playwright");

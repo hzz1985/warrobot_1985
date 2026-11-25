@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Pull the trade list from the panel's own endpoint and try to widen the range.
 //   node trades_full.js
 // -> {count, keys, rows:[...], tried:[...]}

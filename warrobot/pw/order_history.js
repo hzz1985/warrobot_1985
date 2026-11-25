@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Fetch the order history (filled buys/sells) to derive the real average cost.
 const { chromium } = require("playwright");
 const fs = require("fs");

@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Probe: list the broker panel menu links to find the trade-history page.
 const { chromium } = require("playwright");
 const path = require("path");

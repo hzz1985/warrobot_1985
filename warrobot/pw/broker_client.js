@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 /**
  * Robust broker client: login (native setter) + one API call chosen by argument.
  * Replaces the fragile copies scattered in pw/*.js.

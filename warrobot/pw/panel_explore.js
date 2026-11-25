@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Explore the broker panel stacks to find the asset-status / P&L tab and the
 // executed-order prices. Prints the stack titles and the first rows of the
 // interesting ones so we can see the exact columns.

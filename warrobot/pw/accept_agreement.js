@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Round 4b: the broker requires a "caution trading" agreement (AgreementId 2).
 // Accept it programmatically, then place the order with the flags enabled.
 const { chromium } = require("playwright");

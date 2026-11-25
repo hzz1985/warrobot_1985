@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Probe: discover the route to the broker's trade-history page.
 // Dumps nav items (text + href/onclick) and tries plausible ones, printing URLs.
 const { chromium } = require("playwright");

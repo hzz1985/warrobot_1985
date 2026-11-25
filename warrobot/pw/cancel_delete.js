@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Cancel an order through the real endpoint /Web/V1/Order/Delete.
 //   node cancel_delete.js <orderid>
 const { chromium } = require("playwright");

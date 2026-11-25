@@ -23,17 +23,35 @@ try:
 except Exception:
     pass
 
-BASE = Path(r"C:\Users\Administrator\Desktop\DeepSeek DeskTop\WarRobot")
+BASE = Path(__file__).resolve().parent   # == ...\DeepSeek DeskTop\WarRobot on the server
 PROFILE = BASE / "state" / "pw-profile"
 LOCKS = ("SingletonLock", "SingletonCookie", "SingletonSocket")
 
 
-def kill_orphans(verbose: bool = False) -> int:
+def _shared_browser_alive() -> bool:
+    try:
+        import broker_browser
+        return broker_browser.shared_enabled() and broker_browser.cdp_alive()
+    except Exception:
+        return False
+
+
+def kill_orphans(verbose: bool = False, force: bool = False) -> int:
     """Kill chrome.exe whose command line points at our profile.
 
     Chrome children appear/disappear asynchronously, so sweep a few times until
     the profile is really free (a single pass left 8 processes behind).
+
+    Hark fix #2: this used to run before AND after every guarded run, after every
+    scheduler job and at 08:44 - i.e. it killed the logged-in broker session right
+    before the 08:45 order and dozens of times per hour. Now the shared Chrome
+    (debugging port answering) is never killed unless force=True; only a Chrome
+    that holds the profile WITHOUT answering (a real orphan/hang) is removed.
     """
+    if not force and _shared_browser_alive():
+        if verbose:
+            print("shared broker Chrome is alive - nothing killed")
+        return 0
     killed = 0
     for _round in range(6):
         n = _kill_once(verbose)
@@ -93,10 +111,10 @@ def clean_locks(verbose: bool = False) -> None:
         pass
 
 
-def reset(verbose: bool = False) -> dict:
-    killed = kill_orphans(verbose)
+def reset(verbose: bool = False, force: bool = False) -> dict:
+    killed = kill_orphans(verbose, force=force)
     return {"killed_chrome": killed, "profile": str(PROFILE)}
 
 
 if __name__ == "__main__":
-    print(reset(verbose="--verbose" in sys.argv))
+    print(reset(verbose="--verbose" in sys.argv, force="--force" in sys.argv))

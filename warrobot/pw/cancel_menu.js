@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Cancel an order via the row context menu (the panel's real cancel path).
 //   node cancel_menu.js <symbol>
 const { chromium } = require("playwright");

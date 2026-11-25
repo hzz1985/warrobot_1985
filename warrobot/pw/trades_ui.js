@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // UI reader for the broker's today-trades table (source 4 for a11).
 // Prints JSON: {"rows":[{symbol,qty,price,side,date}]}
 const { chromium } = require("playwright");

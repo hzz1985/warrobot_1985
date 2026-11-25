@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Pull the customer's trade history (fills) from the broker API.
 //   node trades.js [days]
 // Prints one JSON line: {trades:[{symbol,isin,side,qty,price,date,time}], raw:...}

@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Probe: bind a symbol on the broker panel and dump the order-book DOM.
 const { chromium } = require("playwright");
 const path = require("path");

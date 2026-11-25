@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Dump the open-orders panel markup so the cancel button can be located.
 const { chromium } = require("playwright");
 const fs = require("fs");

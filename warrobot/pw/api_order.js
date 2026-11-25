@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Round 3b: call the order API directly (fetch inside the logged-in page),
 // exactly the payload the panel sends. Deterministic: no UI click involved.
 //   node api_order.js <symbol> <qty> <price>

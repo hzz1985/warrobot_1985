@@ -18,7 +18,8 @@ import json
 import subprocess
 import os
 import sys
-os.environ.setdefault("SESSION_FORCE_LOGIN", "1")
+# (Hark fix #2) no forced login: pw/session.js now throttles instead of banning,
+# and a forced login per run was what kept kicking the shared session.
 import time
 from datetime import datetime
 from pathlib import Path

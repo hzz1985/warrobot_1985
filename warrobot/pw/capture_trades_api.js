@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Capture the API call behind "معاملات امروز" (trades) so we can replay it for
 // a date range and rebuild the real average cost.
 const { chromium } = require("playwright");
