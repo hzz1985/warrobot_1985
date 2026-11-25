@@ -18,11 +18,12 @@ import json
 import subprocess
 import os
 import sys
-os.environ.setdefault("SESSION_FORCE_LOGIN", "1")
+# (Hark fix #2) no forced login: pw/session.js now throttles instead of banning,
+# and a forced login per run was what kept kicking the shared session.
 from datetime import datetime
 from pathlib import Path
 
-BASE = Path(r"C:\Users\Administrator\Desktop\DeepSeek DeskTop\WarRobot")
+BASE = Path(__file__).resolve().parent   # ...\DeepSeek DeskTop\WarRobot on the server
 # fixed-income stock that receives every realised profit; never auto-sold
 AFRAN_SYMBOL = "افران"
 AFRAN_ISIN = "IRT1AFRN0001"
@@ -109,7 +110,8 @@ def live_price(symbol: str) -> float:
             raw = api.closing_daily(inst["ins_code"])
             rows = raw.get("closingPriceDaily") if isinstance(raw, dict) else None
             if rows:
-                last = rows[-1]
+                # closingPriceDaily is newest-first: rows[-1] was the OLDEST close
+                last = sorted(rows, key=lambda r: str(r.get("dEven") or ""))[-1]
                 px = float(last.get("pClosing") or last.get("pDrCotVal") or 0)
                 if px > 0:
                     return px
@@ -199,16 +201,61 @@ def _legacy_transfer(profit_rial: float) -> dict:
     return {}
 
 
-def main(place: bool = True, notify: bool = True) -> int:
+def _in_session() -> tuple[bool, str]:
+    """09:00-12:30 Tehran on a trading day (the scheduler window, enforced here too)."""
+    try:
+        import market_cal
+        now = market_cal.now_tehran()
+        if not market_cal.market_day(now):
+            return False, "market_closed"
+        hm = now.strftime("%H:%M")
+        if not ("09:00" <= hm <= "12:30"):
+            return False, f"outside_session {hm}"
+        return True, hm
+    except Exception as exc:
+        return True, f"clock_unknown {str(exc)[:40]}"
+
+
+def main(place: bool = True, notify: bool = True, force: bool = False) -> int:
+    """Hark fix #3: one decision path (exit_engine), live prices, idempotent orders."""
+    ok, why = _in_session()
+    if not ok and not force:
+        print(json.dumps({"skipped": why}, ensure_ascii=False))
+        return 0
     import pw_lock as _pl
-    with _pl.guard("intraday_exit") as got:
+    with _pl.guard("intraday_exit", wait=240) as got:
         if not got:
             print('{"skipped":"playwright_lock_timeout"}')
             return 0
-        return _main_locked(place, notify)
+        import exit_engine
+        out = exit_engine.run("intraday", dry=not place)
+    STATE.write_text(json.dumps(out, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
+    placed = [e for e in out["exits"] if e.get("action") == "sell"]
+    if placed and notify:
+        try:
+            from tsebot.alerts import send
+            lines = [f"زمان: {out['at']}", ""]
+            for e in placed:
+                st = "✔ ثبت شد" if e.get("submitted") else "✘ ثبت نشد"
+                pp = e.get("pnl_pct")
+                lines.append(f"{e['symbol']} | {e['reason']} | "
+                             f"{(f'{pp:+.2f}%' if isinstance(pp, (int, float)) else '-')} | "
+                             f"قیمت {float(e.get('price') or 0):,.0f} × {e.get('qty')} | {st}")
+                if e.get("message"):
+                    lines.append(f"   پیام کارگزار: {e['message']}")
+            send("[WarRobot] خروج خودکار (حد سود/ضرر)", "\n".join(lines), key="exit-auto", force=True)
+        except Exception:
+            pass
+    print(json.dumps({"at": out["at"], "positions": len(out["positions"]),
+                      "triggered": [p["symbol"] for p in out["positions"] if p["action"] == "sell"],
+                      "skipped": {p["symbol"]: (p["note"] or p["reason"]) for p in out["positions"]
+                                  if p["action"] == "skip"},
+                      "exits": len(placed),
+                      "submitted": sum(1 for e in placed if e.get("submitted"))}, ensure_ascii=False))
+    return 0
 
 
-def _main_locked(place: bool = True, notify: bool = True) -> int:
+def _legacy_main_locked(place: bool = True, notify: bool = True) -> int:
     # lot-based TP/SL first: each purchase is judged against its own cost
     try:
         import lot_exits
@@ -362,4 +409,4 @@ def _main_locked(place: bool = True, notify: bool = True) -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main(place="--dry" not in sys.argv))
+    raise SystemExit(main(place="--dry" not in sys.argv, force="--force" in sys.argv))

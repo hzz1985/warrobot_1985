@@ -163,11 +163,14 @@ def build() -> dict:
         price = float(p["price"])
         broker_pnl_pct = p.get("pnl_pct")
         broker_pnl_rial = p.get("pnl_rial")
-        broker_avg = float(p.get("avg_cost") or 0)
+        # (Hark fix #3) this local used to be called broker_avg and shadowed the
+        # dict above -> AttributeError for any position whose panel avg was 0,
+        # which silently sent intraday_exit to its broken fallback path
+        panel_avg = float(p.get("avg_cost") or 0)
         if sym in manual:
             avg, src = manual[sym], "manual"
-        elif broker_avg > 0:
-            avg, src = broker_avg, "broker"
+        elif panel_avg > 0:
+            avg, src = panel_avg, "broker"
         elif broker_avg.get(sym, 0) > 0:
             avg, src = broker_avg[sym], "broker"
         elif ledger_avg.get(sym, 0) > 0:
@@ -216,7 +219,8 @@ def build() -> dict:
             if prev.get("positions"):
                 print(json.dumps({"skipped": "empty panel read; previous snapshot kept"},
                                  ensure_ascii=False))
-                return 0
+                prev["stale"] = True          # callers expect a dict (was: return 0)
+                return prev
         except Exception:
             pass
     OUT.write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
