@@ -35,8 +35,11 @@ def save_status(extra=None):
         json.dump(st, open(os.path.join(D, "status.json"), "w"), ensure_ascii=False)
 
 
+STOP_AT = float(os.environ.get("STOP_AT_EPOCH", "0"))   # hard deadline (UTC epoch), e.g. before market open
+
+
 def stopped():
-    return os.path.exists(os.path.join(D, "STOP"))
+    return os.path.exists(os.path.join(D, "STOP")) or (STOP_AT and time.time() > STOP_AT)
 
 
 def j2g(jy, jm, jd):
