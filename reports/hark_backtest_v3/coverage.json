@@ -1,0 +1,33 @@
+{
+ "universe_symbols": 819,
+ "eps_history_found": 635,
+ "eps_symbol_not_found_on_rahavard": 184,
+ "eps_empty": 0,
+ "note_eps": "noid are mostly old/duplicate tsetmc symbols with a trailing digit (e.g. 'آریا3'); features map them to the base symbol",
+ "eps_history_window": "rahavard public API returns the current + 2 previous fiscal years -> statements published from ~2024-07 on; TTM needs last year's figures so before ~2025-07 P/E uses annualised cumulative EPS and YoY growth is mostly unknown",
+ "clienttype_insCodes": 836,
+ "clienttype_found": 832,
+ "instinfo_sector_found": 768,
+ "signal_coverage": {
+  "in_sample": {
+   "pe": 97.2,
+   "growth": 7.9,
+   "bp": 98.9,
+   "sec_mom": 89.6
+  },
+  "out_of_sample": {
+   "pe": 100.0,
+   "growth": 95.3,
+   "bp": 98.9,
+   "sec_mom": 91.5
+  },
+  "pre_5pct": {
+   "pe": 2.4,
+   "growth": 0.0,
+   "bp": 99.0,
+   "sec_mom": 91.4
+  }
+ },
+ "codal": "search.codal.ir is not reachable from the research sandbox; via the owner's server it answered HTTP 429 after ~150 searches and codal.ir report pages switched to a captcha after ~15 views -> abandoned (no captcha solving), rahavard365 EPS mirror used instead",
+ "monthly_sales": "not used (rahavard production/sales endpoints require login; Codal blocked)"
+}

@@ -112,10 +112,14 @@ def scan_nightly() -> pd.DataFrame:
     out = pd.DataFrame(rows).sort_values("turnover", ascending=False) if rows else pd.DataFrame()
     try:  # strategy switch: v2 entry filters (regime, liquidity, floor-lock history); v1 = no-op
         sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-        import strategy_v2 as _s2
-        out = _s2.filter_scan(out, Path(__file__).resolve().parent.parent / "config.json", DAILY)
+        try:  # v3 adds fundamental / money-flow filters; for v1 and v2 it delegates to strategy_v2 unchanged
+            import strategy_v3 as _sv
+            out = _sv.filter_scan(out, Path(__file__).resolve().parent.parent / "config.json", DAILY, log=log)
+        except ImportError:
+            import strategy_v2 as _sv
+            out = _sv.filter_scan(out, Path(__file__).resolve().parent.parent / "config.json", DAILY)
     except Exception as exc:
-        log(f"strategy_v2 filter skipped: {str(exc)[:80]}")
+        log(f"strategy filter skipped: {str(exc)[:80]}")
     prof = PROJ / "state" / "symbol_profiles.csv"
     if len(out) and prof.exists():
         try:

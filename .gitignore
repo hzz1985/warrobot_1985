@@ -16,3 +16,5 @@ pw-profile/
 ocr/*.traineddata
 *.db
 *.sqlite
+
+reports/hark_backtest_v3/_cache/

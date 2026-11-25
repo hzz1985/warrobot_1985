@@ -63,7 +63,7 @@
   "version": "5.0",
   "strategy": {
     "version": "v1",
-    "_comment": "v1 = legacy rules (default). v2 = strategy_v2.py rules, see STRATEGY_HARK.md and reports/hark_backtest. Switch only after a dry-run period.",
+    "_comment": "v1 = legacy rules (default). v2 = strategy_v2.py rules, see STRATEGY_HARK.md and reports/hark_backtest. Switch only after a dry-run period. v3 = strategy_v3.py (v2 + rank by individual buyer power + skip known loss-makers), see STRATEGY_V3_HARK.md; dry-run first.",
     "v2": {
       "entry": "queue",
       "first_lock_only": false,
@@ -78,6 +78,16 @@
       "trail": null,
       "max_hold": 15,
       "slippage": 0.0025
+    },
+    "v3": {
+      "fund_mode": "exclude_loss",
+      "pe_max": null,
+      "growth_min": null,
+      "bp_min": null,
+      "inflow_min": null,
+      "inflow5_min": null,
+      "sec_mom_min": null,
+      "rank_by": "bp"
     }
   }
 }

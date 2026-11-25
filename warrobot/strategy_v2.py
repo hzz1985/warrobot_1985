@@ -157,13 +157,13 @@ def live_params(config_path: str | Path, limit: float = 0.03) -> dict:
         cfg = {}
     ver = ((cfg.get("strategy") or {}).get("version") or "v1").lower()
     sell = cfg.get("sell") or {}
-    if ver != "v2":
+    if ver not in ("v2", "v3"):                     # v3 = v2 exits + extra entry filters (strategy_v3.py)
         return dict(version="v1", tp_pct=float(sell.get("target_pct", 25.0)),
                     sl_pct=float(sell.get("stop_pct", 3.0)),
                     max_hold_days=int(sell.get("max_hold_days", 15)), trail_pct=None, slots=3)
     v = V2Config.from_config(cfg)
     sl = v.sl_fixed if v.sl_fixed is not None else v.sl_limits * limit
-    return dict(version="v2", tp_pct=(v.tp * 100) if v.tp else None, sl_pct=round(sl * 100, 3),
+    return dict(version="v2", strategy=ver, tp_pct=(v.tp * 100) if v.tp else None, sl_pct=round(sl * 100, 3),
                 max_hold_days=int(v.max_hold), trail_pct=(v.trail * 100) if v.trail else None,
                 slots=int(v.max_positions))
 
@@ -199,7 +199,15 @@ def filter_scan(cands, config_path: str | Path, daily_dir: str | Path, limit: fl
         return cands
     if ((cfg.get("strategy") or {}).get("version") or "v1").lower() != "v2" or cands is None or not len(cands):
         return cands
-    v = V2Config.from_config(cfg)
+    return apply_v2_filters(cands, V2Config.from_config(cfg), daily_dir, limit)
+
+
+def apply_v2_filters(cands, v: "V2Config", daily_dir: str | Path, limit: float = 0.03):
+    """The v2 entry filters themselves (regime, value, floor-lock, first-lock), ranked by turnover.
+    Shared by filter_scan (v2) and strategy_v3.filter_scan."""
+    import pandas as pd
+    if cands is None or not len(cands):
+        return cands
     if v.regime_ma and not regime_ok_from_daily(daily_dir, v.regime_ma, limit):
         return cands.iloc[0:0]
     keep = cands["turnover"].astype(float) >= v.min_value_rial
