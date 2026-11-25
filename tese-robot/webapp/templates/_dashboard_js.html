@@ -1,0 +1,175 @@
+<script>
+/* ===== WarRobot dashboard — single script (tabs, theme, refresh, chart, export) ===== */
+(function () {
+  var doc = document.documentElement;
+
+  /* ---------- sticky offsets: tabs sit right under the header ---------- */
+  function setOffsets() {
+    var tb = document.getElementById('topbar');
+    if (tb) doc.style.setProperty('--topbar-h', tb.offsetHeight + 'px');
+  }
+  setOffsets();
+  window.addEventListener('resize', setOffsets);
+
+  /* ---------- tabs (remembered across the auto-refresh) ---------- */
+  function activate(name) {
+    var found = false;
+    document.querySelectorAll('.panel').forEach(function (p) { if (p.id === name) found = true; });
+    if (!found) name = 'overview';
+    document.querySelectorAll('.tab').forEach(function (t) {
+      var on = t.dataset.tab === name;
+      t.classList.toggle('active', on);
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      if (on && t.scrollIntoView) { try { t.scrollIntoView({block: 'nearest', inline: 'nearest'}); } catch (e) {} }
+    });
+    document.querySelectorAll('.panel').forEach(function (p) { p.classList.toggle('active', p.id === name); });
+    try { localStorage.setItem('tseTab', name); } catch (e) {}
+    if (name === 'overview') drawEquity();
+  }
+  document.querySelectorAll('.tab').forEach(function (t) {
+    t.addEventListener('click', function () { activate(t.dataset.tab); window.scrollTo({top: 0}); });
+  });
+  document.querySelectorAll('[data-goto]').forEach(function (a) {
+    a.addEventListener('click', function (e) { e.preventDefault(); activate(a.dataset.goto); window.scrollTo({top: 0}); });
+  });
+
+  /* ---------- theme toggle ---------- */
+  function applyThemeColor() {
+    var m = document.querySelector('meta[name="theme-color"]');
+    if (m) m.setAttribute('content', doc.getAttribute('data-theme') === 'dark' ? '#0c1117' : '#f4f6fa');
+  }
+  applyThemeColor();
+  var themeBtn = document.getElementById('theme-btn');
+  if (themeBtn) themeBtn.addEventListener('click', function () {
+    var next = doc.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    doc.setAttribute('data-theme', next);
+    try { localStorage.setItem('wrTheme', next); } catch (e) {}
+    applyThemeColor();
+    if (window._eqChart) { window._eqChart.destroy(); window._eqChart = null; }
+    drawEquity();
+  });
+
+  /* ---------- refresh: every 60 s, keeps tab + scroll; skipped while typing or hidden ---------- */
+  var rb = document.getElementById('refresh-btn');
+  if (rb) rb.addEventListener('click', function () { location.reload(); });
+  window.addEventListener('beforeunload', function () {
+    try { sessionStorage.setItem('tseScroll', String(window.scrollY)); } catch (e) {}
+  });
+  function tick() {
+    var a = document.activeElement;
+    var typing = a && (a.tagName === 'TEXTAREA' || a.tagName === 'INPUT');
+    if (document.hidden || typing) { setTimeout(tick, 15000); return; }
+    location.reload();
+  }
+  setTimeout(tick, 60000);
+
+  /* ---------- number helpers ---------- */
+  function toman(v) {
+    var t = v / 10, a = Math.abs(t);
+    if (a >= 1e9) return (t / 1e9).toFixed(2) + ' میلیارد';
+    if (a >= 1e6) return (t / 1e6).toFixed(0) + ' میلیون';
+    return Math.round(t).toLocaleString('en-US');
+  }
+  function css(name) { return getComputedStyle(doc).getPropertyValue(name).trim(); }
+
+  /* ---------- equity chart (Chart.js from CDN; plain SVG if the CDN is blocked) ---------- */
+  var eqData = [], chartGaveUp = false;
+  try { eqData = JSON.parse((document.getElementById('equity-data') || {}).textContent || '[]'); } catch (e) {}
+
+  function drawFallback(canvas) {
+    var box = canvas.parentNode, w = 600, h = 260, pad = 30;
+    if (!eqData.length || box.querySelector('svg')) return;
+    var vals = eqData.map(function (p) { return p.t; });
+    var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals), span = (hi - lo) || 1;
+    var pts = eqData.map(function (p, i) {
+      // right-to-left like the Chart.js version: oldest on the right
+      var x = w - pad - (w - 2 * pad) * (eqData.length > 1 ? i / (eqData.length - 1) : .5);
+      var y = h - pad - (h - 2 * pad) * ((p.t - lo) / span);
+      return x.toFixed(1) + ',' + y.toFixed(1);
+    }).join(' ');
+    var svg = '<svg viewBox="0 0 ' + w + ' ' + h + '" style="width:100%;height:100%" preserveAspectRatio="none">' +
+      '<polyline points="' + pts + '" fill="none" stroke="' + css('--chart-line') + '" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>';
+    canvas.style.display = 'none';
+    box.insertAdjacentHTML('beforeend', svg);
+    box.insertAdjacentHTML('afterend', '<div class="note" style="margin:6px 4px 0">بازه: ' +
+      toman(lo) + ' تا ' + toman(hi) + ' تومان · نمودار ساده (Chart.js در دسترس نبود)</div>');
+  }
+
+  function drawEquity() {
+    var canvas = document.getElementById('equity-chart');
+    if (!canvas || !eqData.length || window._eqChart) return;
+    if (!canvas.offsetParent) return;            // hidden tab: draw when shown
+    if (typeof Chart === 'undefined') { if (chartGaveUp) drawFallback(canvas); return; }
+    var line = css('--chart-line'), fill = css('--chart-fill'), grid = css('--chart-grid'),
+        muted = css('--muted'), font = css('--font') || 'Tahoma';
+    window._eqChart = new Chart(canvas.getContext('2d'), {
+      type: 'line',
+      data: {
+        labels: eqData.map(function (p) { return (p.d || '').slice(5, 10).replace('-', '/'); }),
+        datasets: [{
+          label: 'کل دارایی', data: eqData.map(function (p) { return p.t; }),
+          borderColor: line, backgroundColor: fill, fill: true, tension: .3,
+          borderWidth: 2.5, pointRadius: 3, pointHoverRadius: 6, pointBackgroundColor: line
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, animation: {duration: 500},
+        interaction: {mode: 'index', intersect: false},
+        layout: {padding: {top: 6, left: 14, right: 4}},
+        plugins: {
+          legend: {display: false},
+          tooltip: {
+            rtl: true, textDirection: 'rtl', titleFont: {family: font}, bodyFont: {family: font},
+            callbacks: {
+              title: function (items) { return eqData[items[0].dataIndex].d; },
+              label: function (c) {
+                var p = eqData[c.dataIndex];
+                return ['کل: ' + toman(p.t) + ' تومان', 'نقد: ' + toman(p.c) + ' تومان', 'سهام: ' + toman(p.h) + ' تومان'];
+              }
+            }
+          }
+        },
+        scales: {
+          x: {reverse: true, grid: {display: false}, ticks: {color: muted, font: {family: font, size: 11}, maxRotation: 0, autoSkipPadding: 12}},
+          y: {position: 'right', grid: {color: grid}, border: {display: false},
+              ticks: {color: muted, font: {family: font, size: 11}, maxTicksLimit: 5,
+                      callback: function (v) { return toman(v); }}}
+        }
+      }
+    });
+  }
+  // the CDN script is deferred: draw when it arrives; a filtered/slow CDN falls back to SVG
+  window.addEventListener('load', function () { chartGaveUp = true; drawEquity(); });
+  setTimeout(function () { chartGaveUp = true; drawEquity(); }, 5000);
+
+  /* ---------- restore tab + scroll after a refresh ---------- */
+  try { var saved = localStorage.getItem('tseTab'); if (saved) activate(saved); } catch (e) {}
+  try { var y = sessionStorage.getItem('tseScroll'); if (y) window.scrollTo(0, parseInt(y, 10)); } catch (e) {}
+
+  /* ---------- DeepSeekExport: copy / delete ---------- */
+  document.querySelectorAll('.export-item').forEach(function (item) {
+    var body = item.querySelector('.export-body');
+    var copy = item.querySelector('.btn-copy');
+    var del = item.querySelector('.btn-del');
+    function fallback(t) {
+      var ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta);
+      ta.select(); try { document.execCommand('copy'); } catch (e) {} document.body.removeChild(ta);
+    }
+    if (copy) copy.addEventListener('click', function () {
+      var text = body ? body.textContent : '';
+      var done = function () { copy.textContent = '✔ کپی شد'; setTimeout(function () { copy.textContent = '📋 Copy'; }, 1600); };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(function () { fallback(text); done(); });
+      } else { fallback(text); done(); }
+    });
+    if (del) del.addEventListener('click', function () {
+      if (!confirm('این پاسخ حذف شود؟')) return;
+      fetch('/export/delete', {method: 'POST', headers: {'Content-Type': 'application/json'},
+                               body: JSON.stringify({id: item.dataset.id})})
+        .then(function (r) { return r.json(); })
+        .then(function () { item.style.transition = 'opacity .25s ease'; item.style.opacity = '0';
+                            setTimeout(function () { item.remove(); }, 250); });
+    });
+  });
+})();
+</script>
