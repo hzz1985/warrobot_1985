@@ -30,6 +30,14 @@ Rules implemented here (strategy unchanged: TP 25 %, SL 3 %, lot-based):
     orders - qty we submitted in the last few minutes (open-order list lag);
   * every decision and every order is logged (state/exits_log.jsonl,
     state/exit_orders.json).
+
+Time exit (Hark, 2026-11-26, owner's order): a lot held for >= hold sessions
+(strategy max_hold, 15) is sold like any other exit. Sessions are TSE trading days
+(Sat..Wed minus the holidays in market_holidays' holidays.json, which calendar_sync
+keeps in line with the TSETMC index history) strictly AFTER the entry session, up to
+and including today. Entry = the journal lot's "at" (server clock) converted to a
+Tehran date. Shares with no journal lot have no known entry: never time-exited,
+a warning is logged instead. MANUAL_ONLY symbols are never touched.
 """
 from __future__ import annotations
 
@@ -39,7 +47,7 @@ import subprocess
 import sys
 import time
 from dataclasses import dataclass, field, asdict
-from datetime import datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Callable, Optional
 
@@ -58,6 +66,13 @@ MANUAL_ONLY = {"افران", "خساپا"}
 LOT_FEE_PCT = 0.89            # broker fee-inclusive basis (6,855 -> 6,916), as lot_exits
 RECENT_SUBMIT_SEC = 600       # our own just-sent order may not be in the open list yet
 MAX_PRICE_DISAGREE = 0.10     # panel vs TSETMC last trade
+TRADING_WEEKDAYS = {5, 6, 0, 1, 2}   # Python weekday(): Sat, Sun, Mon, Tue, Wed
+
+try:
+    from zoneinfo import ZoneInfo
+    TEHRAN = ZoneInfo("Asia/Tehran")
+except Exception:                     # pragma: no cover
+    TEHRAN = None
 
 
 def config() -> dict:
@@ -67,6 +82,7 @@ def config() -> dict:
         sell = {}
     out = {"tp": float(sell.get("target_pct") or 25.0),
            "sl": float(sell.get("stop_pct") or 3.0),
+           "hold": int(sell.get("max_hold_days") or 15),        # sessions; 0 = no time exit
            "reprice_after_min": float(sell.get("reprice_after_min") or 10.0)}
     try:  # Hark V3: strategy v2/v3 exits (no TP, catastrophe stop 3 x limit = 9 %); v1 keeps sell.*
         if str(BASE) not in sys.path:
@@ -76,9 +92,71 @@ def config() -> dict:
         if p.get("version") == "v2":
             out["tp"] = float(p["tp_pct"]) if p.get("tp_pct") else 1e9
             out["sl"] = float(p["sl_pct"])
+        if p.get("max_hold_days") is not None:
+            out["hold"] = int(p["max_hold_days"])
     except Exception:
         pass
     return out
+
+
+# ------------------------------------------------------------- trading sessions
+def holiday_set() -> Optional[set]:
+    """Jalali holiday dates ('1405-09-12'); None when they cannot be read."""
+    try:
+        import market_holidays as mh
+        data = mh._load()
+        return {str(d) for y, lst in data.items() if str(y).isdigit() for d in (lst or [])}
+    except Exception:
+        return None
+
+
+def _jalali(d: date) -> str:
+    import jdatetime
+    j = jdatetime.date.fromgregorian(date=d)
+    return f"{j.year:04d}-{j.month:02d}-{j.day:02d}"
+
+
+def is_session(d: date, holidays: set) -> bool:
+    return d.weekday() in TRADING_WEEKDAYS and _jalali(d) not in holidays
+
+
+def sessions_after(entry: date, today: date, holidays: set) -> int:
+    """Trading sessions strictly after the entry session, up to and including today."""
+    n, d = 0, entry + timedelta(days=1)
+    while d <= today:
+        if is_session(d, holidays):
+            n += 1
+        d += timedelta(days=1)
+    return n
+
+
+def tehran_today() -> date:
+    return datetime.now(TEHRAN).date() if TEHRAN else datetime.now().date()
+
+
+def entry_session(at: str) -> Optional[date]:
+    """Tehran calendar date of a journal timestamp written with the server clock."""
+    s = str(at or "").strip()
+    if len(s) < 10:
+        return None
+    try:
+        dt = datetime.fromisoformat(s[:19].replace("T", " "))
+    except Exception:
+        try:
+            dt = datetime.strptime(s[:10], "%Y-%m-%d")
+        except Exception:
+            return None
+    if TEHRAN is None:
+        return dt.date()
+    try:
+        # naive = server local clock (Pacific on the live box); aware = as given
+        return dt.astimezone(TEHRAN).date()
+    except Exception:
+        return None
+
+
+def _warn(msg: str) -> None:
+    print(f"[exit] WARN {msg}", flush=True)
 
 
 # --------------------------------------------------------------------------- data
@@ -86,7 +164,7 @@ def config() -> dict:
 class Decision:
     symbol: str
     action: str                     # "sell" | "hold" | "skip"
-    reason: str                     # take_profit | stop_loss | hold | <skip reason>
+    reason: str                     # take_profit | stop_loss | time_exit | hold | <skip reason>
     held_qty: int = 0
     due_qty: int = 0
     qty: int = 0                    # what to place now
@@ -127,8 +205,11 @@ def _pct(price: float, cost: float) -> float:
 
 
 def evaluate(position: dict, lots: list, live_price: float, tp: float, sl: float,
-             today: str) -> Decision:
-    """Pure decision for one held symbol (no I/O)."""
+             today: str, hold: int = 0, today_tehran: Optional[date] = None,
+             holidays: Optional[set] = None) -> Decision:
+    """Pure decision for one held symbol (no I/O).
+
+    hold > 0 enables the time exit (needs today_tehran and holidays)."""
     sym = str(position["symbol"])
     held = int(float(position.get("qty") or 0))
     dec = Decision(symbol=sym, action="hold", reason="hold", held_qty=held, live_price=live_price)
@@ -141,8 +222,12 @@ def evaluate(position: dict, lots: list, live_price: float, tp: float, sl: float
     if not live_price or live_price <= 0:
         dec.action, dec.reason = "skip", "no_live_price"
         return dec
-    due_tp = due_sl = 0.0
+    due_tp = due_sl = due_time = 0.0
     covered = 0.0
+    time_on = bool(hold and hold > 0 and today_tehran is not None and holidays is not None)
+    if hold and hold > 0 and not time_on:
+        dec.note = "time_exit_off_no_calendar"
+        _warn(f"{sym}: time exit not evaluated (no Tehran date / holiday calendar)")
     for lot in lots or []:
         if lot["at"][:10] == today:
             covered += lot["qty"]          # fresh lot: neither judged nor re-judged by avg
@@ -150,12 +235,24 @@ def evaluate(position: dict, lots: list, live_price: float, tp: float, sl: float
             continue
         p = _pct(live_price, lot["cost"])
         verdict = "take_profit" if p >= tp else "stop_loss" if p <= -sl else "hold"
-        dec.lots.append({**lot, "pct": round(p, 2), "verdict": verdict})
+        held_s = None
+        if time_on:
+            ent = entry_session(lot.get("at", ""))
+            if ent is None:
+                _warn(f"{sym}: lot without a readable entry date ({lot.get('at')!r}); no time exit")
+                dec.note = (dec.note + " time_exit_entry_unknown").strip()
+            else:
+                held_s = sessions_after(ent, today_tehran, holidays)
+                if verdict == "hold" and held_s >= hold:
+                    verdict = "time_exit"
+        dec.lots.append({**lot, "pct": round(p, 2), "verdict": verdict, "sessions_held": held_s})
         covered += lot["qty"]
         if verdict == "take_profit":
             due_tp += lot["qty"]
         elif verdict == "stop_loss":
             due_sl += lot["qty"]
+        elif verdict == "time_exit":
+            due_time += lot["qty"]
     # shares the journal does not know about: judge them on the broker average
     rest = max(0.0, held - covered)
     avg = float(position.get("avg_cost") or 0)
@@ -166,19 +263,24 @@ def evaluate(position: dict, lots: list, live_price: float, tp: float, sl: float
             due_tp += rest
         elif p <= -sl:
             due_sl += rest
+        elif time_on:
+            _warn(f"{sym}: {int(rest)} shares have no journal lot (entry date unknown); no time exit")
+            dec.note = (dec.note + " time_exit_entry_unknown").strip()
     elif avg > 0:
         dec.pnl_pct = round(_pct(live_price, avg), 2)
-    due = min(held, int(due_tp + due_sl))
+    due = min(held, int(due_tp + due_sl + due_time))
     if due <= 0:
         return dec
     dec.action = "sell"
-    dec.reason = "stop_loss" if due_sl >= due_tp else "take_profit"
+    # biggest bucket names the order; ties: stop_loss > take_profit > time_exit
+    dec.reason = max([(due_sl, 2, "stop_loss"), (due_tp, 1, "take_profit"),
+                      (due_time, 0, "time_exit")])[2]
     dec.due_qty = due
     return dec
 
 
 def sell_limit(reason: str, live_price: float, market: dict) -> tuple[int, str]:
-    """Limit price for an exit: TP -> best bid else last; SL -> best bid else floor."""
+    """Limit price for an exit: TP / time -> best bid else last; SL -> best bid else floor."""
     floor, ceiling = int(market.get("floor") or 0), int(market.get("ceiling") or 0)
     bids = market.get("bids") or []
     best_bid = int(bids[0][0]) if bids else 0
@@ -237,14 +339,17 @@ def remember(rec: dict) -> None:
 
 def plan(positions: list[dict], lots_by_sym: dict, prices: dict, markets: dict,
          open_orders: Optional[list], cfg: dict, today: str,
-         recent_qty: Optional[Callable[[str], int]] = None) -> list[Decision]:
+         recent_qty: Optional[Callable[[str], int]] = None,
+         today_tehran: Optional[date] = None, holidays: Optional[set] = None) -> list[Decision]:
     """Decide every held symbol. open_orders=None means "could not read" (fail safe)."""
     recent_qty = recent_qty or (lambda s: recent_submitted_qty(s))
+    hold = int(cfg.get("hold") or 0)
     out = []
     for pos in positions:
         sym = str(pos["symbol"])
         live = float(prices.get(sym) or 0)
-        dec = evaluate(pos, lots_by_sym.get(sym, []), live, cfg["tp"], cfg["sl"], today)
+        dec = evaluate(pos, lots_by_sym.get(sym, []), live, cfg["tp"], cfg["sl"], today,
+                       hold=hold, today_tehran=today_tehran, holidays=holidays)
         if dec.action != "sell":
             out.append(dec)
             continue
@@ -434,7 +539,7 @@ def _after_fill_hooks(rec: dict, pos: dict) -> None:
 
 def stale_stop_orders(decisions: list[Decision], open_orders: list, markets: dict, cfg: dict,
                       book: Optional[dict] = None, now: Optional[float] = None) -> list[dict]:
-    """OUR open stop-loss sells that sit above today's sell limit for too long.
+    """OUR open stop-loss / time-exit sells that sit above today's sell limit for too long.
 
     Operator orders (not in state/exit_orders.json) are never touched."""
     now = now or time.time()
@@ -442,9 +547,9 @@ def stale_stop_orders(decisions: list[Decision], open_orders: list, markets: dic
     ours = {str(o.get("orderid")): o for o in book.get("orders", []) if o.get("orderid")}
     out = []
     for d in decisions:
-        if d.reason != "stop_loss" or d.note != "sell_order_already_open":
+        if d.reason not in ("stop_loss", "time_exit") or d.note != "sell_order_already_open":
             continue
-        limit, _ = sell_limit("stop_loss", d.live_price, markets.get(d.symbol) or {})
+        limit, _ = sell_limit(d.reason, d.live_price, markets.get(d.symbol) or {})
         for o in open_orders:
             oid = str(o.get("orderid"))
             if str(o.get("symbol")) != d.symbol or "فروش" not in str(o.get("side") or "") or oid not in ours:
@@ -488,7 +593,8 @@ def prepare_cycle(rebuild_panel: bool = True) -> dict:
     prices, markets, notes = cross_checked_prices(syms, panel)
     open_orders = read_open_orders()
     today = datetime.now().strftime("%Y-%m-%d")       # journal "at" uses the same clock
-    decisions = plan(positions, open_lots(), prices, markets, open_orders, cfg, today)
+    decisions = plan(positions, open_lots(), prices, markets, open_orders, cfg, today,
+                     today_tehran=tehran_today(), holidays=holiday_set())
     for d in decisions:
         if d.symbol in notes and d.action != "hold":
             d.action, d.note = "skip", (d.note + " " + notes[d.symbol]).strip()
@@ -507,5 +613,6 @@ def run(tag: str, dry: bool = False, at_epoch_ms: int = 0, priority: bool = Fals
     results = execute(decisions, c["positions"], tag, dry=dry, at_epoch_ms=at_epoch_ms, priority=priority)
     results.extend(repriced)
     return {"at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "tp": c["cfg"]["tp"], "sl": c["cfg"]["sl"],
+            "hold": c["cfg"].get("hold"),
             "positions": [asdict(d) for d in decisions], "exits": results,
             "open_orders_read": c["open_orders"] is not None}
