@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Read the broker portfolio grid and return structured numbers.
 // The API returns BuyPriceAvg=0 and no price, the DOM has both value and last price.
 //   node portfolio_values.js

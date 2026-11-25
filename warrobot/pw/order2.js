@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Place a buy order inside ONE Playwright session: login (if needed) -> bind the
 // symbol via the watchlist search -> read the ticket limit -> fill -> click خرید.
 // Never navigates after login: a full page load drops the broker session.

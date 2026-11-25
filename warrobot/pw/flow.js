@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 /**
  * Order flow: bind a symbol, type quantity/price with read-back verification,
  * click buy/sell, then prove what the broker actually recorded.
@@ -323,12 +324,36 @@ function solve(uri) {
 
   // ---- click the ticket button ------------------------------------------
   const buttonName = side === "sell" ? "فروش" : "خرید";
+  // ---- precise send time (Hark fix #1) ----------------------------------
+  // FLOW_AT_EPOCH_MS = the OS-clock epoch (ms) at which the click must happen,
+  // e.g. 08:45:01.000 Tehran. Everything above (session, bind, fields) is done
+  // before it, so the order leaves at the exact second instead of minutes later.
+  const atMs = parseInt(process.env.FLOW_AT_EPOCH_MS || "0", 10);
+  if (atMs > 0) {
+    const lead = atMs - Date.now();
+    out.waited_ms = Math.max(0, lead);
+    if (lead > 15 * 60 * 1000) {
+      out.message = "send_time_too_far";
+      console.log(JSON.stringify(out));
+      await ctx.close();
+      return;
+    }
+    while (Date.now() < atMs - 1500) await page.waitForTimeout(Math.min(250, atMs - 1500 - Date.now()));
+    // the panel may have re-rendered while we waited: re-assert the fields, then
+    // spend the last 1.5 s idle so the click itself is not delayed
+    await setVal("#send_order_txtCount", out.qty);
+    await setVal("#send_order_txtPrice", intended);
+    while (Date.now() < atMs - 30) await page.waitForTimeout(Math.min(250, Math.max(1, atMs - Date.now() - 20)));
+    while (Date.now() < atMs) { /* spin the last few ms */ }
+  }
   if (process.env.FLOW_DRY === "1") {
+    out.click_epoch_ms = Date.now();          // rehearsal: when the click WOULD happen
     out.message = "dry-run: form verified, order NOT submitted";
     console.log(JSON.stringify(out));
     await ctx.close();
     return;
   }
+  out.click_epoch_ms = Date.now();
   try {
     await page.getByRole("link", { name: buttonName }).first().click({ timeout: 8000 });
   } catch (e) {
@@ -384,10 +409,16 @@ function solve(uri) {
       return await r.text();
     }, API);
     const d = JSON.parse(raw);
-    const mine = (d.Data || []).find((o) => String(o.symbol || "").trim() === symbol);
+    // same symbol AND same side, so an older buy never "proves" a new sell (and vice versa)
+    const sideFa = side === "sell" ? "فروش" : "خرید";
+    const mine = (d.Data || []).find((o) => String(o.symbol || "").trim() === symbol &&
+                                            String(o.orderside || "").includes(sideFa));
     if (mine) {
       out.placed_price = parseFloat(mine.orderprice);
       out.placed_orderid = String(mine.orderid || out.placed_orderid || "");
+      if (!out.submitted && /no_order_response/.test(out.message || "")) {
+        out.message = `ثبت شد (تأیید از سفارشات باز، OrderId=${out.placed_orderid})`;
+      }
       out.submitted = true;
       if (out.intended_price && Math.abs(out.placed_price - out.intended_price) > 0.5) {
         out.mismatch = { intended: out.intended_price, placed: out.placed_price };

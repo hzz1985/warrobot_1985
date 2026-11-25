@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Look for an "asset status" page/route in the panel navigation.
 const { chromium } = require("playwright");
 const fs = require("fs");

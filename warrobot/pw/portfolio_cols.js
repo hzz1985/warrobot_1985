@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Dump the portfolio grid header cell list + one full row so column order is known.
 const { chromium } = require("playwright");
 const fs = require("fs");

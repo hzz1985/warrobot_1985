@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Authoritative P/L per position from the broker's advanced realtime portfolio
 // (/Home/RealtimePortfolioAdvanced). It exposes the REAL average cost, the
 // current price and the exact profit/loss the operator sees in the panel.

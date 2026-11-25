@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Find the broker's cancel-order endpoint by scanning the site's JS bundles.
 const { chromium } = require("playwright");
 const fs = require("fs");

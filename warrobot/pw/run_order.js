@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Place one buy order through Playwright and report exactly what happened.
 //   node order.js <symbol> <qty> [price]
 // Exit output is a single JSON line: {ok, submitted, message, qty, price, limit}

@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Cancel one open order through the panel (the 4th cell of its grid row is حذف).
 //   node cancel_order.js <symbol> <qty>
 // Prints "cancelled" when the row disappears from the open-orders list.

@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Probe why the symbol search does not bind for certain names.
 const { chromium } = require("playwright");
 const path = require("path");

@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Probe, inside one Playwright session: login -> inspect the panel DOM.
 // Prints where the order form lives so the order step can use the same path.
 const { chromium } = require("playwright");

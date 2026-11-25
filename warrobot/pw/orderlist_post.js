@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Try POST /Order/GetOrderList to read filled orders (needed for a real average cost).
 const { chromium } = require("playwright");
 const fs = require("fs");

@@ -1,4 +1,4 @@
-"""Cross-process lock around the Playwright profile.
+"""Cross-process lock around the broker browser.
 
 Root cause of the intermittent login/bind failures: several jobs (order, exit
 watch, portfolio sync, readiness checks) can launch Chrome on the SAME profile at
@@ -6,9 +6,15 @@ the same time. Chrome's process-singleton then makes one of them attach to the
 other instance (or fail), the session/captcha flow races, and the run reports
 login_ok=false or an empty symbol search.
 
-Every Playwright caller now takes this lock first, so the runs are serialized.
-The lock is a plain file with an owner pid and a stale timeout, so a crashed run
-can never block the bot forever.
+Hark fix #2 (what was still wrong here):
+  * acquire was read-then-write (two processes could both "win");
+    it is now an atomic O_CREAT|O_EXCL create;
+  * a lock older than 240 s was "stale" and STOLEN from a live run (an order
+    flow with OCR login easily takes > 240 s) and the thief then killed that
+    run's Chrome -> session dropped mid-order. A lock is now stale only when its
+    owner process is dead, or after STALE_SECONDS (15 min);
+  * acquire/release no longer kill the shared, logged-in Chrome
+    (pw_reset.kill_orphans only removes a Chrome that does not answer CDP).
 """
 from __future__ import annotations
 
@@ -17,9 +23,9 @@ import time
 from contextlib import contextmanager
 from pathlib import Path
 
-BASE = Path(r"C:\Users\Administrator\Desktop\DeepSeek DeskTop\WarRobot")
+BASE = Path(__file__).resolve().parent
 LOCK = BASE / "state" / "pw.lock"
-STALE_SECONDS = 240          # a run longer than this is considered crashed
+STALE_SECONDS = 900          # owner alive but holding longer than this -> crashed/hung
 WAIT_SECONDS = 180           # how long a caller waits for the lock
 
 
@@ -34,6 +40,16 @@ def _owner() -> tuple[int, float]:
 def _alive(pid: int) -> bool:
     if pid <= 0:
         return False
+    if pid == os.getpid():
+        return True
+    if os.name != "nt":
+        try:
+            os.kill(pid, 0)
+            return True
+        except ProcessLookupError:
+            return False
+        except Exception:
+            return True
     try:
         import subprocess
         out = subprocess.run(["tasklist", "/FI", f"PID eq {pid}"],
@@ -44,7 +60,9 @@ def _alive(pid: int) -> bool:
 
 
 def _clean_profile() -> None:
-    """Kill a Chrome left over by a crashed run before starting a new one."""
+    """Remove a Chrome that holds the profile without answering (crashed run).
+
+    The shared broker Chrome is left alone (see pw_reset.kill_orphans)."""
     try:
         import pw_reset
         n = pw_reset.kill_orphans()
@@ -54,41 +72,58 @@ def _clean_profile() -> None:
         pass
 
 
+def _try_create(name: str) -> bool:
+    LOCK.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        fd = os.open(str(LOCK), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+    except FileExistsError:
+        return False
+    with os.fdopen(fd, "w", encoding="utf-8") as fh:
+        fh.write(f"{os.getpid()}|{time.time()}|{name}")
+    return True
+
+
 @contextmanager
 def guard(name: str = "pw", wait: int = WAIT_SECONDS):
     started = time.time()
     got = False
+    nested = False
     while time.time() - started < wait:
         pid, ts = _owner()
         if pid == os.getpid():          # re-entrant: same process may nest runs
-            got = True
+            got, nested = True, True
             break
-        stale = (time.time() - ts) > STALE_SECONDS
-        if pid == 0 or stale or not _alive(pid):
+        if _try_create(name):
+            got = True
+            _clean_profile()
+            break
+        pid, ts = _owner()
+        stale = ts and (time.time() - ts) > STALE_SECONDS
+        if pid == 0 and not ts:
+            # file vanished or unreadable mid-write: retry soon
+            time.sleep(0.2)
+            continue
+        if stale or not _alive(pid):
             try:
-                LOCK.parent.mkdir(parents=True, exist_ok=True)
-                LOCK.write_text(f"{os.getpid()}|{time.time()}|{name}", encoding="utf-8")
-                _clean_profile()
-                got = True
-                break
+                LOCK.unlink(missing_ok=True)
             except Exception:
                 pass
+            continue
         time.sleep(0.5)
     try:
         yield got
     finally:
-        if got:
+        if got and not nested:
             try:
                 pid, _ = _owner()
                 if pid == os.getpid():
                     LOCK.unlink(missing_ok=True)
             except Exception:
                 pass
-            # release cleanup: a browser must never outlive its guarded run
-            _clean_profile()
 
 
 def is_locked() -> dict:
     pid, ts = _owner()
     return {"pid": pid, "age_sec": round(time.time() - ts, 1) if ts else None,
-            "alive": _alive(pid) if pid else False, "stale": (time.time() - ts) > STALE_SECONDS if ts else True}
+            "alive": _alive(pid) if pid else False,
+            "stale": (time.time() - ts) > STALE_SECONDS if ts else True}

@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Probe the numbered panel pages (/Home/Default2, page-3..5) to find trade history.
 const { chromium } = require("playwright");
 const path = require("path");

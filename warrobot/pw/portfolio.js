@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Read the broker's real portfolio (DailyPortfolio) inside a logged-in session.
 //   node portfolio.js
 // Prints one JSON line: {"positions":[{symbol,qty,avg,last,value}], "balance":...}

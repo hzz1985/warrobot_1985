@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Round 3: after clicking خرید, wait and watch what the broker reports.
 // - full POST response
 // - orderstatev6 updates (SignalR channel the panel subscribes to)

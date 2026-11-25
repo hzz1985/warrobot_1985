@@ -132,7 +132,15 @@ def daemon() -> int:
     b = bot.CONFIG["buy"]
     schedule = bot.CONFIG.get("schedule", {})
     done: set = set()
-    bot.log("daemon started (auction-first)")
+    # Hark fix #1/#3: the scheduler (warsched) owns ALL broker actions now
+    # (morning_orders.py at 08:45:01, intraday_exit.py for TP/SL, rebalance 10:00,
+    # sell_monitor 21:25). This daemon used to fire a SECOND order_candidates.py at
+    # 08:45, its own preflight, auction/top-up buys, a 09:00 cancel, a 10:00
+    # rotate, a 21:25 sell review and a sell_loop every minute - in parallel with
+    # the scheduler, on the same browser profile/session. They stay available behind
+    # config.json -> daemon.trading = true (default false).
+    TRADING = bool((bot.CONFIG.get("daemon") or {}).get("trading", False))
+    bot.log(f"daemon started (auction-first) trading={'on' if TRADING else 'off - scheduler owns orders'}")
     while True:
         now = bot.now_tehran()
         hm, sec, day = now.strftime("%H:%M"), now.strftime("%S"), now.strftime("%Y-%m-%d")
@@ -214,7 +222,7 @@ def daemon() -> int:
                     bot.log(f"bfomul quarterly error: {exc}")
 
             # 2.91) nightly sell review + automatic exits (Playwright path)
-            if hm >= "21:25" and (day, "sellrev") not in done:
+            if TRADING and hm >= "21:25" and (day, "sellrev") not in done:
                 done.add((day, "sellrev"))
                 try:
                     import subprocess as _s3
@@ -319,7 +327,7 @@ def daemon() -> int:
                     bot.log(f"tracker error: {exc}")
 
             # 0.7) 08:25 self-test of the whole order path (1 share, then cancel)
-            if hm == "08:25" and (day, "st") not in done:
+            if TRADING and hm == "08:25" and (day, "st") not in done:
                 done.add((day, "st"))
                 bot.log("self-test 08:25 starting")
                 try:
@@ -363,7 +371,7 @@ def daemon() -> int:
                 bot.log(f"diag hm={hm} sec={sec} bids={len(done)}")
 
             # 0.95) pre-flight at 08:40: session, bot, order capability
-            if "08:40" <= hm < "08:45" and (day, "pre") not in done:
+            if TRADING and "08:40" <= hm < "08:45" and (day, "pre") not in done:
                 done.add((day, "pre"))
                 try:
                     import subprocess
@@ -384,7 +392,7 @@ def daemon() -> int:
 
             # 1) single-shot unattended ordering at exactly 08:45:01
             # the whole 08:45 minute is accepted (the loop may tick slower than 1s)
-            if hm == b.get("preopen_attempt", "08:45") and (day, "pwbuy") not in done:
+            if TRADING and hm == b.get("preopen_attempt", "08:45") and (day, "pwbuy") not in done:
                 done.add((day, "pwbuy"))
                 try:
                     import subprocess as _sp
@@ -400,7 +408,7 @@ def daemon() -> int:
             until_hm = b.get("preopen_until", "09:00")
             retry = int(b.get("preopen_retry_sec", 15))
             bucket = (now.minute * 60 + now.second) // max(retry, 1)
-            if start_hm <= hm < until_hm and (now.minute * 60 + now.second) % retry < 5:
+            if TRADING and start_hm <= hm < until_hm and (now.minute * 60 + now.second) % retry < 5:
                 key = (day, f"auc{bucket}")   # one attempt per retry bucket (no double orders)
                 if key not in done:
                     done.add(key)
@@ -414,7 +422,7 @@ def daemon() -> int:
             # 2) 09:00:02 cancel orders whose stock is not locked
             guard = str(b.get("cancel_if_not_locked_at", "09:00:02"))
             g_hm, _, g_sec = guard.partition(":")
-            if hm == g_hm and sec >= (g_sec or "02") and (day, "protect") not in done:
+            if TRADING and hm == g_hm and sec >= (g_sec or "02") and (day, "protect") not in done:
                 done.add((day, "protect"))
                 live = bot.live_scan_full(workers=8, scope="locked", budget_sec=20)
                 locked = set(live.symbol) if len(live) else set()
@@ -425,7 +433,7 @@ def daemon() -> int:
                     bot.cancel_open(stale)
 
             # 3) 09:01-10:00 top-up retries from the live list
-            if b["window_start"] <= hm <= b["window_end"] and (day, f"t{hm}") not in done:
+            if TRADING and b["window_start"] <= hm <= b["window_end"] and (day, f"t{hm}") not in done:
                 done.add((day, f"t{hm}"))
                 try:
                     ldf = pd.read_csv(LIVE) if LIVE.exists() else None
@@ -435,7 +443,7 @@ def daemon() -> int:
                     pass
 
             # 3.9) 10:00 rotate: cancel the unfilled orders and order the next candidates
-            if hm >= b.get("cancel_unfilled_at", "10:00") and (day, "rebal") not in done:
+            if TRADING and hm >= b.get("cancel_unfilled_at", "10:00") and (day, "rebal") not in done:
                 done.add((day, "rebal"))
                 try:
                     import subprocess as _s2
@@ -459,7 +467,7 @@ def daemon() -> int:
                     bot.log(f"10:00 cancel+rotate error: {exc}")
 
             # daily sell loop
-            if (day, f"s{hm}") not in done:
+            if TRADING and (day, f"s{hm}") not in done:
                 done.add((day, f"s{hm}"))
                 try:
                     bot.sell_loop(dry=False)

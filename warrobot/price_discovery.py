@@ -104,6 +104,21 @@ def market(symbol: str, prev_close: float = 0.0) -> dict:
     return out
 
 
+def last_trade(symbol: str) -> dict:
+    """Live last trade from TSETMC ClosingPriceInfo (NOT closingPriceDaily, whose
+    rows are newest-first and whose [-1] is months old - the 4,370 «stop-loss» bug).
+
+    {"last": pDrCotVal, "close": pClosing, "yesterday": priceYesterday, "source": ...}
+    """
+    code = _ins_code(symbol)
+    if not code:
+        return {"last": 0.0, "close": 0.0, "yesterday": 0.0, "source": "no_ins_code"}
+    info = (_get(f"{API}/ClosingPrice/GetClosingPriceInfo/{code}") or {}).get("closingPriceInfo") or {}
+    return {"last": float(info.get("pDrCotVal") or 0), "close": float(info.get("pClosing") or 0),
+            "yesterday": float(info.get("priceYesterday") or 0),
+            "source": "tsetmc_closing_price_info" if info else "unavailable"}
+
+
 def buy_price(symbol: str, prev_close: float, next_ceiling: float = 0.0) -> dict:
     """Limit for a buy: cross the best ask, or bid today's ceiling when locked."""
     m = market(symbol, prev_close)

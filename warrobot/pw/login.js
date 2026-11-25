@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Playwright-driven broker login with the local tesseract.js captcha reader.
 // Reuses WarRobot/ocr/read2.js for the OCR so both paths share one solver.
 const { chromium } = require("playwright");

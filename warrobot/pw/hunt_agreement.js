@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 ﻿const { chromium } = require("playwright");
 const fs = require("fs"), path = require("path"), { execFileSync } = require("child_process");
 const BASE = path.join(__dirname,"..");

@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Probe the symbol search dropdown after opening the watchlist tab.
 const { chromium } = require("playwright");
 const path = require("path");

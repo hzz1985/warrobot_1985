@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Read the portfolio table straight from the panel DOM (average cost, last price,
 // value, P/L). The API returns BuyPriceAvg=0 for some rows, the UI does not.
 //   node portfolio_dom.js

@@ -1,3 +1,4 @@
+require("./cdp_shared"); // shared logged-in broker browser (Hark fix #2)
 // Probe: JS-driven typing into the visible symbol search + autocomplete DOM.
 const { chromium } = require("playwright");
 const path = require("path");
