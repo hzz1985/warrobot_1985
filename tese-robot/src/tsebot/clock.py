@@ -10,6 +10,7 @@ value in sync, so `now_tehran()` always shows real Tehran time.
 from __future__ import annotations
 
 import json
+import urllib.error
 import urllib.request
 from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
@@ -17,16 +18,39 @@ from pathlib import Path
 from typing import Optional
 
 CONFIG = Path(__file__).resolve().parents[2] / "config" / "config.json"
-SOURCES = ("https://www.google.com", "https://www.cloudflare.com", "https://www.bing.com")
+# broker + TSETMC first: they are reachable from Iran and are the clocks that matter
+# for the 08:45:01 order; the global ones are fallbacks.
+SOURCES = ("https://api.meibours.ir", "https://online.meibours.ir", "https://cdn.tsetmc.com",
+           "https://www.google.com", "https://www.cloudflare.com", "https://www.bing.com")
 
 
 def measure_offset() -> Optional[float]:
-    """Seconds to add to the OS clock so it matches real UTC (None if unmeasurable)."""
+    """Seconds to add to the OS clock so it matches real UTC (None if unmeasurable).
+
+    Median of up to three independent sources, so one wrong/cached Date header
+    cannot shift the bot clock."""
+    vals = []
     for url in SOURCES:
+        v = _measure_one(url)
+        if v is not None:
+            vals.append(v)
+        if len(vals) >= 3:
+            break
+    if not vals:
+        return None
+    vals.sort()
+    return float(vals[len(vals) // 2])
+
+
+def _measure_one(url: str) -> Optional[float]:
+    for _ in (0,):
         try:
             before = datetime.now(timezone.utc)
-            with urllib.request.urlopen(url, timeout=8) as r:
-                header = r.headers.get("Date")
+            try:
+                with urllib.request.urlopen(urllib.request.Request(url, method="HEAD"), timeout=8) as r:
+                    header = r.headers.get("Date")
+            except urllib.error.HTTPError as he:      # a 404/405 still carries a Date
+                header = he.headers.get("Date") if he.headers else None
             after = datetime.now(timezone.utc)
             if not header:
                 continue
@@ -35,10 +59,10 @@ def measure_offset() -> Optional[float]:
             mid = before + (after - before) / 2
             offset = (real - mid).total_seconds()
             if abs(offset) > 12 * 3600:      # a timezone mix-up, not a clock error
-                continue
+                return None
             return float(round(offset))
         except Exception:
-            continue
+            return None
     return None
 
 
