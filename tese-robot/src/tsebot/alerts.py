@@ -7,14 +7,18 @@ Used for events a human must act on:
   * ledger vs broker mismatch                       -> reconciliation
   * kill switch / fatal task error
 
-Credentials live in `config/email.json`, never in code:
+Settings live in `config/email.json`; the SECRET does not:
     {"enabled": true, "host": "smtp.gmail.com", "port": 465,
-     "user": "...@gmail.com", "app_password": "xxxx xxxx xxxx xxxx",
+     "user": "...@gmail.com", "app_password": "",
      "to": ["..."], "min_interval_sec": 600}
+The Gmail app password is read from the environment variable
+WARROBOT_SMTP_PASSWORD (set it for the pm2 processes); the file value is only a
+fallback for old installs and must stay "" in git.
 """
 from __future__ import annotations
 
 import json
+import os
 import smtplib
 import ssl
 import time
@@ -33,9 +37,13 @@ def _load_cfg(path: Optional[Path] = None) -> Dict:
     if not p.exists():
         return {"enabled": False}
     try:
-        return json.loads(p.read_text(encoding="utf-8"))
+        cfg = json.loads(p.read_text(encoding="utf-8"))
     except Exception:
         return {"enabled": False}
+    env_pw = os.environ.get("WARROBOT_SMTP_PASSWORD", "").strip()
+    if env_pw:
+        cfg["app_password"] = env_pw
+    return cfg
 
 
 def _clean(s: str) -> str:

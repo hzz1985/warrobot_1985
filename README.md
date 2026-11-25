@@ -16,3 +16,12 @@
 
 ## امنیت
 اعتبارنامه‌ها، کوکی نشست، پروفایل مرورگر و داده‌های خام در مخزن نیستند.
+
+### رمزها و فایل‌هایی که نباید در git باشند
+- رمز Gmail (App Password) فقط از متغیر محیطی **`WARROBOT_SMTP_PASSWORD`** خوانده می‌شود؛
+  مقدار `app_password` در `tese-robot/config/email.json` باید `""` بماند.
+- الگوهای زیر را در `.gitignore` نگه دارید (اضافه شده‌اند):
+  `**/config/email.json` · `email.local.json` · `state/` · `credentials.json` · `pw_cookies.json` · `pw-profile/` · `.env`
+- فایل `email.json` قبلاً در git ثبت شده؛ برای بیرون آوردنش از ردیابی:
+  `git rm --cached tese-robot/config/email.json` (فایل روی دیسک می‌ماند).
+- رمزی که قبلاً commit شده در تاریخچهٔ git باقی است: آن App Password را در حساب Google **باطل** و رمز تازه بسازید.
