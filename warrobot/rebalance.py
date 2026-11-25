@@ -160,7 +160,11 @@ def run(dry: bool = False) -> dict:
         return out
 
     assets = total_assets()
-    third = assets / 3.0
+    try:  # strategy switch: v1 -> 3 slots, v2 -> strategy.v2.max_positions
+        import strategy_v2 as _s2
+        third = assets / float(_s2.live_params(BASE / "config.json")["slots"])
+    except Exception:
+        third = assets / 3.0
     # free_cash_cap: never size an order above the money we actually have
     try:
         import json as _json

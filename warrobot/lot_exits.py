@@ -37,6 +37,12 @@ PW = BASE / "pw"
 NODE = r"C:\Program Files\nodejs\node.exe"
 
 TP, SL = 25.0, 3.0
+try:  # strategy switch (config.json strategy.version); v1 keeps 25 / 3
+    import strategy_v2 as _s2
+    _p = _s2.live_params(BASE / "config.json")
+    TP, SL = (_p["tp_pct"] if _p["tp_pct"] else 1e9), _p["sl_pct"]
+except Exception:
+    pass
 FEE = 0.89  # percent: matches the broker fee-inclusive basis (6,855 -> 6,916)
 MANUAL_ONLY = {"افران", "خساپا"}
 

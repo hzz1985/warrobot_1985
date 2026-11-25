@@ -332,7 +332,12 @@ def run(dry: bool = False) -> dict:
                 total = max(total, _reb.total_assets())
             except Exception:
                 pass
-    target_each = (total / 3.0) if total > 0 else free / 3.0
+    try:  # strategy switch: v1 -> 3 slots, v2 -> strategy.v2.max_positions
+        import strategy_v2 as _s2
+        _slots = float(_s2.live_params(BASE / "config.json")["slots"])
+    except Exception:
+        _slots = 3.0
+    target_each = (total / _slots) if total > 0 else free / _slots
     out["total_assets"] = round(total, 0)
     out["target_per_symbol"] = round(target_each, 0)
     out["equal_allocation"] = True
