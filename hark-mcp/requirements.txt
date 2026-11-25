@@ -1,0 +1,8 @@
+# official MCP Python SDK, v1 line (FastMCP API); v2 renamed FastMCP -> MCPServer
+mcp>=1.12,<2
+uvicorn>=0.30
+anyio>=4
+psutil>=5.9
+mss>=9.0
+pillow>=10.0
+tzdata>=2024.1
