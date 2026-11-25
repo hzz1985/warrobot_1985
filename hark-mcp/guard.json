@@ -1,0 +1,21 @@
+{
+  "_comment": "Trading kill-switch rules. Active while HARK_MCP_LIVE_TRADING != \"1\". A shell / pm2 command whose text matches any rule 'pattern' is refused, unless it matches the rule's 'unless' regex or the global 'allow_if' regex (FLOW_DRY=1 in the same command). Regexes are Python syntax, matched case-insensitively. Edit freely; the server re-reads this file on every call.",
+  "allow_if": "FLOW_DRY\\s*=\\s*[\"']?1\\b",
+  "rules": [
+    {"name": "order_candidates", "pattern": "order_candidates\\.py"},
+    {"name": "morning_orders (without --dry)", "pattern": "morning_orders\\.py", "unless": "--dry\\b"},
+    {"name": "lot_exits --live", "pattern": "lot_exits\\.py[^\\n;|&]*--live"},
+    {"name": "intraday_exit", "pattern": "intraday_exit\\.py"},
+    {"name": "preopen_exits", "pattern": "preopen_exits\\.py"},
+    {"name": "rebalance", "pattern": "(^|[^a-z_])rebalance\\.py"},
+    {"name": "order_retry", "pattern": "order_retry\\.py"},
+    {"name": "retry_orders", "pattern": "retry_orders\\.py"},
+    {"name": "order_supervisor", "pattern": "order_supervisor\\.py"},
+    {"name": "cancel_open_orders", "pattern": "cancel_open_orders\\.py"},
+    {"name": "cancel_orders", "pattern": "(^|[^a-z_])cancel_orders\\.py"},
+    {"name": "pw/flow.js", "pattern": "(^|[^a-z_])flow\\.js"},
+    {"name": "pw/api_order.js", "pattern": "api_order\\.js"},
+    {"name": "pw/cancel_*.js", "pattern": "(^|[^a-z_])cancel_[a-z0-9_]*\\.js"},
+    {"name": "broker_pw.py order", "pattern": "broker_pw\\.py[\"']?\\s+order\\b"}
+  ]
+}
