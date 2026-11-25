@@ -33,6 +33,15 @@ class V3Config(S2.V2Config):
     inflow5_min: float | None = None  # 5-session net individual inflow / value >= inflow5_min
     # ---- sector ----
     sec_mom_min: float | None = None  # sector (others) 20-session return >= this
+    # ---- V3.1 Codal quality guards (latest ن-10 / ن-30 published before the signal day; unknown -> pass) ----
+    pe_ttm_max: float | None = None   # drop if Codal TTM P/E above this, or TTM net profit <= 0
+    roe_min: float | None = None      # drop if TTM net profit / equity below this (0.03 = 3 %)
+    npm_min: float | None = None      # drop if TTM net margin below this (only when revenue is known)
+    np_yoy_min: float | None = None   # drop if cumulative net profit vs same period last year below this (-0.5)
+    sales_yoy_min: float | None = None  # drop if fiscal-YTD sales (monthly report) vs last year below this
+    capraise_reserve_days: int | None = None  # drop within N days after a non-cash (reserve/revaluation) capital raise
+    codal_cache_dir: str | None = None  # live cache for Codal fetches (default: <bot>/data_v3/codal_cache)
+    codal_budget_s: float = 240.0     # total seconds the nightly scan may spend on Codal; the rest fail open
     # ---- ranking among survivors ----
     rank_by: str = "bp"               # value (v2) | bp (proposed v3) | inflow
 
@@ -63,6 +72,19 @@ def passes(r: dict, cfg: V3Config) -> bool:
     if cfg.pe_max is not None and not _nan(pe) and pe > cfg.pe_max:
         return False
     if cfg.growth_min is not None and not _nan(r.get("growth")) and r["growth"] < cfg.growth_min:
+        return False
+    if cfg.pe_ttm_max is not None and not _nan(r.get("pe_c")) and (r["pe_c"] <= 0 or r["pe_c"] > cfg.pe_ttm_max):
+        return False
+    if cfg.roe_min is not None and not _nan(r.get("roe")) and r["roe"] < cfg.roe_min:
+        return False
+    if cfg.npm_min is not None and not _nan(r.get("npm")) and r["npm"] < cfg.npm_min:
+        return False
+    if cfg.np_yoy_min is not None and not _nan(r.get("np_yoy")) and r["np_yoy"] < cfg.np_yoy_min:
+        return False
+    if cfg.sales_yoy_min is not None and not _nan(r.get("sales_yoy")) and r["sales_yoy"] < cfg.sales_yoy_min:
+        return False
+    if cfg.capraise_reserve_days is not None and r.get("capr_days") is not None and not _nan(r.get("capr_days")) \
+            and 0 <= r["capr_days"] <= cfg.capraise_reserve_days:
         return False
     if cfg.bp_min is not None and (_nan(r.get("bp")) or r["bp"] < cfg.bp_min):
         return False
@@ -110,13 +132,14 @@ def live_fundamentals(symbol: str, price: float, cache_dir: str | Path | None = 
     """TTM P/E and YoY growth from the published EPS history (rahavard365 mirror of Codal)."""
     import re
     import urllib.parse
-    out = {"pe": float("nan"), "growth": float("nan")}
+    out = {"pe": float("nan"), "growth": float("nan"), "capital_rial": float("nan"), "_asset_id": None}
     try:
         d = _get_json(f"{RAHAVARD}/search?keyword=" + urllib.parse.quote(symbol)).get("data") or []
         norm = lambda s: s.replace("ي", "ی").replace("ك", "ک").replace(" ", "")
         c = [x for x in d if norm(x.get("trade_symbol", "")) == norm(symbol) and x.get("entity_type") == "exchange.asset"]
         if not c:
             return out
+        out["_asset_id"] = c[0]["entity_id"]
         e = _get_json(f"{RAHAVARD}/asset/{c[0]['entity_id']}/eps").get("data") or {}
         rep = {}
         for fy in e.get("eps_fiscal_years") or []:
@@ -129,6 +152,7 @@ def live_fundamentals(symbol: str, price: float, cache_dir: str | Path | None = 
         fys = sorted({k[0] for k in rep})
         fy, k = max(rep)
         eps, cap = rep[(fy, k)]
+        out["capital_rial"] = cap
         npc, sh = eps * cap / 1000, cap / 1000
         pf = fys[fys.index(fy) - 1] if fys.index(fy) > 0 else None
         if k == 12:
@@ -142,6 +166,58 @@ def live_fundamentals(symbol: str, price: float, cache_dir: str | Path | None = 
         if pf and (pf, k) in rep:
             pv = rep[(pf, k)][0] * rep[(pf, k)][1] / 1000
             out["growth"] = (npc - pv) / abs(pv) if pv else float("nan")
+    except Exception:
+        pass
+    return out
+
+
+def live_capraise_days(asset_id) -> float:
+    """days since the latest non-cash (reserve / revaluation) capital increase was registered (NaN if none)."""
+    import datetime
+    import re
+    try:
+        d = _get_json(f"{RAHAVARD}/asset/{asset_id}/capital").get("data") or {}
+        best = None
+        for x in d.get("capital_changes") or []:
+            if (x.get("capital_change") or 0) > 0 and x.get("is_reserve") and not x.get("is_contribution"):
+                m = re.search(r"\d{4}-\d{2}-\d{2}", x.get("registration_date") or x.get("date") or "")
+                if m and (best is None or m.group(0) > best):
+                    best = m.group(0)
+        if best:
+            return float((datetime.date.today() - datetime.date.fromisoformat(best)).days)
+    except Exception:
+        pass
+    return float("nan")
+
+
+def live_rahavard_roe(asset_id) -> float:
+    """latest annual Return on Equity from rahavard365 (fraction); NaN when unknown."""
+    try:
+        d = _get_json(f"{RAHAVARD}/asset/{asset_id}/financialratios").get("data") or []
+        best = None
+        for r in d:
+            v = {i["field"]["english_title"]: i["value"] for i in r.get("items") or []}.get("Return on Equity")
+            if v is not None and (best is None or (r.get("date") or "") > best[0]):
+                best = (r.get("date") or "", float(v) / 100.0)
+        return best[1] if best else float("nan")
+    except Exception:
+        return float("nan")
+
+
+def live_codal(symbol: str, price: float, capital_rial: float, fetcher, want_monthly: bool) -> dict:
+    """V3.1 Codal metrics for one candidate; NaN on any gap (filters then pass)."""
+    out = {"pe_c": float("nan"), "roe": float("nan"), "npm": float("nan"), "np_yoy": float("nan"),
+           "sales_yoy": float("nan")}
+    try:
+        import codal_fund as CF
+        mt = CF.live_metrics(symbol, fetcher, want_monthly=want_monthly)
+        for k in ("roe", "npm", "np_yoy", "sales_yoy"):
+            out[k] = mt.get(k, float("nan"))
+        npt = mt.get("np_ttm", float("nan"))
+        shares = capital_rial / 1000.0 if not _nan(capital_rial) and capital_rial > 0 else \
+            (mt.get("capital", float("nan")) * 1000.0)
+        if not _nan(npt) and not _nan(shares) and shares > 0 and price > 0:
+            out["pe_c"] = price * shares / (npt * 1e6) if npt > 0 else -1.0
     except Exception:
         pass
     return out
@@ -198,6 +274,17 @@ def filter_scan(cands, config_path: str | Path, daily_dir: str | Path, limit: fl
     if base is None or not len(base):
         return base
     need_fund = v3.fund_mode != "off" or v3.pe_max is not None or v3.growth_min is not None
+    need_codal = any(x is not None for x in (v3.pe_ttm_max, v3.roe_min, v3.npm_min, v3.np_yoy_min, v3.sales_yoy_min))
+    need_capr = v3.capraise_reserve_days is not None
+    fetcher = None
+    if need_codal:
+        try:
+            import codal_fund as CF
+            cdir = v3.codal_cache_dir or str(Path(config_path).resolve().parent / "data_v3" / "codal_cache")
+            fetcher = CF.Fetcher(cdir, budget_s=v3.codal_budget_s)
+        except Exception:
+            fetcher = None
+    need_fund = need_fund or need_codal or need_capr
     need_flow = (v3.bp_min is not None or v3.inflow_min is not None or v3.inflow5_min is not None
                  or v3.rank_by in ("bp", "inflow"))
     rows = []
@@ -205,7 +292,20 @@ def filter_scan(cands, config_path: str | Path, daily_dir: str | Path, limit: fl
         sym = str(row["symbol"])
         r = {"idx": idx, "value": float(row["turnover"])}
         if need_fund:
-            r.update(live_fundamentals(sym, float(row.get("close") or 0)))
+            f = live_fundamentals(sym, float(row.get("close") or 0))
+            r.update({k: v for k, v in f.items() if not k.startswith("_") and k != "capital_rial"})
+            if fetcher is not None:
+                r.update(live_codal(sym, float(row.get("close") or 0), f.get("capital_rial", float("nan")),
+                                    fetcher, v3.sales_yoy_min is not None))
+                # same fallbacks as the backtest (research/codal_features.hybrid): rahavard365 when Codal is unknown
+                if _nan(r.get("pe_c")):
+                    r["pe_c"] = r.get("pe", float("nan"))
+                if _nan(r.get("np_yoy")):
+                    r["np_yoy"] = r.get("growth", float("nan"))
+                if v3.roe_min is not None and _nan(r.get("roe")) and f.get("_asset_id"):
+                    r["roe"] = live_rahavard_roe(f["_asset_id"])
+            if need_capr and f.get("_asset_id"):
+                r["capr_days"] = live_capraise_days(f["_asset_id"])
         if need_flow:
             ins = (ins_codes or {}).get(sym) or _resolve_ins(sym)
             if ins:
@@ -217,8 +317,9 @@ def filter_scan(cands, config_path: str | Path, daily_dir: str | Path, limit: fl
            "inflow": lambda r: -(r.get("inflow") if not _nan(r.get("inflow")) else -9.0)}[v3.rank_by]
     keep.sort(key=key)
     out = base.loc[[r["idx"] for r in keep]].copy()
-    for col in ("pe", "growth", "bp", "inflow"):
-        out[col] = [r.get(col) for r in keep]
+    for col in ("pe", "growth", "bp", "inflow", "pe_c", "roe", "npm", "np_yoy", "sales_yoy", "capr_days"):
+        if any(col in r for r in keep) or col in ("pe", "growth", "bp", "inflow"):
+            out[col] = [r.get(col) for r in keep]
     if log:
         log(f"strategy_v3: {len(base)} v2-eligible -> {len(out)} after v3 filters, ranked by {v3.rank_by}")
     return out if keep_all else out.head(v3.max_picks)

@@ -92,7 +92,14 @@
       "inflow_min": null,
       "inflow5_min": null,
       "sec_mom_min": null,
-      "rank_by": "bp"
+      "rank_by": "bp",
+      "pe_ttm_max": null,
+      "roe_min": null,
+      "npm_min": null,
+      "np_yoy_min": null,
+      "sales_yoy_min": null,
+      "capraise_reserve_days": null,
+      "codal_budget_s": 240
     }
   }
 }

@@ -1,0 +1,1193 @@
+{
+ "coverage": {
+  "stmt_symbols": 43,
+  "monthly_symbols": 0,
+  "cap_symbols": 1061,
+  "stmt_reports": 315,
+  "stmt_parsed": 288,
+  "monthly_reports": 0,
+  "monthly_parsed": 0,
+  "ratios_symbols": 1067
+ },
+ "results": {
+  "V3_live": {
+   "in_sample": {
+    "start": "2024-09-01",
+    "end": "2025-09-30",
+    "total_return": 7.8,
+    "cagr": 7.2,
+    "max_dd": 18.9,
+    "sharpe": 0.62,
+    "trades": 90,
+    "win_rate": 47.8,
+    "avg_trade": 1.31,
+    "median_trade": -0.83,
+    "avg_hold": 12.9,
+    "exits": {
+     "time": 60,
+     "stop_gap": 18,
+     "stop": 12
+    },
+    "avg_win": 13.18,
+    "avg_loss": -9.55,
+    "expectancy": 1.31,
+    "payoff": 1.38,
+    "exposure": 49.1
+   },
+   "out_of_sample": {
+    "start": "2025-10-01",
+    "end": "2026-11-25",
+    "total_return": 155.0,
+    "cagr": 125.7,
+    "max_dd": 11.8,
+    "sharpe": 6.45,
+    "trades": 102,
+    "win_rate": 69.6,
+    "avg_trade": 9.44,
+    "median_trade": 5.77,
+    "avg_hold": 14.2,
+    "exits": {
+     "time": 89,
+     "stop_gap": 10,
+     "stop": 3
+    },
+    "avg_win": 16.89,
+    "avg_loss": -7.63,
+    "expectancy": 9.44,
+    "payoff": 2.21,
+    "exposure": 70.3
+   },
+   "full": {
+    "start": "2024-09-01",
+    "end": "2026-11-25",
+    "total_return": 199.3,
+    "cagr": 63.5,
+    "max_dd": 19.6,
+    "sharpe": 3.84,
+    "trades": 194,
+    "win_rate": 60.3,
+    "avg_trade": 5.92,
+    "median_trade": 2.77,
+    "avg_hold": 13.6,
+    "exits": {
+     "time": 151,
+     "stop_gap": 28,
+     "stop": 15
+    },
+    "avg_win": 15.69,
+    "avg_loss": -8.91,
+    "expectancy": 5.92,
+    "payoff": 1.76,
+    "exposure": 59.8
+   }
+  },
+  "Q1_pe_c_gt100": {
+   "in_sample": {
+    "start": "2024-09-01",
+    "end": "2025-09-30",
+    "total_return": 8.0,
+    "cagr": 7.4,
+    "max_dd": 19.0,
+    "sharpe": 0.65,
+    "trades": 89,
+    "win_rate": 48.3,
+    "avg_trade": 1.35,
+    "median_trade": -0.22,
+    "avg_hold": 12.9,
+    "exits": {
+     "time": 61,
+     "stop_gap": 18,
+     "stop": 10
+    },
+    "avg_win": 12.84,
+    "avg_loss": -9.4,
+    "expectancy": 1.35,
+    "payoff": 1.37,
+    "exposure": 48.6
+   },
+   "out_of_sample": {
+    "start": "2025-10-01",
+    "end": "2026-11-25",
+    "total_return": 134.7,
+    "cagr": 110.0,
+    "max_dd": 11.5,
+    "sharpe": 5.76,
+    "trades": 105,
+    "win_rate": 67.6,
+    "avg_trade": 8.23,
+    "median_trade": 5.62,
+    "avg_hold": 13.9,
+    "exits": {
+     "time": 88,
+     "stop_gap": 13,
+     "stop": 4
+    },
+    "avg_win": 16.17,
+    "avg_loss": -8.37,
+    "expectancy": 8.23,
+    "payoff": 1.93,
+    "exposure": 70.6
+   },
+   "full": {
+    "start": "2024-09-01",
+    "end": "2026-11-25",
+    "total_return": 179.1,
+    "cagr": 58.4,
+    "max_dd": 19.7,
+    "sharpe": 3.6,
+    "trades": 195,
+    "win_rate": 60.5,
+    "avg_trade": 5.47,
+    "median_trade": 2.74,
+    "avg_hold": 13.6,
+    "exits": {
+     "time": 151,
+     "stop_gap": 31,
+     "stop": 13
+    },
+    "avg_win": 14.95,
+    "avg_loss": -9.08,
+    "expectancy": 5.47,
+    "payoff": 1.65,
+    "exposure": 59.6
+   }
+  },
+  "Q2_pe_c_gt50": {
+   "in_sample": {
+    "start": "2024-09-01",
+    "end": "2025-09-30",
+    "total_return": 11.0,
+    "cagr": 10.1,
+    "max_dd": 18.4,
+    "sharpe": 0.84,
+    "trades": 89,
+    "win_rate": 49.4,
+    "avg_trade": 1.62,
+    "median_trade": -0.17,
+    "avg_hold": 12.9,
+    "exits": {
+     "time": 62,
+     "stop_gap": 18,
+     "stop": 9
+    },
+    "avg_win": 12.9,
+    "avg_loss": -9.4,
+    "expectancy": 1.62,
+    "payoff": 1.37,
+    "exposure": 49.0
+   },
+   "out_of_sample": {
+    "start": "2025-10-01",
+    "end": "2026-11-25",
+    "total_return": 161.8,
+    "cagr": 130.9,
+    "max_dd": 11.7,
+    "sharpe": 6.58,
+    "trades": 105,
+    "win_rate": 69.5,
+    "avg_trade": 9.46,
+    "median_trade": 6.71,
+    "avg_hold": 13.9,
+    "exits": {
+     "time": 88,
+     "stop_gap": 14,
+     "stop": 3
+    },
+    "avg_win": 17.53,
+    "avg_loss": -8.94,
+    "expectancy": 9.46,
+    "payoff": 1.96,
+    "exposure": 70.8
+   },
+   "full": {
+    "start": "2024-09-01",
+    "end": "2026-11-25",
+    "total_return": 214.7,
+    "cagr": 67.2,
+    "max_dd": 18.4,
+    "sharpe": 3.97,
+    "trades": 196,
+    "win_rate": 62.2,
+    "avg_trade": 6.12,
+    "median_trade": 2.84,
+    "avg_hold": 13.5,
+    "exits": {
+     "time": 153,
+     "stop_gap": 31,
+     "stop": 12
+    },
+    "avg_win": 15.44,
+    "avg_loss": -9.24,
+    "expectancy": 6.12,
+    "payoff": 1.67,
+    "exposure": 60.0
+   }
+  },
+  "Q3_roe_lt5": {
+   "in_sample": {
+    "start": "2024-09-01",
+    "end": "2025-09-30",
+    "total_return": 8.7,
+    "cagr": 8.0,
+    "max_dd": 19.9,
+    "sharpe": 0.67,
+    "trades": 90,
+    "win_rate": 48.9,
+    "avg_trade": 1.46,
+    "median_trade": -0.19,
+    "avg_hold": 13.0,
+    "exits": {
+     "time": 59,
+     "stop_gap": 20,
+     "stop": 11
+    },
+    "avg_win": 13.58,
+    "avg_loss": -10.13,
+    "expectancy": 1.46,
+    "payoff": 1.34,
+    "exposure": 49.5
+   },
+   "out_of_sample": {
+    "start": "2025-10-01",
+    "end": "2026-11-25",
+    "total_return": 141.2,
+    "cagr": 115.1,
+    "max_dd": 11.7,
+    "sharpe": 6.12,
+    "trades": 106,
+    "win_rate": 66.0,
+    "avg_trade": 8.57,
+    "median_trade": 5.96,
+    "avg_hold": 13.8,
+    "exits": {
+     "time": 88,
+     "stop_gap": 15,
+     "stop": 3
+    },
+    "avg_win": 17.44,
+    "avg_loss": -8.67,
+    "expectancy": 8.57,
+    "payoff": 2.01,
+    "exposure": 70.3
+   },
+   "full": {
+    "start": "2024-09-01",
+    "end": "2026-11-25",
+    "total_return": 184.0,
+    "cagr": 59.7,
+    "max_dd": 20.6,
+    "sharpe": 3.62,
+    "trades": 198,
+    "win_rate": 60.1,
+    "avg_trade": 5.56,
+    "median_trade": 2.75,
+    "avg_hold": 13.5,
+    "exits": {
+     "time": 150,
+     "stop_gap": 34,
+     "stop": 14
+    },
+    "avg_win": 15.58,
+    "avg_loss": -9.53,
+    "expectancy": 5.56,
+    "payoff": 1.63,
+    "exposure": 60.1
+   }
+  },
+  "Q4_roe_lt3": {
+   "in_sample": {
+    "start": "2024-09-01",
+    "end": "2025-09-30",
+    "total_return": 10.3,
+    "cagr": 9.5,
+    "max_dd": 19.9,
+    "sharpe": 0.78,
+    "trades": 89,
+    "win_rate": 49.4,
+    "avg_trade": 1.65,
+    "median_trade": -0.17,
+    "avg_hold": 13.1,
+    "exits": {
+     "time": 59,
+     "stop_gap": 19,
+     "stop": 11
+    },
+    "avg_win": 13.58,
+    "avg_loss": -10.01,
+    "expectancy": 1.65,
+    "payoff": 1.36,
+    "exposure": 49.2
+   },
+   "out_of_sample": {
+    "start": "2025-10-01",
+    "end": "2026-11-25",
+    "total_return": 147.6,
+    "cagr": 120.0,
+    "max_dd": 11.7,
+    "sharpe": 6.27,
+    "trades": 105,
+    "win_rate": 66.7,
+    "avg_trade": 8.81,
+    "median_trade": 6.0,
+    "avg_hold": 13.8,
+    "exits": {
+     "time": 88,
+     "stop_gap": 14,
+     "stop": 3
+    },
+    "avg_win": 17.45,
+    "avg_loss": -8.47,
+    "expectancy": 8.81,
+    "payoff": 2.06,
+    "exposure": 70.3
+   },
+   "full": {
+    "start": "2024-09-01",
+    "end": "2026-11-25",
+    "total_return": 195.9,
+    "cagr": 62.6,
+    "max_dd": 20.6,
+    "sharpe": 3.76,
+    "trades": 196,
+    "win_rate": 60.7,
+    "avg_trade": 5.78,
+    "median_trade": 2.77,
+    "avg_hold": 13.6,
+    "exits": {
+     "time": 150,
+     "stop_gap": 32,
+     "stop": 14
+    },
+    "avg_win": 15.59,
+    "avg_loss": -9.37,
+    "expectancy": 5.78,
+    "payoff": 1.66,
+    "exposure": 59.9
+   }
+  },
+  "Q5_npm_lt5": {
+   "in_sample": {
+    "start": "2024-09-01",
+    "end": "2025-09-30",
+    "total_return": 4.2,
+    "cagr": 3.9,
+    "max_dd": 18.9,
+    "sharpe": 0.37,
+    "trades": 91,
+    "win_rate": 46.2,
+    "avg_trade": 0.95,
+    "median_trade": -1.58,
+    "avg_hold": 12.7,
+    "exits": {
+     "time": 59,
+     "stop_gap": 21,
+     "stop": 11
+    },
+    "avg_win": 13.4,
+    "avg_loss": -9.72,
+    "expectancy": 0.95,
+    "payoff": 1.38,
+    "exposure": 48.9
+   },
+   "out_of_sample": {
+    "start": "2025-10-01",
+    "end": "2026-11-25",
+    "total_return": 156.3,
+    "cagr": 126.7,
+    "max_dd": 12.8,
+    "sharpe": 6.43,
+    "trades": 104,
+    "win_rate": 69.2,
+    "avg_trade": 9.29,
+    "median_trade": 5.77,
+    "avg_hold": 14.1,
+    "exits": {
+     "time": 90,
+     "stop_gap": 11,
+     "stop": 3
+    },
+    "avg_win": 16.84,
+    "avg_loss": -7.72,
+    "expectancy": 9.29,
+    "payoff": 2.18,
+    "exposure": 70.6
+   },
+   "full": {
+    "start": "2024-09-01",
+    "end": "2026-11-25",
+    "total_return": 179.2,
+    "cagr": 58.4,
+    "max_dd": 19.6,
+    "sharpe": 3.57,
+    "trades": 197,
+    "win_rate": 59.4,
+    "avg_trade": 5.48,
+    "median_trade": 2.74,
+    "avg_hold": 13.5,
+    "exits": {
+     "time": 150,
+     "stop_gap": 33,
+     "stop": 14
+    },
+    "avg_win": 15.5,
+    "avg_loss": -9.17,
+    "expectancy": 5.48,
+    "payoff": 1.69,
+    "exposure": 60.0
+   }
+  },
+  "Q6_np_yoy_lt-50": {
+   "in_sample": {
+    "start": "2024-09-01",
+    "end": "2025-09-30",
+    "total_return": 7.3,
+    "cagr": 6.8,
+    "max_dd": 19.2,
+    "sharpe": 0.59,
+    "trades": 90,
+    "win_rate": 47.8,
+    "avg_trade": 1.27,
+    "median_trade": -0.83,
+    "avg_hold": 12.8,
+    "exits": {
+     "time": 60,
+     "stop_gap": 19,
+     "stop": 11
+    },
+    "avg_win": 13.18,
+    "avg_loss": -9.62,
+    "expectancy": 1.27,
+    "payoff": 1.37,
+    "exposure": 49.1
+   },
+   "out_of_sample": {
+    "start": "2025-10-01",
+    "end": "2026-11-25",
+    "total_return": 209.6,
+    "cagr": 167.2,
+    "max_dd": 11.0,
+    "sharpe": 7.39,
+    "trades": 102,
+    "win_rate": 70.6,
+    "avg_trade": 11.17,
+    "median_trade": 7.97,
+    "avg_hold": 14.3,
+    "exits": {
+     "time": 91,
+     "stop_gap": 6,
+     "stop": 5
+    },
+    "avg_win": 18.83,
+    "avg_loss": -7.21,
+    "expectancy": 11.17,
+    "payoff": 2.61,
+    "exposure": 73.4
+   },
+   "full": {
+    "start": "2024-09-01",
+    "end": "2026-11-25",
+    "total_return": 234.2,
+    "cagr": 71.7,
+    "max_dd": 19.9,
+    "sharpe": 4.09,
+    "trades": 196,
+    "win_rate": 60.7,
+    "avg_trade": 6.38,
+    "median_trade": 3.09,
+    "avg_hold": 13.6,
+    "exits": {
+     "time": 153,
+     "stop_gap": 28,
+     "stop": 15
+    },
+    "avg_win": 16.28,
+    "avg_loss": -8.91,
+    "expectancy": 6.38,
+    "payoff": 1.83,
+    "exposure": 61.1
+   }
+  },
+  "Q7_sales_yoy_lt0": {
+   "in_sample": {
+    "start": "2024-09-01",
+    "end": "2025-09-30",
+    "total_return": 7.8,
+    "cagr": 7.2,
+    "max_dd": 18.9,
+    "sharpe": 0.62,
+    "trades": 90,
+    "win_rate": 47.8,
+    "avg_trade": 1.31,
+    "median_trade": -0.83,
+    "avg_hold": 12.9,
+    "exits": {
+     "time": 60,
+     "stop_gap": 18,
+     "stop": 12
+    },
+    "avg_win": 13.18,
+    "avg_loss": -9.55,
+    "expectancy": 1.31,
+    "payoff": 1.38,
+    "exposure": 49.1
+   },
+   "out_of_sample": {
+    "start": "2025-10-01",
+    "end": "2026-11-25",
+    "total_return": 155.0,
+    "cagr": 125.7,
+    "max_dd": 11.8,
+    "sharpe": 6.45,
+    "trades": 102,
+    "win_rate": 69.6,
+    "avg_trade": 9.44,
+    "median_trade": 5.77,
+    "avg_hold": 14.2,
+    "exits": {
+     "time": 89,
+     "stop_gap": 10,
+     "stop": 3
+    },
+    "avg_win": 16.89,
+    "avg_loss": -7.63,
+    "expectancy": 9.44,
+    "payoff": 2.21,
+    "exposure": 70.3
+   },
+   "full": {
+    "start": "2024-09-01",
+    "end": "2026-11-25",
+    "total_return": 199.3,
+    "cagr": 63.5,
+    "max_dd": 19.6,
+    "sharpe": 3.84,
+    "trades": 194,
+    "win_rate": 60.3,
+    "avg_trade": 5.92,
+    "median_trade": 2.77,
+    "avg_hold": 13.6,
+    "exits": {
+     "time": 151,
+     "stop_gap": 28,
+     "stop": 15
+    },
+    "avg_win": 15.69,
+    "avg_loss": -8.91,
+    "expectancy": 5.92,
+    "payoff": 1.76,
+    "exposure": 59.8
+   }
+  },
+  "Q8_capraise_reserve_120d": {
+   "in_sample": {
+    "start": "2024-09-01",
+    "end": "2025-09-30",
+    "total_return": 7.3,
+    "cagr": 6.8,
+    "max_dd": 17.9,
+    "sharpe": 0.61,
+    "trades": 86,
+    "win_rate": 46.5,
+    "avg_trade": 1.31,
+    "median_trade": -0.9,
+    "avg_hold": 13.3,
+    "exits": {
+     "time": 59,
+     "stop_gap": 19,
+     "stop": 8
+    },
+    "avg_win": 13.49,
+    "avg_loss": -9.29,
+    "expectancy": 1.31,
+    "payoff": 1.45,
+    "exposure": 48.7
+   },
+   "out_of_sample": {
+    "start": "2025-10-01",
+    "end": "2026-11-25",
+    "total_return": 157.6,
+    "cagr": 127.7,
+    "max_dd": 10.8,
+    "sharpe": 6.34,
+    "trades": 105,
+    "win_rate": 67.6,
+    "avg_trade": 8.85,
+    "median_trade": 6.0,
+    "avg_hold": 13.9,
+    "exits": {
+     "time": 88,
+     "stop_gap": 11,
+     "stop": 6
+    },
+    "avg_win": 16.9,
+    "avg_loss": -7.95,
+    "expectancy": 8.85,
+    "payoff": 2.13,
+    "exposure": 71.2
+   },
+   "full": {
+    "start": "2024-09-01",
+    "end": "2026-11-25",
+    "total_return": 206.7,
+    "cagr": 65.2,
+    "max_dd": 19.0,
+    "sharpe": 3.84,
+    "trades": 191,
+    "win_rate": 60.7,
+    "avg_trade": 5.97,
+    "median_trade": 2.77,
+    "avg_hold": 13.9,
+    "exits": {
+     "time": 151,
+     "stop_gap": 28,
+     "stop": 12
+    },
+    "avg_win": 15.39,
+    "avg_loss": -8.6,
+    "expectancy": 5.97,
+    "payoff": 1.79,
+    "exposure": 60.2
+   }
+  },
+  "Q9_guard_Q1+Q4+Q6": {
+   "in_sample": {
+    "start": "2024-09-01",
+    "end": "2025-09-30",
+    "total_return": 9.5,
+    "cagr": 8.7,
+    "max_dd": 20.8,
+    "sharpe": 0.73,
+    "trades": 89,
+    "win_rate": 49.4,
+    "avg_trade": 1.54,
+    "median_trade": -0.17,
+    "avg_hold": 13.0,
+    "exits": {
+     "time": 60,
+     "stop_gap": 19,
+     "stop": 10
+    },
+    "avg_win": 13.25,
+    "avg_loss": -9.9,
+    "expectancy": 1.54,
+    "payoff": 1.34,
+    "exposure": 48.8
+   },
+   "out_of_sample": {
+    "start": "2025-10-01",
+    "end": "2026-11-25",
+    "total_return": 210.0,
+    "cagr": 167.5,
+    "max_dd": 11.0,
+    "sharpe": 7.48,
+    "trades": 103,
+    "win_rate": 68.9,
+    "avg_trade": 11.0,
+    "median_trade": 7.21,
+    "avg_hold": 14.2,
+    "exits": {
+     "time": 91,
+     "stop_gap": 8,
+     "stop": 4
+    },
+    "avg_win": 19.15,
+    "avg_loss": -7.08,
+    "expectancy": 11.0,
+    "payoff": 2.7,
+    "exposure": 73.0
+   },
+   "full": {
+    "start": "2024-09-01",
+    "end": "2026-11-25",
+    "total_return": 236.0,
+    "cagr": 72.1,
+    "max_dd": 21.5,
+    "sharpe": 4.1,
+    "trades": 197,
+    "win_rate": 60.9,
+    "avg_trade": 6.34,
+    "median_trade": 2.83,
+    "avg_hold": 13.6,
+    "exits": {
+     "time": 154,
+     "stop_gap": 30,
+     "stop": 13
+    },
+    "avg_win": 16.14,
+    "avg_loss": -8.93,
+    "expectancy": 6.34,
+    "payoff": 1.81,
+    "exposure": 61.0
+   }
+  },
+  "Q10_Q9+Q7": {
+   "in_sample": {
+    "start": "2024-09-01",
+    "end": "2025-09-30",
+    "total_return": 9.5,
+    "cagr": 8.7,
+    "max_dd": 20.8,
+    "sharpe": 0.73,
+    "trades": 89,
+    "win_rate": 49.4,
+    "avg_trade": 1.54,
+    "median_trade": -0.17,
+    "avg_hold": 13.0,
+    "exits": {
+     "time": 60,
+     "stop_gap": 19,
+     "stop": 10
+    },
+    "avg_win": 13.25,
+    "avg_loss": -9.9,
+    "expectancy": 1.54,
+    "payoff": 1.34,
+    "exposure": 48.8
+   },
+   "out_of_sample": {
+    "start": "2025-10-01",
+    "end": "2026-11-25",
+    "total_return": 210.0,
+    "cagr": 167.5,
+    "max_dd": 11.0,
+    "sharpe": 7.48,
+    "trades": 103,
+    "win_rate": 68.9,
+    "avg_trade": 11.0,
+    "median_trade": 7.21,
+    "avg_hold": 14.2,
+    "exits": {
+     "time": 91,
+     "stop_gap": 8,
+     "stop": 4
+    },
+    "avg_win": 19.15,
+    "avg_loss": -7.08,
+    "expectancy": 11.0,
+    "payoff": 2.7,
+    "exposure": 73.0
+   },
+   "full": {
+    "start": "2024-09-01",
+    "end": "2026-11-25",
+    "total_return": 236.0,
+    "cagr": 72.1,
+    "max_dd": 21.5,
+    "sharpe": 4.1,
+    "trades": 197,
+    "win_rate": 60.9,
+    "avg_trade": 6.34,
+    "median_trade": 2.83,
+    "avg_hold": 13.6,
+    "exits": {
+     "time": 154,
+     "stop_gap": 30,
+     "stop": 13
+    },
+    "avg_win": 16.14,
+    "avg_loss": -8.93,
+    "expectancy": 6.34,
+    "payoff": 1.81,
+    "exposure": 61.0
+   }
+  }
+ },
+ "signal_coverage": {
+  "in_sample": {
+   "pe_c": 97.3,
+   "roe": 87.5,
+   "npm": 6.8,
+   "np_yoy": 14.1,
+   "sales_yoy": 0.0,
+   "capr_days": 57.0,
+   "n": 3653
+  },
+  "out_of_sample": {
+   "pe_c": 100.0,
+   "roe": 99.4,
+   "npm": 8.6,
+   "np_yoy": 95.6,
+   "sales_yoy": 0.0,
+   "capr_days": 76.1,
+   "n": 11987
+  }
+ },
+ "signal_coverage_codal_only": {
+  "in_sample": {
+   "pe_c": 7.6,
+   "roe": 7.1,
+   "np_yoy": 6.8,
+   "npm": 6.8,
+   "sales_yoy": 0.0
+  },
+  "out_of_sample": {
+   "pe_c": 8.6,
+   "roe": 8.6,
+   "np_yoy": 8.6,
+   "npm": 8.6,
+   "sales_yoy": 0.0
+  }
+ },
+ "signal_study": [
+  {
+   "period": "in_sample",
+   "rule": "Q1 pe_c>100|loss",
+   "group": "excluded",
+   "n": 121,
+   "mean": 1.91,
+   "median": 0.89,
+   "win": 52.9
+  },
+  {
+   "period": "in_sample",
+   "rule": "Q1 pe_c>100|loss",
+   "group": "kept_known",
+   "n": 2346,
+   "mean": 1.06,
+   "median": 0.05,
+   "win": 50.3
+  },
+  {
+   "period": "in_sample",
+   "rule": "Q1 pe_c>100|loss",
+   "group": "unknown",
+   "n": 85,
+   "mean": 4.31,
+   "median": 1.48,
+   "win": 54.1
+  },
+  {
+   "period": "in_sample",
+   "rule": "Q2 pe_c>50|loss",
+   "group": "excluded",
+   "n": 229,
+   "mean": 1.56,
+   "median": 0.09,
+   "win": 50.2
+  },
+  {
+   "period": "in_sample",
+   "rule": "Q2 pe_c>50|loss",
+   "group": "kept_known",
+   "n": 2238,
+   "mean": 1.05,
+   "median": 0.1,
+   "win": 50.4
+  },
+  {
+   "period": "in_sample",
+   "rule": "Q2 pe_c>50|loss",
+   "group": "unknown",
+   "n": 85,
+   "mean": 4.31,
+   "median": 1.48,
+   "win": 54.1
+  },
+  {
+   "period": "in_sample",
+   "rule": "Q3 roe<5%",
+   "group": "excluded",
+   "n": 57,
+   "mean": 1.28,
+   "median": 1.26,
+   "win": 50.9
+  },
+  {
+   "period": "in_sample",
+   "rule": "Q3 roe<5%",
+   "group": "kept_known",
+   "n": 2162,
+   "mean": 1.19,
+   "median": 0.22,
+   "win": 50.6
+  },
+  {
+   "period": "in_sample",
+   "rule": "Q3 roe<5%",
+   "group": "unknown",
+   "n": 333,
+   "mean": 1.33,
+   "median": 0.01,
+   "win": 50.2
+  },
+  {
+   "period": "in_sample",
+   "rule": "Q4 roe<3%",
+   "group": "excluded",
+   "n": 33,
+   "mean": 3.11,
+   "median": 1.75,
+   "win": 51.5
+  },
+  {
+   "period": "in_sample",
+   "rule": "Q4 roe<3%",
+   "group": "kept_known",
+   "n": 2186,
+   "mean": 1.16,
+   "median": 0.22,
+   "win": 50.5
+  },
+  {
+   "period": "in_sample",
+   "rule": "Q4 roe<3%",
+   "group": "unknown",
+   "n": 333,
+   "mean": 1.33,
+   "median": 0.01,
+   "win": 50.2
+  },
+  {
+   "period": "in_sample",
+   "rule": "Q5 npm<5%",
+   "group": "excluded",
+   "n": 27,
+   "mean": 1.26,
+   "median": -0.58,
+   "win": 48.1
+  },
+  {
+   "period": "in_sample",
+   "rule": "Q5 npm<5%",
+   "group": "kept_known",
+   "n": 154,
+   "mean": -1.32,
+   "median": -0.13,
+   "win": 49.4
+  },
+  {
+   "period": "in_sample",
+   "rule": "Q5 npm<5%",
+   "group": "unknown",
+   "n": 2371,
+   "mean": 1.37,
+   "median": 0.19,
+   "win": 50.6
+  },
+  {
+   "period": "in_sample",
+   "rule": "Q6 np_yoy<-50%",
+   "group": "excluded",
+   "n": 47,
+   "mean": -0.05,
+   "median": 1.2,
+   "win": 53.2
+  },
+  {
+   "period": "in_sample",
+   "rule": "Q6 np_yoy<-50%",
+   "group": "kept_known",
+   "n": 327,
+   "mean": -0.79,
+   "median": -0.65,
+   "win": 47.1
+  },
+  {
+   "period": "in_sample",
+   "rule": "Q6 np_yoy<-50%",
+   "group": "unknown",
+   "n": 2178,
+   "mean": 1.53,
+   "median": 0.29,
+   "win": 51.0
+  },
+  {
+   "period": "in_sample",
+   "rule": "Q7 sales_yoy<0",
+   "group": "unknown",
+   "n": 2552,
+   "mean": 1.21,
+   "median": 0.15,
+   "win": 50.5
+  },
+  {
+   "period": "in_sample",
+   "rule": "Q8 capraise<=120d",
+   "group": "excluded",
+   "n": 309,
+   "mean": 1.02,
+   "median": -0.05,
+   "win": 49.8
+  },
+  {
+   "period": "in_sample",
+   "rule": "Q8 capraise<=120d",
+   "group": "kept_known",
+   "n": 2243,
+   "mean": 1.23,
+   "median": 0.19,
+   "win": 50.6
+  },
+  {
+   "period": "out_of_sample",
+   "rule": "Q1 pe_c>100|loss",
+   "group": "excluded",
+   "n": 128,
+   "mean": 2.71,
+   "median": 3.2,
+   "win": 52.3
+  },
+  {
+   "period": "out_of_sample",
+   "rule": "Q1 pe_c>100|loss",
+   "group": "kept_known",
+   "n": 5953,
+   "mean": 5.56,
+   "median": 3.63,
+   "win": 58.6
+  },
+  {
+   "period": "out_of_sample",
+   "rule": "Q2 pe_c>50|loss",
+   "group": "excluded",
+   "n": 247,
+   "mean": 4.41,
+   "median": 2.45,
+   "win": 54.3
+  },
+  {
+   "period": "out_of_sample",
+   "rule": "Q2 pe_c>50|loss",
+   "group": "kept_known",
+   "n": 5834,
+   "mean": 5.55,
+   "median": 3.69,
+   "win": 58.6
+  },
+  {
+   "period": "out_of_sample",
+   "rule": "Q3 roe<5%",
+   "group": "excluded",
+   "n": 284,
+   "mean": 5.94,
+   "median": 4.04,
+   "win": 57.7
+  },
+  {
+   "period": "out_of_sample",
+   "rule": "Q3 roe<5%",
+   "group": "kept_known",
+   "n": 5775,
+   "mean": 5.51,
+   "median": 3.62,
+   "win": 58.5
+  },
+  {
+   "period": "out_of_sample",
+   "rule": "Q3 roe<5%",
+   "group": "unknown",
+   "n": 22,
+   "mean": -1.27,
+   "median": 1.39,
+   "win": 54.5
+  },
+  {
+   "period": "out_of_sample",
+   "rule": "Q4 roe<3%",
+   "group": "excluded",
+   "n": 186,
+   "mean": 8.31,
+   "median": 7.65,
+   "win": 62.4
+  },
+  {
+   "period": "out_of_sample",
+   "rule": "Q4 roe<3%",
+   "group": "kept_known",
+   "n": 5873,
+   "mean": 5.44,
+   "median": 3.57,
+   "win": 58.4
+  },
+  {
+   "period": "out_of_sample",
+   "rule": "Q4 roe<3%",
+   "group": "unknown",
+   "n": 22,
+   "mean": -1.27,
+   "median": 1.39,
+   "win": 54.5
+  },
+  {
+   "period": "out_of_sample",
+   "rule": "Q5 npm<5%",
+   "group": "excluded",
+   "n": 51,
+   "mean": 13.55,
+   "median": 12.74,
+   "win": 78.4
+  },
+  {
+   "period": "out_of_sample",
+   "rule": "Q5 npm<5%",
+   "group": "kept_known",
+   "n": 393,
+   "mean": 8.98,
+   "median": 7.58,
+   "win": 60.6
+  },
+  {
+   "period": "out_of_sample",
+   "rule": "Q5 npm<5%",
+   "group": "unknown",
+   "n": 5637,
+   "mean": 5.19,
+   "median": 3.33,
+   "win": 58.1
+  },
+  {
+   "period": "out_of_sample",
+   "rule": "Q6 np_yoy<-50%",
+   "group": "excluded",
+   "n": 546,
+   "mean": 6.09,
+   "median": 3.2,
+   "win": 57.5
+  },
+  {
+   "period": "out_of_sample",
+   "rule": "Q6 np_yoy<-50%",
+   "group": "kept_known",
+   "n": 5297,
+   "mean": 5.48,
+   "median": 3.79,
+   "win": 58.7
+  },
+  {
+   "period": "out_of_sample",
+   "rule": "Q6 np_yoy<-50%",
+   "group": "unknown",
+   "n": 238,
+   "mean": 4.76,
+   "median": 1.34,
+   "win": 55.5
+  },
+  {
+   "period": "out_of_sample",
+   "rule": "Q7 sales_yoy<0",
+   "group": "unknown",
+   "n": 6081,
+   "mean": 5.5,
+   "median": 3.62,
+   "win": 58.5
+  },
+  {
+   "period": "out_of_sample",
+   "rule": "Q8 capraise<=120d",
+   "group": "excluded",
+   "n": 649,
+   "mean": 9.31,
+   "median": 8.01,
+   "win": 67.5
+  },
+  {
+   "period": "out_of_sample",
+   "rule": "Q8 capraise<=120d",
+   "group": "kept_known",
+   "n": 5432,
+   "mean": 5.05,
+   "median": 3.13,
+   "win": 57.4
+  }
+ ]
+}
