@@ -60,5 +60,24 @@
     "chromedriver": "C:\\TSE_Strategy\\chromedriver.exe",
     "order_page": 2
   },
-  "version": "5.0"
+  "version": "5.0",
+  "strategy": {
+    "version": "v1",
+    "_comment": "v1 = legacy rules (default). v2 = strategy_v2.py rules, see STRATEGY_HARK.md and reports/hark_backtest. Switch only after a dry-run period.",
+    "v2": {
+      "entry": "queue",
+      "first_lock_only": false,
+      "min_value_rial": 20000000000.0,
+      "max_picks": 6,
+      "regime_ma": 50,
+      "avoid_floor_lock_days": 10,
+      "max_positions": 10,
+      "tp": null,
+      "sl_limits": 3.0,
+      "sl_fixed": null,
+      "trail": null,
+      "max_hold": 15,
+      "slippage": 0.0025
+    }
+  }
 }

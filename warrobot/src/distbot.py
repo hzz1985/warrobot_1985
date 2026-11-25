@@ -110,6 +110,12 @@ def scan_nightly() -> pd.DataFrame:
                          "dist_pct": round(dist, 3), "volume": vol,
                          "turnover": vol * close, "session": market_last})
     out = pd.DataFrame(rows).sort_values("turnover", ascending=False) if rows else pd.DataFrame()
+    try:  # strategy switch: v2 entry filters (regime, liquidity, floor-lock history); v1 = no-op
+        sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+        import strategy_v2 as _s2
+        out = _s2.filter_scan(out, Path(__file__).resolve().parent.parent / "config.json", DAILY)
+    except Exception as exc:
+        log(f"strategy_v2 filter skipped: {str(exc)[:80]}")
     prof = PROJ / "state" / "symbol_profiles.csv"
     if len(out) and prof.exists():
         try:

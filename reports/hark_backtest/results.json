@@ -1,0 +1,1363 @@
+{
+ "data": {
+  "symbols": 1080,
+  "sessions": 1015,
+  "first": "2022-06-01",
+  "last": "2026-11-25",
+  "fees": {
+   "buy": 0.003712,
+   "sell": 0.0088
+  }
+ },
+ "periods": {
+  "full": [
+   "2024-09-01",
+   "2026-11-25"
+  ],
+  "in_sample": [
+   "2024-09-01",
+   "2025-09-30"
+  ],
+  "out_of_sample": [
+   "2025-10-01",
+   "2026-11-25"
+  ],
+  "pre_5pct_limits": [
+   "2022-07-01",
+   "2024-08-31"
+  ]
+ },
+ "results": {
+  "V1_naive_repo_method": {
+   "config": {
+    "entry": "queue",
+    "first_lock_only": false,
+    "min_value_rial": 300000000.0,
+    "max_picks": 6,
+    "regime_ma": 0,
+    "avoid_floor_lock_days": 0,
+    "max_positions": 3,
+    "tp": 0.25,
+    "sl_limits": 1.0,
+    "sl_fixed": 0.03,
+    "trail": null,
+    "max_hold": 15,
+    "slippage": 0.0025
+   },
+   "opt_naive": true,
+   "full": {
+    "start": "2024-09-01",
+    "end": "2026-11-25",
+    "total_return": 341.5,
+    "cagr": 94.5,
+    "max_dd": 25.2,
+    "sharpe": 3.0,
+    "trades": 138,
+    "win_rate": 39.9,
+    "avg_trade": 3.37,
+    "median_trade": -4.94,
+    "avg_hold": 8.4,
+    "exits": {
+     "stop": 76,
+     "time": 37,
+     "tp": 25
+    }
+   },
+   "in_sample": {
+    "start": "2024-09-01",
+    "end": "2025-09-30",
+    "total_return": 21.3,
+    "cagr": 19.6,
+    "max_dd": 25.2,
+    "sharpe": 0.84,
+    "trades": 75,
+    "win_rate": 28.0,
+    "avg_trade": 0.52,
+    "median_trade": -4.94,
+    "avg_hold": 7.8,
+    "exits": {
+     "stop": 49,
+     "time": 19,
+     "tp": 7
+    }
+   },
+   "out_of_sample": {
+    "start": "2025-10-01",
+    "end": "2026-11-25",
+    "total_return": 251.8,
+    "cagr": 198.6,
+    "max_dd": 18.5,
+    "sharpe": 5.28,
+    "trades": 62,
+    "win_rate": 48.4,
+    "avg_trade": 6.24,
+    "median_trade": -0.71,
+    "avg_hold": 9.0,
+    "exits": {
+     "stop": 30,
+     "tp": 17,
+     "time": 15
+    }
+   },
+   "pre_5pct_limits": {
+    "start": "2022-07-02",
+    "end": "2024-08-31",
+    "total_return": 113.7,
+    "cagr": 42.0,
+    "max_dd": 41.6,
+    "sharpe": 1.23,
+    "trades": 216,
+    "win_rate": 28.7,
+    "avg_trade": 1.29,
+    "median_trade": -4.94,
+    "avg_hold": 5.2,
+    "exits": {
+     "stop": 151,
+     "tp": 37,
+     "time": 28
+    }
+   }
+  },
+  "V1_current_realistic": {
+   "config": {
+    "entry": "queue",
+    "first_lock_only": false,
+    "min_value_rial": 300000000.0,
+    "max_picks": 6,
+    "regime_ma": 0,
+    "avoid_floor_lock_days": 0,
+    "max_positions": 3,
+    "tp": 0.25,
+    "sl_limits": 1.0,
+    "sl_fixed": 0.03,
+    "trail": null,
+    "max_hold": 15,
+    "slippage": 0.0025
+   },
+   "full": {
+    "start": "2024-09-01",
+    "end": "2026-11-25",
+    "total_return": -23.0,
+    "cagr": -11.1,
+    "max_dd": 42.9,
+    "sharpe": -0.39,
+    "trades": 174,
+    "win_rate": 27.6,
+    "avg_trade": -0.32,
+    "median_trade": -4.45,
+    "avg_hold": 6.4,
+    "exits": {
+     "stop_gap": 78,
+     "stop": 46,
+     "time": 34,
+     "tp_gap": 14,
+     "tp": 2
+    },
+    "random_pick_mc": {
+     "runs": 30,
+     "cagr_p5": -15.9,
+     "cagr_median": 3.7,
+     "cagr_p95": 25.5,
+     "maxdd_median": 48.2,
+     "share_positive": 0.6
+    },
+    "event_study": {
+     "signals": 55491,
+     "fills": 37575,
+     "fill_rate": 0.677,
+     "trades": 36074,
+     "mean_net": 0.5,
+     "median_net": -4.45,
+     "win_rate": 28.7,
+     "t_stat_monthly": -0.55,
+     "months_positive": "11/25"
+    },
+    "event_control_random_stocks": {
+     "signals": 19240,
+     "fills": 18815,
+     "fill_rate": 0.978,
+     "trades": 18464,
+     "mean_net": 0.49,
+     "median_net": -4.45,
+     "win_rate": 29.8,
+     "t_stat_monthly": 0.78,
+     "months_positive": "14/25"
+    }
+   },
+   "in_sample": {
+    "start": "2024-09-01",
+    "end": "2025-09-30",
+    "total_return": -37.6,
+    "cagr": -35.4,
+    "max_dd": 42.2,
+    "sharpe": -1.7,
+    "trades": 89,
+    "win_rate": 23.6,
+    "avg_trade": -1.84,
+    "median_trade": -4.45,
+    "avg_hold": 6.6,
+    "exits": {
+     "stop_gap": 41,
+     "stop": 25,
+     "time": 20,
+     "tp_gap": 2,
+     "tp": 1
+    },
+    "random_pick_mc": {
+     "runs": 30,
+     "cagr_p5": -45.3,
+     "cagr_median": -28.6,
+     "cagr_p95": -3.5,
+     "maxdd_median": 43.5,
+     "share_positive": 0.03
+    },
+    "event_study": {
+     "signals": 16187,
+     "fills": 12947,
+     "fill_rate": 0.8,
+     "trades": 12442,
+     "mean_net": -1.09,
+     "median_net": -4.45,
+     "win_rate": 23.7,
+     "t_stat_monthly": -2.55,
+     "months_positive": "3/13"
+    },
+    "event_control_random_stocks": {
+     "signals": 10040,
+     "fills": 9902,
+     "fill_rate": 0.986,
+     "trades": 9596,
+     "mean_net": -1.12,
+     "median_net": -4.45,
+     "win_rate": 24.0,
+     "t_stat_monthly": -1.41,
+     "months_positive": "3/13"
+    }
+   },
+   "out_of_sample": {
+    "start": "2025-10-01",
+    "end": "2026-11-25",
+    "total_return": 29.8,
+    "cagr": 25.5,
+    "max_dd": 26.9,
+    "sharpe": 1.17,
+    "trades": 78,
+    "win_rate": 33.3,
+    "avg_trade": 1.25,
+    "median_trade": -4.45,
+    "avg_hold": 6.5,
+    "exits": {
+     "stop_gap": 35,
+     "stop": 17,
+     "time": 14,
+     "tp_gap": 10,
+     "tp": 2
+    },
+    "random_pick_mc": {
+     "runs": 30,
+     "cagr_p5": -15.0,
+     "cagr_median": 52.6,
+     "cagr_p95": 129.6,
+     "maxdd_median": 25.8,
+     "share_positive": 0.87
+    },
+    "event_study": {
+     "signals": 39266,
+     "fills": 24594,
+     "fill_rate": 0.626,
+     "trades": 23094,
+     "mean_net": 1.25,
+     "median_net": -4.45,
+     "win_rate": 30.8,
+     "t_stat_monthly": 0.99,
+     "months_positive": "8/12"
+    },
+    "event_control_random_stocks": {
+     "signals": 9160,
+     "fills": 8848,
+     "fill_rate": 0.966,
+     "trades": 8513,
+     "mean_net": 2.09,
+     "median_net": -4.45,
+     "win_rate": 34.8,
+     "t_stat_monthly": 1.95,
+     "months_positive": "10/12"
+    }
+   },
+   "pre_5pct_limits": {
+    "start": "2022-07-02",
+    "end": "2024-08-31",
+    "total_return": -93.7,
+    "cagr": -72.2,
+    "max_dd": 94.3,
+    "sharpe": -3.87,
+    "trades": 288,
+    "win_rate": 12.2,
+    "avg_trade": -2.87,
+    "median_trade": -4.45,
+    "avg_hold": 3.4,
+    "exits": {
+     "stop": 147,
+     "stop_gap": 104,
+     "time": 16,
+     "tp_gap": 13,
+     "tp": 8
+    },
+    "random_pick_mc": {
+     "runs": 30,
+     "cagr_p5": -72.0,
+     "cagr_median": -63.5,
+     "cagr_p95": -56.6,
+     "maxdd_median": 89.5,
+     "share_positive": 0.0
+    },
+    "event_study": {
+     "signals": 4230,
+     "fills": 3651,
+     "fill_rate": 0.863,
+     "trades": 3395,
+     "mean_net": -1.9,
+     "median_net": -4.45,
+     "win_rate": 16.7,
+     "t_stat_monthly": -4.89,
+     "months_positive": "4/26"
+    },
+    "event_control_random_stocks": {
+     "signals": 20520,
+     "fills": 20158,
+     "fill_rate": 0.982,
+     "trades": 19688,
+     "mean_net": -0.98,
+     "median_net": -4.45,
+     "win_rate": 21.6,
+     "t_stat_monthly": -1.35,
+     "months_positive": "7/26"
+    }
+   }
+  },
+  "V1_fill30pct_when_locked": {
+   "config": {
+    "entry": "queue",
+    "first_lock_only": false,
+    "min_value_rial": 300000000.0,
+    "max_picks": 6,
+    "regime_ma": 0,
+    "avoid_floor_lock_days": 0,
+    "max_positions": 3,
+    "tp": 0.25,
+    "sl_limits": 1.0,
+    "sl_fixed": 0.03,
+    "trail": null,
+    "max_hold": 15,
+    "slippage": 0.0025
+   },
+   "opt_fill_locked_prob": 0.3,
+   "full": {
+    "start": "2024-09-01",
+    "end": "2026-11-25",
+    "total_return": 24.7,
+    "cagr": 10.4,
+    "max_dd": 47.4,
+    "sharpe": 0.57,
+    "trades": 171,
+    "win_rate": 30.4,
+    "avg_trade": 0.64,
+    "median_trade": -4.45,
+    "avg_hold": 6.7,
+    "exits": {
+     "stop_gap": 65,
+     "stop": 53,
+     "time": 34,
+     "tp_gap": 16,
+     "tp": 3
+    }
+   },
+   "in_sample": {
+    "start": "2024-09-01",
+    "end": "2025-09-30",
+    "total_return": -43.1,
+    "cagr": -40.7,
+    "max_dd": 47.4,
+    "sharpe": -2.21,
+    "trades": 97,
+    "win_rate": 21.6,
+    "avg_trade": -1.92,
+    "median_trade": -4.45,
+    "avg_hold": 5.9,
+    "exits": {
+     "stop_gap": 40,
+     "stop": 36,
+     "time": 17,
+     "tp": 2,
+     "tp_gap": 2
+    }
+   },
+   "out_of_sample": {
+    "start": "2025-10-01",
+    "end": "2026-11-25",
+    "total_return": 28.3,
+    "cagr": 24.2,
+    "max_dd": 31.4,
+    "sharpe": 1.13,
+    "trades": 78,
+    "win_rate": 34.6,
+    "avg_trade": 0.99,
+    "median_trade": -4.45,
+    "avg_hold": 6.7,
+    "exits": {
+     "stop_gap": 33,
+     "stop": 18,
+     "time": 18,
+     "tp_gap": 8,
+     "tp": 1
+    }
+   },
+   "pre_5pct_limits": {
+    "start": "2022-07-02",
+    "end": "2024-08-31",
+    "total_return": -93.5,
+    "cagr": -71.7,
+    "max_dd": 94.0,
+    "sharpe": -3.81,
+    "trades": 287,
+    "win_rate": 12.2,
+    "avg_trade": -2.84,
+    "median_trade": -4.45,
+    "avg_hold": 3.5,
+    "exits": {
+     "stop": 147,
+     "stop_gap": 103,
+     "time": 16,
+     "tp_gap": 13,
+     "tp": 8
+    }
+   }
+  },
+  "V2a_open_unlocked": {
+   "config": {
+    "entry": "open_unlocked",
+    "first_lock_only": false,
+    "min_value_rial": 20000000000.0,
+    "max_picks": 6,
+    "regime_ma": 50,
+    "avoid_floor_lock_days": 10,
+    "max_positions": 10,
+    "tp": null,
+    "sl_limits": 3.0,
+    "sl_fixed": null,
+    "trail": null,
+    "max_hold": 15,
+    "slippage": 0.0025
+   },
+   "full": {
+    "start": "2024-09-01",
+    "end": "2026-11-25",
+    "total_return": 45.2,
+    "cagr": 18.2,
+    "max_dd": 25.8,
+    "sharpe": 1.18,
+    "trades": 228,
+    "win_rate": 50.4,
+    "avg_trade": 1.68,
+    "median_trade": 0.22,
+    "avg_hold": 12.6,
+    "exits": {
+     "time": 149,
+     "stop_gap": 58,
+     "stop": 21
+    },
+    "random_pick_mc": {
+     "runs": 30,
+     "cagr_p5": 26.1,
+     "cagr_median": 38.9,
+     "cagr_p95": 57.8,
+     "maxdd_median": 22.0,
+     "share_positive": 1.0
+    },
+    "event_study": {
+     "signals": 15642,
+     "fills": 5587,
+     "fill_rate": 0.357,
+     "trades": 5174,
+     "mean_net": 4.92,
+     "median_net": 2.91,
+     "win_rate": 57.9,
+     "t_stat_monthly": 1.4,
+     "months_positive": "14/21"
+    },
+    "event_control_random_stocks": {
+     "signals": 3963,
+     "fills": 3886,
+     "fill_rate": 0.981,
+     "trades": 3742,
+     "mean_net": 3.73,
+     "median_net": 1.64,
+     "win_rate": 54.4,
+     "t_stat_monthly": 1.84,
+     "months_positive": "14/21"
+    }
+   },
+   "in_sample": {
+    "start": "2024-09-01",
+    "end": "2025-09-30",
+    "total_return": -18.7,
+    "cagr": -17.5,
+    "max_dd": 24.7,
+    "sharpe": -1.27,
+    "trades": 96,
+    "win_rate": 41.7,
+    "avg_trade": -1.68,
+    "median_trade": -2.0,
+    "avg_hold": 12.5,
+    "exits": {
+     "time": 59,
+     "stop_gap": 30,
+     "stop": 7
+    },
+    "random_pick_mc": {
+     "runs": 30,
+     "cagr_p5": -10.6,
+     "cagr_median": -4.2,
+     "cagr_p95": 6.3,
+     "maxdd_median": 21.0,
+     "share_positive": 0.23
+    },
+    "event_study": {
+     "signals": 3653,
+     "fills": 1661,
+     "fill_rate": 0.455,
+     "trades": 1638,
+     "mean_net": 1.06,
+     "median_net": -0.24,
+     "win_rate": 49.5,
+     "t_stat_monthly": -1.12,
+     "months_positive": "3/9"
+    },
+    "event_control_random_stocks": {
+     "signals": 1670,
+     "fills": 1646,
+     "fill_rate": 0.986,
+     "trades": 1639,
+     "mean_net": -0.16,
+     "median_net": -2.23,
+     "win_rate": 42.0,
+     "t_stat_monthly": -0.63,
+     "months_positive": "3/9"
+    }
+   },
+   "out_of_sample": {
+    "start": "2025-10-01",
+    "end": "2026-11-25",
+    "total_return": 75.5,
+    "cagr": 63.1,
+    "max_dd": 15.8,
+    "sharpe": 3.22,
+    "trades": 127,
+    "win_rate": 57.5,
+    "avg_trade": 4.43,
+    "median_trade": 4.11,
+    "avg_hold": 12.5,
+    "exits": {
+     "time": 87,
+     "stop_gap": 28,
+     "stop": 12
+    },
+    "random_pick_mc": {
+     "runs": 30,
+     "cagr_p5": 67.3,
+     "cagr_median": 96.7,
+     "cagr_p95": 130.9,
+     "maxdd_median": 10.4,
+     "share_positive": 1.0
+    },
+    "event_study": {
+     "signals": 11987,
+     "fills": 3925,
+     "fill_rate": 0.327,
+     "trades": 3512,
+     "mean_net": 6.76,
+     "median_net": 4.88,
+     "win_rate": 61.8,
+     "t_stat_monthly": 3.08,
+     "months_positive": "10/11"
+    },
+    "event_control_random_stocks": {
+     "signals": 2417,
+     "fills": 2362,
+     "fill_rate": 0.977,
+     "trades": 2200,
+     "mean_net": 7.29,
+     "median_net": 5.12,
+     "win_rate": 63.3,
+     "t_stat_monthly": 3.55,
+     "months_positive": "10/11"
+    }
+   },
+   "pre_5pct_limits": {
+    "start": "2022-07-02",
+    "end": "2024-08-31",
+    "total_return": -22.5,
+    "cagr": -11.1,
+    "max_dd": 52.9,
+    "sharpe": -0.57,
+    "trades": 170,
+    "win_rate": 36.5,
+    "avg_trade": -0.75,
+    "median_trade": -5.83,
+    "avg_hold": 14.0,
+    "exits": {
+     "time": 142,
+     "stop": 17,
+     "stop_gap": 11
+    },
+    "random_pick_mc": {
+     "runs": 30,
+     "cagr_p5": -18.3,
+     "cagr_median": -12.2,
+     "cagr_p95": -4.4,
+     "maxdd_median": 52.4,
+     "share_positive": 0.0
+    },
+    "event_study": {
+     "signals": 1262,
+     "fills": 907,
+     "fill_rate": 0.719,
+     "trades": 906,
+     "mean_net": 2.54,
+     "median_net": -0.87,
+     "win_rate": 47.6,
+     "t_stat_monthly": -1.26,
+     "months_positive": "8/20"
+    },
+    "event_control_random_stocks": {
+     "signals": 8858,
+     "fills": 8703,
+     "fill_rate": 0.983,
+     "trades": 8697,
+     "mean_net": 1.39,
+     "median_net": -1.57,
+     "win_rate": 45.0,
+     "t_stat_monthly": -0.68,
+     "months_positive": "6/20"
+    }
+   }
+  },
+  "V2b_stop2L_trail10_h10": {
+   "config": {
+    "entry": "queue",
+    "first_lock_only": false,
+    "min_value_rial": 20000000000.0,
+    "max_picks": 6,
+    "regime_ma": 50,
+    "avoid_floor_lock_days": 10,
+    "max_positions": 10,
+    "tp": null,
+    "sl_limits": 2.0,
+    "sl_fixed": null,
+    "trail": 0.1,
+    "max_hold": 10,
+    "slippage": 0.0025
+   },
+   "full": {
+    "start": "2024-09-01",
+    "end": "2026-11-25",
+    "total_return": 6.6,
+    "cagr": 2.9,
+    "max_dd": 39.7,
+    "sharpe": 0.28,
+    "trades": 342,
+    "win_rate": 41.8,
+    "avg_trade": 0.27,
+    "median_trade": -4.22,
+    "avg_hold": 7.7,
+    "exits": {
+     "time": 168,
+     "stop_gap": 122,
+     "stop": 52
+    },
+    "random_pick_mc": {
+     "runs": 30,
+     "cagr_p5": 8.7,
+     "cagr_median": 19.1,
+     "cagr_p95": 34.5,
+     "maxdd_median": 30.4,
+     "share_positive": 1.0
+    },
+    "event_study": {
+     "signals": 15642,
+     "fills": 9866,
+     "fill_rate": 0.631,
+     "trades": 9308,
+     "mean_net": 2.12,
+     "median_net": -0.07,
+     "win_rate": 49.8,
+     "t_stat_monthly": 0.4,
+     "months_positive": "12/21"
+    },
+    "event_control_random_stocks": {
+     "signals": 3963,
+     "fills": 3886,
+     "fill_rate": 0.981,
+     "trades": 3776,
+     "mean_net": 1.89,
+     "median_net": -0.19,
+     "win_rate": 49.5,
+     "t_stat_monthly": 0.92,
+     "months_positive": "14/21"
+    }
+   },
+   "in_sample": {
+    "start": "2024-09-01",
+    "end": "2025-09-30",
+    "total_return": -30.2,
+    "cagr": -28.4,
+    "max_dd": 38.5,
+    "sharpe": -2.29,
+    "trades": 142,
+    "win_rate": 32.4,
+    "avg_trade": -1.98,
+    "median_trade": -7.01,
+    "avg_hold": 7.4,
+    "exits": {
+     "time": 63,
+     "stop_gap": 49,
+     "stop": 30
+    },
+    "random_pick_mc": {
+     "runs": 30,
+     "cagr_p5": -27.6,
+     "cagr_median": -18.5,
+     "cagr_p95": -7.5,
+     "maxdd_median": 29.4,
+     "share_positive": 0.0
+    },
+    "event_study": {
+     "signals": 3653,
+     "fills": 2773,
+     "fill_rate": 0.759,
+     "trades": 2741,
+     "mean_net": -0.21,
+     "median_net": -1.85,
+     "win_rate": 43.3,
+     "t_stat_monthly": -1.77,
+     "months_positive": "2/9"
+    },
+    "event_control_random_stocks": {
+     "signals": 1670,
+     "fills": 1646,
+     "fill_rate": 0.986,
+     "trades": 1639,
+     "mean_net": -0.77,
+     "median_net": -2.49,
+     "win_rate": 39.0,
+     "t_stat_monthly": -1.17,
+     "months_positive": "3/9"
+    }
+   },
+   "out_of_sample": {
+    "start": "2025-10-01",
+    "end": "2026-11-25",
+    "total_return": 49.0,
+    "cagr": 41.5,
+    "max_dd": 16.9,
+    "sharpe": 2.49,
+    "trades": 196,
+    "win_rate": 49.5,
+    "avg_trade": 2.05,
+    "median_trade": -0.38,
+    "avg_hold": 7.7,
+    "exits": {
+     "time": 103,
+     "stop_gap": 73,
+     "stop": 20
+    },
+    "random_pick_mc": {
+     "runs": 30,
+     "cagr_p5": 36.1,
+     "cagr_median": 68.3,
+     "cagr_p95": 95.6,
+     "maxdd_median": 12.6,
+     "share_positive": 1.0
+    },
+    "event_study": {
+     "signals": 11987,
+     "fills": 7091,
+     "fill_rate": 0.592,
+     "trades": 6533,
+     "mean_net": 3.12,
+     "median_net": 1.38,
+     "win_rate": 52.5,
+     "t_stat_monthly": 2.14,
+     "months_positive": "9/11"
+    },
+    "event_control_random_stocks": {
+     "signals": 2417,
+     "fills": 2362,
+     "fill_rate": 0.977,
+     "trades": 2240,
+     "mean_net": 4.27,
+     "median_net": 2.74,
+     "win_rate": 57.4,
+     "t_stat_monthly": 2.85,
+     "months_positive": "10/11"
+    }
+   },
+   "pre_5pct_limits": {
+    "start": "2022-07-02",
+    "end": "2024-08-31",
+    "total_return": -33.9,
+    "cagr": -17.4,
+    "max_dd": 41.3,
+    "sharpe": -1.01,
+    "trades": 282,
+    "win_rate": 36.5,
+    "avg_trade": -1.26,
+    "median_trade": -4.61,
+    "avg_hold": 7.3,
+    "exits": {
+     "time": 125,
+     "stop": 106,
+     "stop_gap": 51
+    },
+    "random_pick_mc": {
+     "runs": 30,
+     "cagr_p5": -20.0,
+     "cagr_median": -14.5,
+     "cagr_p95": -9.6,
+     "maxdd_median": 45.6,
+     "share_positive": 0.0
+    },
+    "event_study": {
+     "signals": 1262,
+     "fills": 1150,
+     "fill_rate": 0.911,
+     "trades": 1148,
+     "mean_net": 0.69,
+     "median_net": -3.93,
+     "win_rate": 40.3,
+     "t_stat_monthly": -1.95,
+     "months_positive": "5/20"
+    },
+    "event_control_random_stocks": {
+     "signals": 8858,
+     "fills": 8703,
+     "fill_rate": 0.983,
+     "trades": 8699,
+     "mean_net": 0.15,
+     "median_net": -2.55,
+     "win_rate": 40.3,
+     "t_stat_monthly": -1.34,
+     "months_positive": "6/20"
+    }
+   }
+  },
+  "V2_recommended": {
+   "config": {
+    "entry": "queue",
+    "first_lock_only": false,
+    "min_value_rial": 20000000000.0,
+    "max_picks": 6,
+    "regime_ma": 50,
+    "avoid_floor_lock_days": 10,
+    "max_positions": 10,
+    "tp": null,
+    "sl_limits": 3.0,
+    "sl_fixed": null,
+    "trail": null,
+    "max_hold": 15,
+    "slippage": 0.0025
+   },
+   "full": {
+    "start": "2024-09-01",
+    "end": "2026-11-25",
+    "total_return": 47.5,
+    "cagr": 19.0,
+    "max_dd": 29.3,
+    "sharpe": 1.19,
+    "trades": 237,
+    "win_rate": 51.1,
+    "avg_trade": 1.69,
+    "median_trade": 0.72,
+    "avg_hold": 12.7,
+    "exits": {
+     "time": 159,
+     "stop_gap": 49,
+     "stop": 29
+    },
+    "random_pick_mc": {
+     "runs": 30,
+     "cagr_p5": 21.4,
+     "cagr_median": 37.5,
+     "cagr_p95": 49.2,
+     "maxdd_median": 23.8,
+     "share_positive": 1.0
+    },
+    "event_study": {
+     "signals": 15642,
+     "fills": 9866,
+     "fill_rate": 0.631,
+     "trades": 9093,
+     "mean_net": 4.17,
+     "median_net": 2.34,
+     "win_rate": 55.9,
+     "t_stat_monthly": 1.1,
+     "months_positive": "13/21"
+    },
+    "event_control_random_stocks": {
+     "signals": 3963,
+     "fills": 3886,
+     "fill_rate": 0.981,
+     "trades": 3742,
+     "mean_net": 3.73,
+     "median_net": 1.64,
+     "win_rate": 54.4,
+     "t_stat_monthly": 1.84,
+     "months_positive": "14/21"
+    }
+   },
+   "in_sample": {
+    "start": "2024-09-01",
+    "end": "2025-09-30",
+    "total_return": -17.0,
+    "cagr": -15.9,
+    "max_dd": 28.1,
+    "sharpe": -1.07,
+    "trades": 103,
+    "win_rate": 42.7,
+    "avg_trade": -1.27,
+    "median_trade": -2.41,
+    "avg_hold": 12.4,
+    "exits": {
+     "time": 64,
+     "stop_gap": 25,
+     "stop": 14
+    },
+    "random_pick_mc": {
+     "runs": 30,
+     "cagr_p5": -19.3,
+     "cagr_median": -8.6,
+     "cagr_p95": 1.6,
+     "maxdd_median": 22.9,
+     "share_positive": 0.07
+    },
+    "event_study": {
+     "signals": 3653,
+     "fills": 2773,
+     "fill_rate": 0.759,
+     "trades": 2741,
+     "mean_net": 1.04,
+     "median_net": -0.07,
+     "win_rate": 49.7,
+     "t_stat_monthly": -1.11,
+     "months_positive": "3/9"
+    },
+    "event_control_random_stocks": {
+     "signals": 1670,
+     "fills": 1646,
+     "fill_rate": 0.986,
+     "trades": 1639,
+     "mean_net": -0.16,
+     "median_net": -2.23,
+     "win_rate": 42.0,
+     "t_stat_monthly": -0.63,
+     "months_positive": "3/9"
+    }
+   },
+   "out_of_sample": {
+    "start": "2025-10-01",
+    "end": "2026-11-25",
+    "total_return": 66.9,
+    "cagr": 56.1,
+    "max_dd": 15.3,
+    "sharpe": 2.96,
+    "trades": 134,
+    "win_rate": 56.7,
+    "avg_trade": 3.68,
+    "median_trade": 2.54,
+    "avg_hold": 12.6,
+    "exits": {
+     "time": 93,
+     "stop_gap": 22,
+     "stop": 19
+    },
+    "random_pick_mc": {
+     "runs": 30,
+     "cagr_p5": 45.1,
+     "cagr_median": 93.7,
+     "cagr_p95": 122.3,
+     "maxdd_median": 12.4,
+     "share_positive": 1.0
+    },
+    "event_study": {
+     "signals": 11987,
+     "fills": 7091,
+     "fill_rate": 0.592,
+     "trades": 6318,
+     "mean_net": 5.55,
+     "median_net": 3.72,
+     "win_rate": 58.5,
+     "t_stat_monthly": 2.45,
+     "months_positive": "9/11"
+    },
+    "event_control_random_stocks": {
+     "signals": 2417,
+     "fills": 2362,
+     "fill_rate": 0.977,
+     "trades": 2200,
+     "mean_net": 7.29,
+     "median_net": 5.12,
+     "win_rate": 63.3,
+     "t_stat_monthly": 3.55,
+     "months_positive": "10/11"
+    }
+   },
+   "pre_5pct_limits": {
+    "start": "2022-07-02",
+    "end": "2024-08-31",
+    "total_return": -27.8,
+    "cagr": -14.0,
+    "max_dd": 53.5,
+    "sharpe": -0.76,
+    "trades": 175,
+    "win_rate": 38.3,
+    "avg_trade": -1.11,
+    "median_trade": -5.62,
+    "avg_hold": 13.9,
+    "exits": {
+     "time": 140,
+     "stop": 21,
+     "stop_gap": 14
+    },
+    "random_pick_mc": {
+     "runs": 30,
+     "cagr_p5": -19.1,
+     "cagr_median": -12.6,
+     "cagr_p95": -7.3,
+     "maxdd_median": 51.1,
+     "share_positive": 0.0
+    },
+    "event_study": {
+     "signals": 1262,
+     "fills": 1150,
+     "fill_rate": 0.911,
+     "trades": 1148,
+     "mean_net": 2.83,
+     "median_net": -0.43,
+     "win_rate": 48.8,
+     "t_stat_monthly": -1.17,
+     "months_positive": "7/20"
+    },
+    "event_control_random_stocks": {
+     "signals": 8858,
+     "fills": 8703,
+     "fill_rate": 0.983,
+     "trades": 8697,
+     "mean_net": 1.39,
+     "median_net": -1.57,
+     "win_rate": 45.0,
+     "t_stat_monthly": -0.68,
+     "months_positive": "6/20"
+    }
+   }
+  }
+ },
+ "index": {
+  "full": {
+   "start": "2024-09-06",
+   "end": "2026-11-14",
+   "total_return": 297.5,
+   "cagr": 87.9,
+   "max_dd": 26.3,
+   "sharpe": 3.51,
+   "note": "TEDPIX from api.tgju.org (some sessions missing; Sharpe approximate)"
+  },
+  "in_sample": {
+   "start": "2024-09-06",
+   "end": "2025-09-30",
+   "total_return": 30.1,
+   "cagr": 28.1,
+   "max_dd": 26.3,
+   "sharpe": 1.49,
+   "note": "TEDPIX from api.tgju.org (some sessions missing; Sharpe approximate)"
+  },
+  "out_of_sample": {
+   "start": "2025-10-01",
+   "end": "2026-11-14",
+   "total_return": 206.2,
+   "cagr": 171.6,
+   "max_dd": 17.0,
+   "sharpe": 5.42,
+   "note": "TEDPIX from api.tgju.org (some sessions missing; Sharpe approximate)"
+  },
+  "pre_5pct_limits": {
+   "start": "2022-07-01",
+   "end": "2024-08-31",
+   "total_return": 40.5,
+   "cagr": 17.0,
+   "max_dd": 22.4,
+   "sharpe": 1.12,
+   "note": "TEDPIX from api.tgju.org (some sessions missing; Sharpe approximate)"
+  }
+ },
+ "grid": {
+  "n_configs": 648,
+  "is_sharpe_quantiles": [
+   -3.56,
+   -1.91,
+   -0.71
+  ],
+  "share_positive_is_cagr": 0.019,
+  "top10_is_then_oos": [
+   {
+    "cfg": {
+     "entry": "queue",
+     "first_lock_only": false,
+     "min_value_rial": 300000000.0,
+     "max_picks": 6,
+     "regime_ma": 50,
+     "avoid_floor_lock_days": 0,
+     "max_positions": 3,
+     "tp": 0.25,
+     "sl_limits": 2.0,
+     "sl_fixed": null,
+     "trail": null,
+     "max_hold": 5,
+     "slippage": 0.0025
+    },
+    "is_cagr": 3.5,
+    "is_max_dd": 24.4,
+    "is_sharpe": 0.28,
+    "is_trades": 67,
+    "oos_cagr": -5.5,
+    "oos_max_dd": 25.8,
+    "oos_sharpe": -0.18,
+    "oos_trades": 96
+   },
+   {
+    "cfg": {
+     "entry": "queue",
+     "first_lock_only": false,
+     "min_value_rial": 100000000000.0,
+     "max_picks": 6,
+     "regime_ma": 50,
+     "avoid_floor_lock_days": 0,
+     "max_positions": 3,
+     "tp": 0.25,
+     "sl_limits": 2.0,
+     "sl_fixed": null,
+     "trail": null,
+     "max_hold": 5,
+     "slippage": 0.0025
+    },
+    "is_cagr": 3.5,
+    "is_max_dd": 24.4,
+    "is_sharpe": 0.28,
+    "is_trades": 67,
+    "oos_cagr": -5.5,
+    "oos_max_dd": 25.8,
+    "oos_sharpe": -0.18,
+    "oos_trades": 96
+   },
+   {
+    "cfg": {
+     "entry": "queue",
+     "first_lock_only": false,
+     "min_value_rial": 20000000000.0,
+     "max_picks": 6,
+     "regime_ma": 50,
+     "avoid_floor_lock_days": 0,
+     "max_positions": 3,
+     "tp": 0.25,
+     "sl_limits": 2.0,
+     "sl_fixed": null,
+     "trail": null,
+     "max_hold": 5,
+     "slippage": 0.0025
+    },
+    "is_cagr": 3.5,
+    "is_max_dd": 24.4,
+    "is_sharpe": 0.28,
+    "is_trades": 67,
+    "oos_cagr": -5.5,
+    "oos_max_dd": 25.8,
+    "oos_sharpe": -0.18,
+    "oos_trades": 96
+   },
+   {
+    "cfg": {
+     "entry": "queue",
+     "first_lock_only": false,
+     "min_value_rial": 100000000000.0,
+     "max_picks": 6,
+     "regime_ma": 50,
+     "avoid_floor_lock_days": 0,
+     "max_positions": 3,
+     "tp": 0.25,
+     "sl_limits": 1.0,
+     "sl_fixed": 0.03,
+     "trail": null,
+     "max_hold": 10,
+     "slippage": 0.0025
+    },
+    "is_cagr": 2.7,
+    "is_max_dd": 25.3,
+    "is_sharpe": 0.24,
+    "is_trades": 49,
+    "oos_cagr": 15.6,
+    "oos_max_dd": 19.9,
+    "oos_sharpe": 0.83,
+    "oos_trades": 83
+   },
+   {
+    "cfg": {
+     "entry": "queue",
+     "first_lock_only": false,
+     "min_value_rial": 300000000.0,
+     "max_picks": 6,
+     "regime_ma": 50,
+     "avoid_floor_lock_days": 0,
+     "max_positions": 3,
+     "tp": 0.25,
+     "sl_limits": 1.0,
+     "sl_fixed": 0.03,
+     "trail": null,
+     "max_hold": 10,
+     "slippage": 0.0025
+    },
+    "is_cagr": 2.7,
+    "is_max_dd": 25.3,
+    "is_sharpe": 0.24,
+    "is_trades": 49,
+    "oos_cagr": 15.6,
+    "oos_max_dd": 19.9,
+    "oos_sharpe": 0.83,
+    "oos_trades": 83
+   },
+   {
+    "cfg": {
+     "entry": "queue",
+     "first_lock_only": false,
+     "min_value_rial": 20000000000.0,
+     "max_picks": 6,
+     "regime_ma": 50,
+     "avoid_floor_lock_days": 0,
+     "max_positions": 3,
+     "tp": 0.25,
+     "sl_limits": 1.0,
+     "sl_fixed": 0.03,
+     "trail": null,
+     "max_hold": 10,
+     "slippage": 0.0025
+    },
+    "is_cagr": 2.7,
+    "is_max_dd": 25.3,
+    "is_sharpe": 0.24,
+    "is_trades": 49,
+    "oos_cagr": 15.6,
+    "oos_max_dd": 19.9,
+    "oos_sharpe": 0.83,
+    "oos_trades": 83
+   },
+   {
+    "cfg": {
+     "entry": "queue",
+     "first_lock_only": false,
+     "min_value_rial": 100000000000.0,
+     "max_picks": 6,
+     "regime_ma": 50,
+     "avoid_floor_lock_days": 0,
+     "max_positions": 3,
+     "tp": null,
+     "sl_limits": 2.0,
+     "sl_fixed": null,
+     "trail": 0.1,
+     "max_hold": 5,
+     "slippage": 0.0025
+    },
+    "is_cagr": 2.4,
+    "is_max_dd": 24.4,
+    "is_sharpe": 0.22,
+    "is_trades": 67,
+    "oos_cagr": -5.5,
+    "oos_max_dd": 25.8,
+    "oos_sharpe": -0.18,
+    "oos_trades": 96
+   },
+   {
+    "cfg": {
+     "entry": "queue",
+     "first_lock_only": false,
+     "min_value_rial": 20000000000.0,
+     "max_picks": 6,
+     "regime_ma": 50,
+     "avoid_floor_lock_days": 0,
+     "max_positions": 3,
+     "tp": null,
+     "sl_limits": 2.0,
+     "sl_fixed": null,
+     "trail": 0.1,
+     "max_hold": 5,
+     "slippage": 0.0025
+    },
+    "is_cagr": 2.4,
+    "is_max_dd": 24.4,
+    "is_sharpe": 0.22,
+    "is_trades": 67,
+    "oos_cagr": -5.5,
+    "oos_max_dd": 25.8,
+    "oos_sharpe": -0.18,
+    "oos_trades": 96
+   },
+   {
+    "cfg": {
+     "entry": "queue",
+     "first_lock_only": false,
+     "min_value_rial": 300000000.0,
+     "max_picks": 6,
+     "regime_ma": 50,
+     "avoid_floor_lock_days": 0,
+     "max_positions": 3,
+     "tp": null,
+     "sl_limits": 2.0,
+     "sl_fixed": null,
+     "trail": 0.1,
+     "max_hold": 5,
+     "slippage": 0.0025
+    },
+    "is_cagr": 2.4,
+    "is_max_dd": 24.4,
+    "is_sharpe": 0.22,
+    "is_trades": 67,
+    "oos_cagr": -5.5,
+    "oos_max_dd": 25.8,
+    "oos_sharpe": -0.18,
+    "oos_trades": 96
+   },
+   {
+    "cfg": {
+     "entry": "queue",
+     "first_lock_only": false,
+     "min_value_rial": 20000000000.0,
+     "max_picks": 6,
+     "regime_ma": 50,
+     "avoid_floor_lock_days": 0,
+     "max_positions": 3,
+     "tp": 0.25,
+     "sl_limits": 1.0,
+     "sl_fixed": 0.03,
+     "trail": null,
+     "max_hold": 15,
+     "slippage": 0.0025
+    },
+    "is_cagr": 0.2,
+    "is_max_dd": 28.1,
+    "is_sharpe": 0.11,
+    "is_trades": 48,
+    "oos_cagr": 4.8,
+    "oos_max_dd": 31.6,
+    "oos_sharpe": 0.35,
+    "oos_trades": 77
+   }
+  ]
+ }
+}

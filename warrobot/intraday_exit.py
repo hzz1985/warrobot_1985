@@ -49,9 +49,20 @@ TARGETS = BASE / "state" / "targets.json"
 
 def _config() -> dict:
     try:
-        return json.loads((BASE / "config.json").read_text(encoding="utf-8"))["sell"]
+        sell = json.loads((BASE / "config.json").read_text(encoding="utf-8"))["sell"]
     except Exception:
         return {"target_pct": 25.0, "stop_pct": 3.0, "max_hold_days": 15}
+    try:  # strategy switch: v2 overrides the exit numbers, v1 returns them unchanged
+        if str(BASE) not in sys.path:
+            sys.path.insert(0, str(BASE))
+        import strategy_v2 as _s2
+        p = _s2.live_params(BASE / "config.json")
+        if p["version"] == "v2":
+            sell = {**sell, "target_pct": p["tp_pct"] or 1e9, "stop_pct": p["sl_pct"],
+                    "max_hold_days": p["max_hold_days"]}
+    except Exception:
+        pass
+    return sell
 
 
 def _targets() -> dict:

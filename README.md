@@ -16,3 +16,7 @@
 
 ## امنیت
 اعتبارنامه‌ها، کوکی نشست، پروفایل مرورگر و داده‌های خام در مخزن نیستند.
+
+## بازبینی استراتژی (Hark)
+گزارش بازبینی و بک‌تست واقعی: `STRATEGY_HARK.md` · کد: `warrobot/strategy_v2.py`، `warrobot/backtest_v2.py`
+(سوییچ `strategy.version` در `warrobot/config.json`؛ پیش‌فرض `v1` بدون تغییر رفتار).
