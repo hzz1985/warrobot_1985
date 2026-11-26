@@ -196,6 +196,19 @@ def cash_snapshot() -> float:
     return max(cands)[1] if cands else 0.0
 
 
+def fresh_cash_snapshot(max_age_min: float = 10.0) -> float:
+    """buying power from the data agent's balance card (state/webdata/balance.json, every 5 min in session) when it
+    is at most max_age_min old (server clock), else 0. Fallback when the live broker read fails."""
+    b = _read(STATE / "webdata" / "balance.json")
+    try:
+        age = (datetime.now() - datetime.strptime(str(b["at"])[:19], "%Y-%m-%d %H:%M:%S")).total_seconds() / 60.0
+        if 0 <= age <= max_age_min and b.get("ok", True):
+            return float(b.get("purchasing_power") or b.get("account_balance") or 0)
+    except Exception:
+        pass
+    return 0.0
+
+
 def broker_snapshot() -> tuple[float, dict, dict]:
     """(cash, {symbol: value}, {symbol: qty}) without خساپا (kept for older callers)."""
     _, pos = positions_snapshot()

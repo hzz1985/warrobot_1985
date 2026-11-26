@@ -316,7 +316,7 @@ def candidates_plan(out: dict, free_balance, open_orders_fn, isin_fn) -> dict:
         out["strategy"] = "fund"
         out["note"] = "fund: live_orders=false, rehearsal only (fund_orders.py --dry)"
         return out
-    free = float(free_balance())
+    free = float(free_balance()) or FL.fresh_cash_snapshot()
     oo = open_orders_fn() or []
     p = plan_now(free, oo)
     out["free_balance"] = round(free, 0)
@@ -448,7 +448,7 @@ def run(dry: bool = False, force: bool = False, plan_only: bool = False) -> dict
     with (guard or contextlib.nullcontext(True)) as got:
         if not got:
             _log({"event": "playwright_lock_timeout"}); return {"skipped": "lock"}
-        cash = oc._free_balance()
+        cash = oc._free_balance() or FL.fresh_cash_snapshot()
         oo = oc._open_orders()
         p = plan_now(cash, oo, simulate_afran_sale=dry)
         report["plan"] = p
@@ -461,7 +461,7 @@ def run(dry: bool = False, force: bool = False, plan_only: bool = False) -> dict
         if not dry and any(r.get("submitted") for r in results):
             # the sale money becomes buying power when it fills: give it a moment, then re-plan the buys
             time.sleep(20)
-            cash = oc._free_balance()
+            cash = oc._free_balance() or FL.fresh_cash_snapshot()
             oo = oc._open_orders()
             p2 = plan_now(cash, oo)
             report["replan"] = {"cash": cash, "buys": [b["symbol"] for b in p2["buys"]],
