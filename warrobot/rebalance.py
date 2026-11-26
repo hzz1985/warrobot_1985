@@ -151,6 +151,15 @@ def _next_candidates(used: set, need: int) -> list[dict]:
 
 def run(dry: bool = False) -> dict:
     out = {"at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "cancelled": [], "placed": []}
+    # Hark F3 (2026-11-28): V3 rotation is archived; never cancel_all() the fund's orders
+    try:
+        import fund_ledger as _fl
+        _off = (not _fl.v3_buys_enabled()) or _fl.raw_fund_enabled()
+    except Exception:
+        _off = True
+    if _off:
+        out["note"] = "V3 rotation disabled (strategy.fund live / strategy.v3 archived)"
+        return out
     orders = open_buys()
     unfilled = [o for o in orders if o["executed"] < o["qty"]]
     out["open"] = orders

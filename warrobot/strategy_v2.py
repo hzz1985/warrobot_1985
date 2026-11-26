@@ -157,7 +157,8 @@ def live_params(config_path: str | Path, limit: float = 0.03) -> dict:
         cfg = {}
     ver = ((cfg.get("strategy") or {}).get("version") or "v1").lower()
     sell = cfg.get("sell") or {}
-    if ver not in ("v2", "v3"):                     # v3 = v2 exits + extra entry filters (strategy_v3.py)
+    if ver not in ("v2", "v3", "fund"):             # v3 = v2 exits + extra entry filters; fund = F3 live, the
+                                                    # legacy V3 positions keep these v2/v3 exits (9 % stop, 15 sessions)
         return dict(version="v1", tp_pct=float(sell.get("target_pct", 25.0)),
                     sl_pct=float(sell.get("stop_pct", 3.0)),
                     max_hold_days=int(sell.get("max_hold_days", 15)), trail_pct=None, slots=3)

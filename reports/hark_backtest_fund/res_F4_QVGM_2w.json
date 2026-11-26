@@ -1,0 +1,79 @@
+{
+ "variant": "F4_QVGM_2w",
+ "config": {
+  "variant": "F4_QVGM_2w",
+  "factors": [
+   "ey",
+   "yoy",
+   "roe",
+   "mom"
+  ],
+  "n_hold": 10,
+  "buffer": 20,
+  "rebalance_sessions": 10,
+  "min_value_rial": 20000000000.0,
+  "min_traded_frac": 0.8,
+  "pe_max": 40.0,
+  "mom_lb": 126,
+  "mom_skip": 5,
+  "regime_ma": 0,
+  "flow_bottom_pct": 0.0,
+  "mode": "rank",
+  "pead_yoy": 0.3,
+  "pead_hold": 40,
+  "liq_cap": 0.1,
+  "slippage": 0.0025,
+  "fee_buy": 0.003712,
+  "fee_sell": 0.0088
+ },
+ "periods": {
+  "IS": {
+   "start": "2024-08-03",
+   "end": "2025-09-30",
+   "total_return": 68.1,
+   "cagr": 56.6,
+   "max_dd": 19.2,
+   "sharpe": 2.43,
+   "trades": 50,
+   "win_rate": 62.0,
+   "avg_win": 25.76,
+   "avg_loss": -7.32,
+   "avg_hold": 54.0,
+   "open_at_end": 10,
+   "turnover_x_per_year": 3.57,
+   "exposure_pct": 95.4
+  },
+  "OOS": {
+   "start": "2025-10-01",
+   "end": "2026-11-25",
+   "total_return": 321.9,
+   "cagr": 249.7,
+   "max_dd": 17.8,
+   "sharpe": 6.85,
+   "trades": 53,
+   "win_rate": 81.1,
+   "avg_win": 44.55,
+   "avg_loss": -6.24,
+   "avg_hold": 41.1,
+   "open_at_end": 10,
+   "turnover_x_per_year": 4.39,
+   "exposure_pct": 93.8
+  },
+  "FULL": {
+   "start": "2024-08-03",
+   "end": "2026-11-25",
+   "total_return": 523.0,
+   "cagr": 120.7,
+   "max_dd": 19.2,
+   "sharpe": 4.19,
+   "trades": 92,
+   "win_rate": 70.7,
+   "avg_win": 40.32,
+   "avg_loss": -7.29,
+   "avg_hold": 53.4,
+   "open_at_end": 10,
+   "turnover_x_per_year": 3.7,
+   "exposure_pct": 93.7
+  }
+ }
+}

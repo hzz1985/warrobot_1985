@@ -589,6 +589,18 @@ def prepare_cycle(rebuild_panel: bool = True) -> dict:
     cfg = config()
     positions, panel = fresh_panel_positions(rebuild=rebuild_panel)
     positions = [p for p in positions if str(p.get("symbol")) not in MANUAL_ONLY]
+    # Hark F3 (2026-11-28): fund (F3) positions are never judged by the V3 exits; in replace mode only the
+    # legacy V3 positions (state/fund_state.json legacy_v3, e.g. آباد) stay here. On any error: judge nothing.
+    try:
+        import fund_ledger as _fl
+        if _fl.replace_active():
+            _leg = _fl.legacy_v3()
+            positions = [p for p in positions if _fl.norm(p.get("symbol")) in _leg]
+        else:
+            _fx = _fl.v3_excluded()
+            positions = [p for p in positions if str(p.get("symbol")) not in _fx]
+    except Exception:
+        positions = []
     syms = [str(p["symbol"]) for p in positions]
     prices, markets, notes = cross_checked_prices(syms, panel)
     open_orders = read_open_orders()

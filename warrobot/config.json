@@ -67,8 +67,8 @@
   },
   "version": "5.0",
   "strategy": {
-    "version": "v3",
-    "_comment": "v3 = strategy_v3.py (v2 filters/exits + skip known loss-makers, rank by individual buyer power), live since 2026-11-26 on owner's order (no dry-run); v2 = strategy_v2.py; fees corrected to 0.3712/0.88 on owner's order. Rollback: backups/pre_v3_*/rollback.ps1",
+    "version": "fund",
+    "_comment": "fund = F3_QVGM fundamentals strategy (strategy_fund.py / fund_live.py / fund_orders.py, STRATEGY_FUND_HARK.md), the ONLY automatic strategy since 2026-11-28 on the owner's order (2026-11-26). V3 archived (archive/v3_20261126, strategy.v3.enabled=false); 'fund' keeps the v2/v3 exit numbers (9% stop, 15 sessions) for the legacy V3 position (آباد) only. Rollback: backups/pre_f3_*/rollback.ps1",
     "v2": {
       "entry": "queue",
       "first_lock_only": false,
@@ -93,13 +93,27 @@
       "inflow5_min": null,
       "sec_mom_min": null,
       "rank_by": "bp",
-      "pe_ttm_max": null,
-      "roe_min": null,
-      "npm_min": null,
-      "np_yoy_min": null,
-      "sales_yoy_min": null,
-      "capraise_reserve_days": null,
-      "codal_budget_s": 240
+      "enabled": false,
+      "_archived": "2026-11-26: V3 archived, code+config in archive/v3_20261126; no V3 buys/rotation while strategy.fund is enabled"
+    },
+    "fund": {
+      "_comment": "F3_QVGM live (owner order 2026-11-26). replace = only automatic buyer. Capital = buying power + افران + F3 holdings; afran_share stays in افران (bot sells only the excess, never below), the rest split equally over n_hold names; recomputed every run. خساپا manual-only; legacy V3 (fund_state.json legacy_v3: آباد) keeps V3 exits and is not a fund slot. See STRATEGY_FUND_HARK.md / AGENTS.md",
+      "enabled": true,
+      "mode": "replace",
+      "capital_share": 1.0,
+      "live_orders": true,
+      "variant": "F3_QVGM",
+      "n_hold": 10,
+      "buffer": 20,
+      "rebalance_sessions": 21,
+      "min_value_rial": 20000000000.0,
+      "pe_max": 40,
+      "manage_afran": true,
+      "afran_share": 0.3333333333,
+      "min_trade_rial": 50000000,
+      "topup_drift": 0.25,
+      "afran_min_excess_pct": 0.02,
+      "codal_ext_dir": null
     }
   }
 }
