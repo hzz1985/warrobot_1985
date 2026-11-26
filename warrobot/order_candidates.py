@@ -305,6 +305,24 @@ def prepare() -> dict:
     """Everything that needs the network BEFORE the order second: balance, open
     orders, holdings, prices, sizes. Returns {"orders": [planned rec, ...], ...}."""
     out = {"at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "orders": [], "planned": []}
+    # Hark F3 (2026-11-28): strategy.fund mode=replace -> the fundamentals strategy is the ONLY buyer;
+    # V3 candidates are never bought. Any error here returns an empty plan (V3 must not buy instead).
+    try:
+        import fund_ledger as _fl
+        _fund_on = _fl.replace_active() or _fl.raw_fund_enabled() or _fl.v3_disabled_in_config()
+    except Exception:
+        _fund_on = True
+    if _fund_on:
+        try:
+            import fund_ledger as _fl
+            if not _fl.replace_active():
+                out["note"] = "V3 buys disabled (strategy.v3.enabled=false / fund not in replace mode)"
+                return out
+            import fund_orders as _fo
+            return _fo.candidates_plan(out, _free_balance, _open_orders, _isin)
+        except Exception as exc:
+            out["note"] = f"fund plan error, no buys: {str(exc)[:120]}"
+            return out
     if not CAND.exists():
         out["note"] = "no candidates file"
         return out

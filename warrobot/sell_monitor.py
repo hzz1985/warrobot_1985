@@ -111,8 +111,18 @@ def _sell(symbol: str, isin: str, qty: int, price: float) -> dict:
 def run(place_orders: bool = True) -> dict:
     tgt = _targets()
     rows, acts = [], []
+    try:  # Hark F3: only legacy V3 positions may be judged here; fund + افران/خساپا never
+        import fund_ledger as _fl
+        _fund_mode = _fl.raw_fund_enabled()
+        _legacy = _fl.legacy_v3() if _fund_mode else None
+    except Exception:
+        _fund_mode, _legacy = True, set()
     for pos in positions():
         sym = pos["symbol"]
+        if sym in ("افران", "خساپا"):
+            continue
+        if _fund_mode and str(sym).replace("ي", "ی").replace("ك", "ک") not in (_legacy or set()):
+            continue
         t = tgt.get(sym, {})
         tp = float(t.get("tp") or 22.0)
         sl = float(t.get("sl") or 4.0)

@@ -1,0 +1,79 @@
+{
+ "variant": "F6_PEAD",
+ "config": {
+  "variant": "F6_PEAD",
+  "factors": [
+   "ey",
+   "yoy",
+   "roe",
+   "mom"
+  ],
+  "n_hold": 10,
+  "buffer": 20,
+  "rebalance_sessions": 21,
+  "min_value_rial": 20000000000.0,
+  "min_traded_frac": 0.8,
+  "pe_max": 40.0,
+  "mom_lb": 126,
+  "mom_skip": 5,
+  "regime_ma": 0,
+  "flow_bottom_pct": 0.0,
+  "mode": "pead",
+  "pead_yoy": 0.3,
+  "pead_hold": 40,
+  "liq_cap": 0.1,
+  "slippage": 0.0025,
+  "fee_buy": 0.003712,
+  "fee_sell": 0.0088
+ },
+ "periods": {
+  "IS": {
+   "start": "2024-08-03",
+   "end": "2025-09-30",
+   "total_return": 9.0,
+   "cagr": 7.7,
+   "max_dd": 24.8,
+   "sharpe": 0.66,
+   "trades": 46,
+   "win_rate": 52.2,
+   "avg_win": 17.41,
+   "avg_loss": -13.34,
+   "avg_hold": 38.8,
+   "open_at_end": 9,
+   "turnover_x_per_year": 3.59,
+   "exposure_pct": 62.6
+  },
+  "OOS": {
+   "start": "2025-10-01",
+   "end": "2026-11-25",
+   "total_return": 122.0,
+   "cagr": 100.1,
+   "max_dd": 24.1,
+   "sharpe": 4.06,
+   "trades": 56,
+   "win_rate": 75.0,
+   "avg_win": 27.89,
+   "avg_loss": -15.71,
+   "avg_hold": 37.5,
+   "open_at_end": 9,
+   "turnover_x_per_year": 5.38,
+   "exposure_pct": 90.9
+  },
+  "FULL": {
+   "start": "2024-08-03",
+   "end": "2026-11-25",
+   "total_return": 217.4,
+   "cagr": 64.9,
+   "max_dd": 24.8,
+   "sharpe": 3.16,
+   "trades": 100,
+   "win_rate": 71.0,
+   "avg_win": 25.45,
+   "avg_loss": -15.65,
+   "avg_hold": 40.4,
+   "open_at_end": 10,
+   "turnover_x_per_year": 4.7,
+   "exposure_pct": 77.5
+  }
+ }
+}

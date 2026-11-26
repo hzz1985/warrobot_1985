@@ -52,6 +52,17 @@ def transfer(profit_rial: float, source: str = "") -> dict:
     if rec["profit_rial"] < MIN_ORDER_RIAL:
         rec["skipped"] = "profit below the minimum order value"
         return rec
+    try:  # Hark F3: with manage_afran the profit only refills افران up to its 1/3 target
+        import fund_ledger as _fl
+        _cap = _fl.afran_transfer_cap()
+        if _cap < rec["profit_rial"]:
+            rec["capped_by_afran_target"] = round(_cap, 0)
+            rec["profit_rial"] = round(_cap, 0)
+            if rec["profit_rial"] < MIN_ORDER_RIAL:
+                rec["skipped"] = "افران already at its target share (fund mode)"
+                return rec
+    except Exception:
+        pass
     price = _price() or 56900.0
     qty = int(rec["profit_rial"] / (price * 1.015))
     if qty <= 0:
