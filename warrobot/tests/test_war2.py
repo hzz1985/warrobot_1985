@@ -213,7 +213,9 @@ class Plan(unittest.TestCase):
                                                                           "notes": [], "war2_basis": {"x": {}}}), \
                     mock.patch.object(LV, "PLAN", st / "fund_plan.json"), mock.patch.object(LV, "STATE", st), \
                     mock.patch.object(LV, "LOG", st / "fund_log.jsonl"):
-                LV.main(["--plan", "--out", str(st / "rehearsal.json")])
+                with mock.patch.object(LV, "PRICE_CACHE", LV.PRICE_CACHE):
+                    LV.main(["--plan", "--out", str(st / "rehearsal.json")])
+                    self.assertEqual(LV.PRICE_CACHE.name, "prices_rehearsal")   # never the nightly cache
                 a = (st / "rehearsal.json").exists(), (st / "fund_plan.json").exists(), FL.load_state().get("war2")
                 LV.main(["--plan"])
                 return a, FL.load_state().get("war2", {}).get("basis")

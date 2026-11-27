@@ -3,7 +3,8 @@
     python fund_live.py --plan            nightly (after the close): writes state/fund_plan.json
     python fund_live.py --plan --force    rebalance now even if the schedule says no
     python fund_live.py --status          print the last plan
-    python fund_live.py --plan --out X    rehearsal: write the plan to X, no state change, no log line
+    python fund_live.py --plan --out X    rehearsal: write the plan to X, no state change, no log line, own price
+                                          cache (state/fund_cache/prices_rehearsal) so tonight's plan re-fetches
 
 What it does (same numbers as the backtest, research/fund/bt_fund.py):
   1. universe  = TSETMC market watch stocks (TSE 300 / IFB 303), symbols without a trailing digit
@@ -39,6 +40,7 @@ import war2_stop as W2          # noqa: E402
 
 STATE = BASE / "state"
 CACHE = STATE / "fund_cache"
+PRICE_CACHE = CACHE / "prices"   # --out rehearsals use their own folder so they never feed tonight's plan a stale close
 PLAN = STATE / "fund_plan.json"
 LOG = STATE / "fund_log.jsonl"
 TSE = "https://cdn.tsetmc.com/api"
@@ -83,7 +85,7 @@ def universe() -> dict:
 
 def history(ins: str, day: str) -> list:
     """[[dEven, py, c, ntr, val], ...] oldest first; cached per insCode per day."""
-    p = CACHE / "prices" / f"{ins}.json"
+    p = PRICE_CACHE / f"{ins}.json"
     if p.exists():
         try:
             d = json.loads(p.read_text(encoding="utf-8"))
@@ -360,9 +362,11 @@ def main(argv: list[str]) -> int:
     if not fc["enabled"] and "--force" not in argv:
         log("fund_plan_skipped", reason="strategy.fund.enabled is false")
         return 0
+    global PRICE_CACHE
     out = PLAN
     if "--out" in argv:             # rehearsal: write the plan elsewhere, touch no state (deploy tests)
         out = Path(argv[argv.index("--out") + 1])
+        PRICE_CACHE = CACHE / "prices_rehearsal"
     plan = build_plan(force="--force" in argv)
     basis = plan.pop("war2_basis", None)
     STATE.mkdir(parents=True, exist_ok=True)
