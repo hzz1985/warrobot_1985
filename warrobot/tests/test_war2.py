@@ -315,7 +315,10 @@ class RunOrder(unittest.TestCase):
             sent.append((side, symbol)); return {"submitted": True, "message": "ok", "placed_orderid": "9"}
 
         def f(st):
-            with mock.patch.dict(sys.modules, {"order_candidates": oc}), mock.patch.object(FO, "_flow", flow), \
+            # hermetic on the live server too: no real trade journal / playwright lock / cancel module is touched
+            with mock.patch.dict(sys.modules, {"order_candidates": oc, "trade_journal": None, "pw_lock": None,
+                                               "cancel_orders": None, "market_cal": None}), \
+                    mock.patch.object(FO, "_flow", flow), \
                     mock.patch.object(FO, "_isin", lambda s: "IR"), mock.patch.object(FO, "_stop_px", PX["stop_px"]), \
                     mock.patch.object(FO, "_sell_px", PX["sell_px"]), mock.patch.object(FO, "time") as t:
                 t.time.return_value = 0; t.sleep = lambda s: None
