@@ -66,26 +66,28 @@
   <div class="meta-row">
     <span class="chip {{ 'live' if mode == 'live' else 'dry' }}"><span class="dot"></span>حالت: {{ mode }}</span>
     <span class="chip">اکنون <span class="num">{{ jd(now) }}</span></span>
-    <span class="chip hide-sm">کاندیدها برای <span class="num">{{ jd(for_date) }}</span></span>
+    <span class="chip hide-sm">استراتژی <b>{{ (f3 or {}).variant or 'F3_QVGM' }}</b> · برنامه <span class="num">{{ (f3 or {}).plan_at_tehran or '—' }}</span></span>
   </div>
 </header>
 
 <nav class="tabs-wrap" aria-label="بخش‌ها">
   <div class="tabs" role="tablist">
-    <button class="tab active" data-tab="overview" type="button">نمای کلی</button>
-    <button class="tab" data-tab="buy" type="button">کاندیدای خرید{% if picks.picks %}<span class="cnt">{{ picks.picks|length }}</span>{% endif %}</button>
-    <button class="tab" data-tab="sell" type="button">کاندیدای فروش</button>
+    <button class="tab active" data-tab="f3" type="button">F3 زنده{% if (f3 or {}).picks %}<span class="cnt">{{ f3.picks|length }}</span>{% endif %}</button>
+    <button class="tab" data-tab="overview" type="button">نمای کلی</button>
     <button class="tab" data-tab="orders" type="button">سفارش‌ها</button>
     <button class="tab" data-tab="journal" type="button">ژورنال</button>
     <button class="tab" data-tab="report" type="button">گزارش</button>
     <button class="tab" data-tab="agents" type="button">ایجنت‌ها</button>
+    <button class="tab" data-tab="v3archive" type="button">آرشیو V3</button>
     <button class="tab" data-tab="export" type="button">DeepSeekExport{% if exports %}<span class="cnt">{{ exports|length }}</span>{% endif %}</button>
   </div>
 </nav>
 
 <main>
+{% include "_f3_panel.html" %}
+
 <!-- ================= OVERVIEW ================= -->
-<section class="panel active" id="overview">
+<section class="panel" id="overview">
   <div class="kpis">
     <div class="kpi hero">
       <div class="lbl">کل دارایی</div>
@@ -106,8 +108,8 @@
     </div>
     <div class="kpi">
       <div class="lbl">پوزیشن‌های باز</div>
-      <div class="val">{{ k.open_n or 0 }} <span class="unit">از {{ k.max_pos or max_pos }}</span></div>
-      <div class="sub">{% if k.open_n %}سود/زیان باز: <span class="num {{ pcls(k.open_pnl) }}">{{ srial(k.open_pnl) }}</span>{% else %}{{ free_slots }} اسلات آزاد{% endif %}</div>
+      <div class="val">{{ k.open_n or 0 }} <span class="unit">نماد</span></div>
+      <div class="sub">{% if k.open_n %}سود/زیان باز: <span class="num {{ pcls(k.open_pnl) }}">{{ srial(k.open_pnl) }}</span>{% else %}—{% endif %}</div>
     </div>
     <div class="kpi">
       <div class="lbl">نقد / قدرت خرید</div>
@@ -117,8 +119,8 @@
   </div>
 
   <div class="kpis minis">
-    <div class="kpi mini"><div class="lbl">حد سود</div><div class="val pos">{{ target }}%</div></div>
-    <div class="kpi mini"><div class="lbl">حد ضرر</div><div class="val neg">{{ stop }}%</div></div>
+    <div class="kpi mini"><div class="lbl">استراتژی</div><div class="val">{{ (f3 or {}).variant or 'F3_QVGM' }}</div></div>
+    <div class="kpi mini"><div class="lbl">ری‌بالانس بعدی</div><div class="val">{% set _r = (f3 or {}).rebalance or {} %}{% if _r.first %}اولین{% elif _r.left is defined %}{{ _r.left }} جلسه{% else %}—{% endif %}</div></div>
     <div class="kpi mini"><div class="lbl">صندوق افران</div><div class="val">{{ tval(fund.value) }}</div></div>
     <div class="kpi mini"><div class="lbl">سود/زیان کل پوزیشن‌ها</div>
       <div class="val {{ pcls(port_total) }}">{{ '%+.2f'|format(port_pct) }}%</div></div>
@@ -172,7 +174,7 @@
   <!-- open positions -->
   <div class="section">
     <div class="section-h"><h2>پوزیشن‌های باز</h2>
-      <span class="aside">سهم هدف هر نماد: {{ '%.1f'|format(target_share) }}% · به‌روزرسانی: {{ jd(pnl_at) }}</span></div>
+      <span class="aside">به‌روزرسانی: {{ jd(pnl_at) }} · هدف هر سهم F3 در تب «F3 زنده»</span></div>
     {% if excluded %}<p class="note">خارج از حلقهٔ پایش و تصمیم‌گیری: <b>{{ excluded|join('، ') }}</b> — باگ کارگزار؛ نه فروخته می‌شود و نه اسلات می‌گیرد.</p>{% endif %}
     {% if positions %}
     <div class="positions">
@@ -194,16 +196,6 @@
           <div><dt>سهم از سبد</dt><dd>{{ p.share_pct }}%</dd></div>
           <div><dt>وضعیت</dt><dd>{{ p.status or 'hold' }}</dd></div>
         </dl>
-        <div class="tpsl" title="از حد ضرر (−{{ stop }}%) تا حد سود (+{{ target }}%)">
-          <div class="bar">
-            <span class="zero" style="inset-inline-start:{{ '%.1f'|format(p.zero_at or 50) }}%"></span>
-            <span class="mark" style="inset-inline-start:{{ '%.1f'|format(p.bar if p.bar is defined else 50) }}%"></span>
-          </div>
-          <div class="ends">
-            <span class="neg">تا حد ضرر <b class="num">{{ '%.2f'|format(p.to_sl or 0) }}%</b> <small>(<bdi>−{{ stop }}%</bdi>)</small></span>
-            <span class="pos">تا حد سود <b class="num">{{ '%.2f'|format(p.to_tp or 0) }}%</b> <small>(<bdi>+{{ target }}%</bdi>)</small></span>
-          </div>
-        </div>
       </article>
       {% endfor %}
     </div>
@@ -225,29 +217,41 @@
       <p class="note">⚠ {{ d.equity_suspect|length }} اسنپ‌شات با دارایی تقریباً صفر ({% for s in d.equity_suspect %}{{ jd(s.date) }}{% if not loop.last %}، {% endif %}{% endfor %}) کنار گذاشته شد — معمولاً یعنی ورود کارگزار در آن لحظه ناموفق بوده.</p>
       {% endif %}
     </div>
-    <!-- today's candidates (short) -->
+    <!-- F3 targets (short) -->
     <div>
-      <div class="section-h"><h2>کاندیدهای امروز</h2>
-        <a class="aside" href="#buy" data-goto="buy">همه ←</a></div>
-      {% if picks.picks %}
+      <div class="section-h"><h2>۱۰ سهم هدف F3</h2>
+        <a class="aside" href="#f3" data-goto="f3">همه ←</a></div>
+      {% if (f3 or {}).picks %}
       <ul class="card cand-list">
-        {% for p in picks.picks[:6] %}
-        {% set close = (price_map.get(p.symbol) or {}).get('close') %}
+        {% for p in f3.picks %}
         <li>
           <span class="rank">{{ p.rank }}</span>
           <div class="c-main"><b>{{ p.symbol }}</b>
-            <span class="c-sub">{% if close %}پایانی <bdi>{{ rial(close) }}</bdi> · {% endif %}تا سقف <bdi>{{ '%.2f'|format(p.dist_to_ceiling_pct) }}%</bdi></span></div>
-          <span class="score" title="امتیاز رتبه">{{ '%.0f'|format(p.score) }}</span>
+            <span class="c-sub">P/E <bdi>{{ '%.1f'|format(p.pe) if p.pe else '—' }}</bdi> · {{ p.status_fa }}</span></div>
+          <span class="score" title="امتیاز ترکیبی">{{ '%.2f'|format(p.score) if p.score is not none else '—' }}</span>
         </li>
         {% endfor %}
       </ul>
-      {% else %}<div class="empty">کاندیدی برای امروز ثبت نشده است.</div>{% endif %}
+      {% else %}<div class="empty">برنامهٔ F3 در دسترس نیست.</div>{% endif %}
     </div>
   </div>
 </section>
 
-<!-- ================= BUY ================= -->
+<!-- ================= V3 ARCHIVE ================= -->
+<section class="panel" id="v3archive">
+  <h2 style="margin-top:4px">آرشیو V3 — بایگانی‌شده از ۲۰۲۶-۱۱-۲۶ ۲۳:۱۱</h2>
+  <p class="note">V3 (سیگنال صف خرید سقف، حداکثر ۶ انتخاب در روز، ۱۰ اسلات، حد ضرر ۹٪، خروج زمانی ۱۵ جلسه‌ای) دیگر خرید نمی‌کند.
+     تنها اثر باقی‌ماندهٔ آن، قواعد خروج پوزیشن قدیمی <b>آباد</b> است (حد ضرر ۹٪ و خروج زمانی) که در تب «F3 زنده» نشان داده می‌شود.
+     جدول‌های زیر فقط برای سابقه نگه داشته شده‌اند.</p>
+  <div class="f3-sched" style="display:flex;gap:8px;flex-wrap:wrap">
+    <button class="btn" type="button" data-goto="buy">کاندیدای خرید (اسکن صف سقف V3){% if picks.picks %} · {{ picks.picks|length }}{% endif %}</button>
+    <button class="btn" type="button" data-goto="sell">کاندیدای فروش (حد سود/ضرر و خروج ۱۵ جلسه‌ای V3)</button>
+  </div>
+</section>
+
+<!-- ================= BUY (V3 archive) ================= -->
 <section class="panel" id="buy">
+  <p class="note"><a href="#v3archive" data-goto="v3archive">→ بازگشت به آرشیو V3</a> · این جدول مربوط به V3 بایگانی‌شده است و روی سفارش‌ها اثری ندارد.</p>
   <div class="kpis minis" style="margin-top:0">
     <div class="kpi mini"><div class="lbl">پوزیشن‌های باز</div><div class="val">{{ positions|length }} / {{ max_pos }}</div></div>
     <div class="kpi mini"><div class="lbl">اسلات آزاد</div><div class="val">{{ free_slots }}</div></div>
@@ -315,8 +319,9 @@
   {% endif %}
 </section>
 
-<!-- ================= SELL ================= -->
+<!-- ================= SELL (V3 archive) ================= -->
 <section class="panel" id="sell">
+  <p class="note"><a href="#v3archive" data-goto="v3archive">→ بازگشت به آرشیو V3</a> · قواعد حد سود/ضرر و خروج زمانی V3 — فقط برای پوزیشن قدیمی آباد فعال است.</p>
   <div class="kpis minis" style="margin-top:0">
     <div class="kpi mini"><div class="lbl">حد سود</div><div class="val pos">{{ target }}%</div></div>
     <div class="kpi mini"><div class="lbl">حد ضرر</div><div class="val neg">{{ stop }}%</div></div>

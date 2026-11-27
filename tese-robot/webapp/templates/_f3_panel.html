@@ -1,0 +1,221 @@
+{# ================= F3_QVGM (Hark 2026-11-27) — read-only view of the live fundamentals strategy ================= #}
+<style>
+  .f3-funnel{display:flex;flex-direction:column;gap:6px;padding:14px}
+  .f3-stage{display:grid;grid-template-columns:minmax(150px,1.3fr) 3fr 64px;gap:10px;align-items:center}
+  .f3-stage .nm{font-size:.86rem;line-height:1.35}
+  .f3-stage .bar{height:18px;border-radius:6px;background:var(--chart-grid,#e5e9f0);overflow:hidden}
+  .f3-stage .bar i{display:block;height:100%;border-radius:6px;background:var(--chart-line,#2f6fed)}
+  .f3-stage.top .bar i{background:#16a34a}
+  .f3-stage .ct{font-weight:700;text-align:left;font-variant-numeric:tabular-nums}
+  .f3-stage .drop{font-size:.72rem;opacity:.65;display:block}
+  .f3-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+  .f3-card{padding:14px}
+  .f3-card h3{margin:0 0 8px;font-size:1rem}
+  .f3-row{display:flex;justify-content:space-between;gap:8px;padding:4px 0;border-bottom:1px dashed var(--chart-grid,#e5e9f0);font-size:.88rem}
+  .f3-row:last-child{border-bottom:0}
+  .f3-row .unit,.f3-row small{margin-inline-start:4px}
+  .f3-meter{height:10px;border-radius:5px;background:var(--chart-grid,#e5e9f0);position:relative;margin:8px 0 4px;overflow:hidden}
+  .f3-meter i{position:absolute;inset-block:0;inset-inline-start:0;background:var(--chart-line,#2f6fed)}
+  .f3-meter b{position:absolute;inset-block:-2px;width:2px;background:#dc2626}
+  .f3-st{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.78rem;white-space:nowrap;background:var(--chart-grid,#e5e9f0)}
+  .f3-st.filled,.f3-st.done,.f3-st.held{background:#dcfce7;color:#166534}
+  .f3-st.partial,.f3-st.running,.f3-st.queued{background:#fef9c3;color:#854d0e}
+  .f3-st.failed,.f3-st.missed{background:#fee2e2;color:#991b1b}
+  .f3-st.dry{background:#e0e7ff;color:#3730a3}
+  [data-theme="dark"] .f3-st.filled,[data-theme="dark"] .f3-st.done,[data-theme="dark"] .f3-st.held{background:#14532d;color:#dcfce7}
+  [data-theme="dark"] .f3-st.partial,[data-theme="dark"] .f3-st.running,[data-theme="dark"] .f3-st.queued{background:#713f12;color:#fef9c3}
+  [data-theme="dark"] .f3-st.failed,[data-theme="dark"] .f3-st.missed{background:#7f1d1d;color:#fee2e2}
+  .f3-sched{display:flex;flex-wrap:wrap;gap:8px}
+  .f3-slot{padding:8px 10px;border-radius:10px;border:1px solid var(--chart-grid,#e5e9f0);min-width:118px}
+  .f3-slot .t{font-weight:700;font-size:1rem}
+  .f3-big{font-size:2rem;font-weight:800;line-height:1.1}
+  .f3-ro{font-size:.78rem;opacity:.7}
+  @media (max-width:640px){.f3-stage{grid-template-columns:1fr 54px}.f3-stage .bar{grid-column:1/-1;order:3}}
+</style>
+{% set F = f3 or {} %}
+{% set C = F.capital or {} %}
+{% set FN = F.funnel or {} %}
+{% macro pc(v, d=1) -%}{% if v is none %}—{% else %}{{ ('%.' ~ d ~ 'f')|format(v * 100) }}٪{% endif %}{%- endmacro %}
+{% macro mrial(v) -%}{% if v is none %}—{% else %}{{ '{:,.1f}'.format((v or 0) / 1000000) }}{% endif %}{%- endmacro %}
+
+<section class="panel active" id="f3">
+  {% if F.error %}
+  <div class="empty">خطا در خواندن داده‌های F3: <code>{{ F.error }}</code> — بقیهٔ داشبورد سالم است.</div>
+  {% elif not F.ok %}
+  <div class="empty">برنامهٔ F3 (state/fund_plan.json) هنوز ساخته نشده است.</div>
+  {% else %}
+  <div class="section-h" style="margin-top:4px">
+    <h2>استراتژی زنده: {{ F.variant }} — کیفیت، ارزش، رشد، مومنتوم</h2>
+    <span class="aside">
+      <span class="chip {{ 'live' if F.live_orders else 'dry' }}"><span class="dot"></span>{{ 'سفارش واقعی روشن' if F.live_orders else 'سفارش واقعی خاموش (آزمایشی)' }}</span>
+      · آخرین برنامه: <bdi class="num">{{ F.plan_at_tehran }}</bdi> تهران (دادهٔ جلسهٔ <bdi>{{ F.plan_session }}</bdi>)
+    </span>
+  </div>
+  <p class="f3-ro">این بخش فقط‌خواندنی است: هیچ دکمه‌ای سفارش نمی‌دهد یا تنظیمات را تغییر نمی‌دهد. صفحه هر ۶۰ ثانیه نو می‌شود.</p>
+  {% if F.plan_notes %}<p class="note">⚠ یادداشت برنامه: {{ F.plan_notes|join(' · ') }}</p>{% endif %}
+
+  <!-- KPIs -->
+  <div class="kpis">
+    <div class="kpi hero">
+      <div class="lbl">کل سرمایهٔ استراتژی</div>
+      <div class="val">{{ tval(C.total) }}</div>
+      <div class="sub"><span class="num">{{ rial(C.total) }}</span> ریال · نقد + افران + سهام F3 (بدون آباد و خساپا) · {{ jd(C.at_server) }}</div>
+    </div>
+    <div class="kpi">
+      <div class="lbl">سهم هر نماد (هدف)</div>
+      <div class="val">{{ tval(C.per_name) }}</div>
+      <div class="sub">۲/۳ سرمایه ÷ {{ F.cfg.n_hold }}</div>
+    </div>
+    <div class="kpi">
+      <div class="lbl">ری‌بالانس بعدی</div>
+      {% set R = F.rebalance or {} %}
+      {% if R.first %}
+      <div class="val">اولین ری‌بالانس</div>
+      <div class="sub">امروز/جلسهٔ بعد اجرا می‌شود؛ سپس شمارش {{ R.of }} جلسه</div>
+      {% else %}
+      <div class="val">{{ R.left }} <span class="unit">جلسه مانده از {{ R.of }}</span></div>
+      <div class="sub">{{ R.since }} جلسه از ری‌بالانس جلسهٔ <bdi>{{ R.last_session }}</bdi></div>
+      {% endif %}
+    </div>
+    <div class="kpi">
+      <div class="lbl">سفارش‌های F3 امروز</div>
+      <div class="val">{{ F.submitted_today }} <span class="unit">ثبت‌شده از {{ F.orders_today }} تلاش</span></div>
+      <div class="sub">روز <bdi>{{ F.today }}</bdi> · ساعت تهران <bdi>{{ F.now_hm }}</bdi></div>
+    </div>
+  </div>
+
+  <!-- funnel -->
+  <div class="section">
+    <div class="section-h"><h2>قیف انتخاب سهم</h2>
+      <span class="aside">{% if FN.refreshing %}در حال به‌روزرسانی شمارش‌ها… · {% endif %}محاسبه از کش‌های همان برنامه · {{ jd(FN.computed_at) }}</span></div>
+    {% if FN.stages %}
+    {% set top = (FN.stages[0].count or 1) %}
+    <div class="card f3-funnel">
+      {% for s in FN.stages %}
+      {% set prev = FN.stages[loop.index0 - 1].count if loop.index0 > 0 else none %}
+      <div class="f3-stage {{ 'top' if s.key == 'top' else '' }}">
+        <div class="nm">{{ s.label }}{% if prev is not none and prev - s.count > 0 %}<span class="drop">−{{ prev - s.count }} حذف</span>{% endif %}</div>
+        <div class="bar"><i style="width:{{ '%.1f'|format([s.count * 100.0 / top, 1.5]|max) }}%"></i></div>
+        <div class="ct">{{ s.count }}</div>
+      </div>
+      {% endfor %}
+      <div class="f3-ro">نگهداری: سهمی که در سبد است تا رتبهٔ ≤ {{ FN.buffer or 20 }} می‌ماند ·
+        {% if FN.match_plan_top10 %}۱۰ سهم برتر با برنامهٔ شبانه یکی است ✓{% else %}⚠ ده سهم برتر با برنامهٔ شبانه فرق دارد (داده‌ها بعد از برنامه تغییر کرده){% endif %}</div>
+    </div>
+    {% elif FN.error %}<div class="empty">شمارش قیف در دسترس نیست: <code>{{ FN.error }}</code></div>
+    {% else %}<div class="empty">شمارش قیف در حال محاسبه است؛ چند ثانیه دیگر صفحه را نو کنید.</div>{% endif %}
+  </div>
+
+  <!-- picks -->
+  <div class="section">
+    <div class="section-h"><h2>۱۰ سهم هدف</h2>
+      <span class="aside">امتیاز = میانگین رتبهٔ صدکی چهار عامل (۰ تا ۱) · وضعیت سفارش برای امروز (تهران)</span></div>
+    <div class="table-wrap stack">
+    <table class="responsive">
+      <tr class="head"><th>رتبه</th><th>نماد</th><th>امتیاز</th><th>E/P</th><th>رشد EPS سالانه</th><th>ROE</th><th>مومنتوم ۶ ماهه</th><th>P/E</th>
+        <th>هدف (م ریال)</th><th>در سبد</th><th>فاصله تا هدف (م ریال)</th><th>قیمت سفارش</th><th>وضعیت امروز</th></tr>
+      {% for p in F.picks %}
+      <tr>
+        <td data-label="رتبه">{{ p.rank }}</td>
+        <td data-label="نماد"><b>{{ p.symbol }}</b>{% if p.pub %}<small class="src"> گزارش <bdi>{{ p.pub }}</bdi></small>{% endif %}</td>
+        <td data-label="امتیاز" class="n pos">{{ '%.3f'|format(p.score) if p.score is not none else '—' }}</td>
+        <td data-label="E/P" class="n">{{ pc(p.ey) }}</td>
+        <td data-label="رشد EPS" class="n">{{ pc(p.yoy, 0) }}</td>
+        <td data-label="ROE" class="n">{{ pc(p.roe, 0) }}</td>
+        <td data-label="مومنتوم ۶ماهه" class="n">{{ pc(p.mom, 0) }}</td>
+        <td data-label="P/E" class="n">{{ '%.1f'|format(p.pe) if p.pe else '—' }}</td>
+        <td data-label="هدف (م ریال)" class="n">{{ mrial(p.target) }}</td>
+        <td data-label="در سبد" class="n">{% if p.held_qty %}{{ '{:,.0f}'.format(p.held_qty) }} سهم<small class="rial"> {{ mrial(p.held_value) }} م</small>{% else %}—{% endif %}</td>
+        <td data-label="فاصله تا هدف" class="n {{ 'neg' if p.gap_pct >= 25 else '' }}">{{ mrial(p.gap) }}<small class="rial"> {{ '%.0f'|format(p.gap_pct) }}٪</small></td>
+        <td data-label="قیمت سفارش" class="n">{{ rial(p.limit) if p.limit else '—' }}
+          <small class="src">{% if p.limit_kind == 'order' %}سفارش امروز{% if p.order_at %} <bdi>{{ p.order_at }}</bdi>{% endif %}{% elif p.limit_kind == 'run' %}برآورد آخرین اجرا{% else %}قیمت پایانی{% endif %}{% if p.limit_src and p.limit_src != 'ref' %} · <bdi>{{ p.limit_src }}</bdi>{% endif %}</small></td>
+        <td data-label="وضعیت امروز"><span class="f3-st {{ p.status }}">{{ p.status_fa }}</span>{% if p.status_msg %}<small class="src"> <bdi>{{ p.status_msg }}</bdi></small>{% endif %}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    </div>
+    <p class="note">قواعد: سفارش زیر {{ '{:,.0f}'.format((F.cfg.min_trade_rial or 0) / 1000000) }} میلیون ریال ثبت نمی‌شود · تکمیل سهم فقط وقتی ≥ {{ '%.0f'|format((F.cfg.topup_drift or 0) * 100) }}٪ زیر هدف باشد ·
+      قیمت: «best_ask» = بهترین فروشنده، «ceiling_locked» = صف خرید سقف (احتمال پر نشدن).</p>
+  </div>
+
+  <!-- capital -->
+  <div class="section">
+    <div class="section-h"><h2>تخصیص سرمایه</h2><span class="aside">پرتفوی کارگزار {{ jd(C.at_server) }} · موجودی {{ jd(C.cash_at_server) }}</span></div>
+    <div class="f3-grid">
+      <div class="card f3-card">
+        <h3>صندوق افران — هدف ۱/۳</h3>
+        <div class="f3-row"><span>ارزش فعلی</span><b>{{ tval(C.afran_value) }}</b></div>
+        <div class="f3-row"><span>سهم از کل</span><b>{{ '%.1f'|format(C.afran_pct or 0) }}٪ <small>(هدف {{ '%.1f'|format(C.afran_target_pct or 0) }}٪)</small></b></div>
+        <div class="f3-meter" title="سهم افران؛ خط قرمز = هدف"><i style="width:{{ '%.1f'|format([C.afran_pct or 0, 100]|min) }}%"></i><b style="inset-inline-start:{{ '%.1f'|format(C.afran_target_pct or 0) }}%"></b></div>
+        <div class="f3-row"><span>هدف</span><b>{{ tval(C.afran_target) }}</b></div>
+        <div class="f3-row"><span>مازاد برای فروش</span>
+          <b class="{{ 'neg' if C.afran_excess_due else '' }}">{% if C.afran_excess > 0 %}{{ tval(C.afran_excess) }} <small>≈ {{ '{:,.0f}'.format(C.afran_excess_units) }} واحد</small>{% else %}ندارد{% endif %}</b></div>
+        <div class="f3-row"><span>فروش امروز</span><b>{% if F.afran_sale %}<span class="f3-st {{ 'queued' if F.afran_sale.submitted else ('dry' if F.afran_sale.dry else 'failed') }}">{{ 'ثبت شد' if F.afran_sale.submitted else ('آزمایشی' if F.afran_sale.dry else 'ثبت نشد') }}</span> <bdi>{{ F.afran_sale.at }}</bdi> · {{ '{:,.0f}'.format(F.afran_sale.qty or 0) }} واحد{% else %}—{% endif %}</b></div>
+        <p class="f3-ro">فروش فقط اگر مازاد ≥ {{ '{:,.0f}'.format((C.excess_threshold or 0) / 1000000) }} میلیون ریال؛ هرگز زیر ۱/۳. خرید افران با سود فقط تا ۱/۳.</p>
+      </div>
+      <div class="card f3-card">
+        <h3>سبد سهام F3 — ۲/۳</h3>
+        <div class="f3-row"><span>بودجهٔ سهام</span><b>{{ tval(C.stock_budget) }}</b></div>
+        <div class="f3-row"><span>ارزش سهام F3 در سبد</span><b>{{ tval(C.fund_value) }}</b></div>
+        <div class="f3-meter" title="درصد پرشدن بودجهٔ سهام"><i style="width:{{ '%.1f'|format([C.fund_fill_pct or 0, 100]|min) }}%"></i></div>
+        <div class="f3-row"><span>پر شده</span><b>{{ '%.1f'|format(C.fund_fill_pct or 0) }}٪</b></div>
+        <div class="f3-row"><span>نقد / قدرت خرید</span><b>{{ tval(C.cash) }}{% if not C.cash_ok %} <small class="neg">(خواندن ناموفق)</small>{% endif %}</b></div>
+        <div class="f3-row"><span>هر نماد</span><b>{{ tval(C.per_name) }}</b></div>
+      </div>
+      <div class="card f3-card">
+        <h3>دستی و قدیمی (خارج از سرمایهٔ F3)</h3>
+        {% for L in F.legacy %}
+          {% if L.held %}
+          <div class="f3-row"><span><b>{{ L.symbol }}</b> — پوزیشن قدیمی V3</span><b>{{ tval(L.value) }}</b></div>
+          <div class="f3-row"><span>سود/زیان</span><b class="{{ pcls(L.pnl_pct) }}">{{ '%+.2f'|format(L.pnl_pct or 0) }}٪</b></div>
+          <div class="f3-row"><span>حد ضرر {{ '%.0f'|format(L.stop_pct) }}٪ (≈ قیمت)</span><b>{{ rial(L.stop_px) }} <small>{{ '%.1f'|format(L.to_stop_pct or 0) }}٪ فاصله</small></b></div>
+          <div class="f3-row"><span>خروج زمانی</span><b><bdi>{{ L.exit_day }}</bdi> <small>({{ L.exit_days_left }} روز دیگر)</small></b></div>
+          {% else %}
+          <div class="f3-row"><span><b>{{ L.symbol }}</b></span><b>دیگر در سبد نیست</b></div>
+          {% endif %}
+        {% endfor %}
+        {% for M in F.manual %}
+          <div class="f3-row"><span><b>{{ M.symbol }}</b> — کاملاً دستی</span><b>{{ tval(M.value) }}</b></div>
+        {% endfor %}
+        <p class="f3-ro">ربات آباد را فقط با قواعد V3 (حد ضرر/خروج زمانی) می‌فروشد؛ به خساپا دست نمی‌زند.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- schedule + buffer -->
+  <div class="grid2 section">
+    <div>
+      <div class="section-h"><h2>برنامهٔ امروز (تهران)</h2><span class="aside">روز <bdi>{{ F.today }}</bdi></span></div>
+      <div class="card f3-card">
+        <div class="f3-sched">
+          {% for s in F.pre %}
+          <div class="f3-slot"><div class="t"><bdi>{{ s.at }}</bdi></div><div>{{ s.label }}</div>
+            <span class="f3-st {{ '' if s.closed else ('done' if s.done else '') }}">{% if s.closed %}بازار بسته{% elif s.done %}انجام شد {{ s.done }}{% else %}در انتظار{% endif %}</span></div>
+          {% endfor %}
+          {% for s in F.schedule %}
+          <div class="f3-slot"><div class="t"><bdi>{{ s.at }}</bdi></div><div>خرید F3 {% if loop.first %}(+ فروش مازاد افران){% endif %}</div>
+            <span class="f3-st {{ s.code }}">{{ s.fa }}</span>
+            {% if s.orders %}<div class="f3-ro">{{ s.submitted }}/{{ s.orders }} سفارش ثبت شد</div>{% endif %}
+            {% if s.skipped %}<div class="f3-ro">رد شد: <bdi>{{ s.skipped }}</bdi></div>{% endif %}
+          </div>
+          {% endfor %}
+        </div>
+        <p class="f3-ro">ساخت برنامهٔ شبانه هر شب ۲۱:۳۰ · چرخش ۱۰:۰۰ V3 خاموش است.</p>
+      </div>
+    </div>
+    <div>
+      <div class="section-h"><h2>بافر نگهداری (رتبه ۱۱ تا {{ F.cfg.buffer }})</h2></div>
+      <div class="card f3-card">
+        {% if F.hold_buffer %}
+          {% for b in F.hold_buffer %}<div class="f3-row"><span><b>{{ b.symbol }}</b> — رتبه {{ b.rank }} · نگه داشته می‌شود</span><b>{{ tval(b.value) }}</b></div>{% endfor %}
+        {% else %}<div class="f3-row"><span>هیچ سهم نگه‌داشته‌ای در رتبهٔ ۱۱–{{ F.cfg.buffer }} نیست.</span></div>{% endif %}
+        {% for b in F.out_of_buffer %}<div class="f3-row"><span class="neg"><b>{{ b.symbol }}</b> — رتبه {{ b.rank or 'خارج از فهرست' }} · در ری‌بالانس بعد فروخته می‌شود</span><b>{{ tval(b.value) }}</b></div>{% endfor %}
+        {% if F.near %}
+        <div class="f3-ro" style="margin-top:8px">رتبه‌های ۱۱ تا {{ F.cfg.buffer }} امشب:
+          {% for n in F.near %}<bdi>{{ n.rank }}. {{ n.symbol }}{% if n.held %} ●{% endif %}</bdi>{% if not loop.last %}، {% endif %}{% endfor %}</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</section>
