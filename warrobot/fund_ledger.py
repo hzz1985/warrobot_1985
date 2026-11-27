@@ -179,6 +179,16 @@ def positions_snapshot() -> tuple[str, dict]:
             px = float(r.get("price") or 0) or (val / qty if qty else 0.0)
             if qty > 0:
                 out[s] = {"qty": qty, "value": val or qty * px, "price": px}
+                # War2 stop basis: the portfolio card's avg_cost is the raw broker average; pnl.json's avg_cost is
+                # already the broker's fee-inclusive break-even average -> keep it only as avg_cost_fee
+                try:
+                    if p.name == "portfolio.json" and float(r.get("avg_cost") or 0) > 0:
+                        out[s]["avg_cost"] = float(r["avg_cost"])
+                    fee_avg = float(r.get("avg_cost_fee") or (r.get("avg_cost") if p.name == "pnl.json" else 0) or 0)
+                    if fee_avg > 0:
+                        out[s]["avg_cost_fee"] = fee_avg
+                except Exception:
+                    pass
         best_at, best = str(d["at"]), out
     return best_at, best
 

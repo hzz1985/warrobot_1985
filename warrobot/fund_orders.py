@@ -22,6 +22,12 @@ Per run (all numbers recomputed from the CURRENT capital, see fund_ledger.capita
     or a buy submitted today (Tehran) is skipped; spend <= 99.5 % of the buying power.
   * prices: price_discovery (official band + best limits): buy crosses the best ask, else bids the ceiling
     (pre-open auction fills at the auction price); sells hit the best bid, افران never below 99.5 % of close.
+War2 stop (war2_stop.py, strategy.fund.stop_fixed_pct > 0): stop sales go FIRST in every run — tonight's new
+  stops from the plan plus every pending stop in state/fund_state.json "war2"; the whole held qty at
+  exit_engine.sell_limit("stop_loss") (best bid, else the daily floor); retried each run until the broker no
+  longer shows the name; our own open stop order above the current limit for >= 10 min is cancelled (re-placed
+  next run).  A stopped name is never bought / topped up again in the same cycle, and its slot's money stays in
+  cash (spendable cash is reduced by one per-name budget for each sold stop of the cycle).
 Guards: MANUAL_ONLY (خساپا; افران except the excess sale) and legacy V3 names are never traded here.
 Live buys go through order_candidates.execute (orders_log.jsonl, trade journal, idempotency).
 Every decision is logged to state/fund_orders.jsonl; the last run to state/fund_run.json.
@@ -49,6 +55,7 @@ sys.path.insert(0, str(BASE.parent / "Tse2" / "orderflow"))
 sys.path.insert(0, str(BASE.parent / "TeseRobot" / "src"))
 import fund_ledger as FL          # noqa: E402
 import strategy_fund as SF        # noqa: E402
+import war2_stop as W2            # noqa: E402
 
 STATE = BASE / "state"
 PLAN = STATE / "fund_plan.json"
@@ -106,7 +113,44 @@ def commit_rebalance(plan: dict) -> None:
     st = FL.load_state()
     st.update(last_rebalance_session=plan.get("session"), last_rebalance_at=plan.get("at"),
               target=[FL.norm(s) for s in (plan.get("target") or [])], target_committed_tehran=tehran_now().strftime("%Y-%m-%d %H:%M"))
+    if "war2" in st:
+        W2.roll_cycle(st, plan.get("session"))
     FL.save_state(st)
+
+
+def plan_is_fresh(plan: dict) -> bool:
+    try:
+        return datetime.now() - datetime.strptime(plan["at"], "%Y-%m-%d %H:%M:%S") <= timedelta(days=PLAN_MAX_AGE_DAYS)
+    except Exception:
+        return False
+
+
+def recent_stop_submits(minutes: float = 15.0) -> set:
+    """symbols with a live War2 stop sell we submitted in the last few minutes (server clock)."""
+    out, now = set(), datetime.now()
+    for r in _jsonl(OLOG, last=500):
+        if r.get("event") == "order" and r.get("reason") == W2.REASON and r.get("submitted") and not r.get("dry"):
+            try:
+                if (now - datetime.strptime(r["at"], "%Y-%m-%d %H:%M:%S")).total_seconds() <= minutes * 60:
+                    out.add(FL.norm(r.get("symbol")))
+            except Exception:
+                pass
+    return out
+
+
+def war2_stops(plan: dict, st: dict) -> dict:
+    """{symbol: stop record} to act on now: pending stops from the state + new stops of a fresh plan."""
+    out = {s: dict(v, symbol=s, status="pending") for s, v in W2.pending(st).items()}
+    if plan_is_fresh(plan):
+        for x in plan.get("stops") or []:
+            s = FL.norm(x.get("symbol"))
+            if not s or s in out:
+                continue
+            cur = (W2.w2_state(st)["stops"]).get(s) or {}
+            if cur.get("status") == "sold" and str(cur.get("trigger_session")) == str(x.get("trigger_session")):
+                continue
+            out[s] = dict(x, symbol=s)
+    return out
 
 
 # ------------------------------------------------------------------ today's activity (Tehran day)
@@ -187,6 +231,24 @@ def _sell_px(sym: str, ref: float, floor_share: float = 0.0) -> tuple[int, str]:
     return px, src
 
 
+def _stop_px(sym: str, ref: float) -> tuple[int, str]:
+    """War2 stop limit: exit_engine.sell_limit("stop_loss") = best bid, else today's floor (clamped to the band)."""
+    market = {}
+    try:
+        import price_discovery as pdsc
+        market = pdsc.market(sym, ref) or {}
+    except Exception:
+        pass
+    try:
+        import exit_engine as ee
+        px, src = ee.sell_limit("stop_loss", ref, market)
+    except Exception:
+        px, src = 0, "none"
+    if not px and ref:                       # no book and no band: 3 % under the reference (the TSE band)
+        px, src = int(round(ref * 0.97)), "ref-3%"
+    return int(px), "war2:" + str(src)
+
+
 def _ref_close(sym: str, plan: dict) -> float:
     for r in (plan.get("ranked_top") or []):
         if FL.norm(r.get("sym")) == sym and r.get("close"):
@@ -205,11 +267,13 @@ def _ref_close(sym: str, plan: dict) -> float:
 # ------------------------------------------------------------------ the decision (no orders)
 def plan_now(cash: float, open_orders: list | None = None, sold_afran_today: bool | None = None,
              bought_today: set | None = None, buy_px=None, sell_px=None, ref_close=None,
-             simulate_afran_sale: bool = False) -> dict:
+             simulate_afran_sale: bool = False, stop_px=None) -> dict:
     fc = FL.fund_config()
     _, cfg = SF.load_config(BASE / "config.json")
+    w2cfg = W2.config(BASE / "config.json")
     buy_px = buy_px or _buy_px
     sell_px = sell_px or _sell_px
+    stop_px = stop_px or _stop_px
     open_buys, open_sells, reserved = open_order_book(open_orders or [])
     bought_today = submitted_today("buy") if bought_today is None else bought_today
     if sold_afran_today is None:
@@ -218,7 +282,8 @@ def plan_now(cash: float, open_orders: list | None = None, sold_afran_today: boo
     target, plan, new_reb = current_target()
     ref_close = ref_close or (lambda s: _ref_close(s, plan))
     out = {"capital": cap, "target": target, "new_rebalance": new_reb, "plan_session": plan.get("session"),
-           "plan_at": plan.get("at"), "afran_sell": None, "sells": [], "buys": [], "notes": []}
+           "plan_at": plan.get("at"), "afran_sell": None, "stop_sells": [], "sells": [], "buys": [], "notes": [],
+           "war2": {"name": w2cfg["name"], "stop_fixed_pct": w2cfg["stop_fixed_pct"], "active": w2cfg["active"]}}
     total = cap["total"]
     per_name = cap["stock_budget"] / max(1, cfg.n_hold)
     out["per_name"] = round(per_name, 0)
@@ -228,10 +293,53 @@ def plan_now(cash: float, open_orders: list | None = None, sold_afran_today: boo
     if not target:
         out["notes"].append("no target yet (no rebalance plan): nothing to buy")
 
+    # 0) War2 stop sales: first, every run, until the broker no longer shows the name
+    st = FL.load_state()
+    blocked, stop_names, reserve = set(), set(), 0.0
+    if w2cfg["active"]:
+        stops = war2_stops(plan, st)
+        _, snap = FL.positions_snapshot()
+        out["stops"] = []
+        for s, x in stops.items():
+            if s in FL.MANUAL_ONLY or s in W2.MANUAL_ONLY or s in leg:
+                out["notes"].append(f"{s}: War2 never judges manual-only / legacy V3"); continue
+            stop_names.add(s)
+            qty = int((snap.get(s) or {}).get("qty") or 0)
+            rec = {"symbol": s, "status": x.get("status"), "trigger_session": x.get("trigger_session"),
+                   "stop_price": x.get("stop_price"), "close": x.get("close"), "held_qty": qty}
+            out["stops"].append(rec)
+            if qty <= 0:
+                rec["status"] = "sold"; continue
+            if s in open_sells:
+                rec["order"] = "sell_open"
+                out["notes"].append(f"{s}: War2 stop sell already open"); continue
+            if s in recent_stop_submits():
+                rec["order"] = "submitted_recently"       # the open-order list can lag our own order
+                out["notes"].append(f"{s}: War2 stop sell submitted < 15 min ago"); continue
+            ref = float(x.get("close") or 0) or ref_close(s)
+            px, src = stop_px(s, ref)
+            if px <= 0:
+                out["notes"].append(f"{s}: War2 stop, no price"); continue
+            out["stop_sells"].append({"side": "sell", "symbol": s, "qty": qty, "price": px, "price_source": src,
+                                      "reason": W2.REASON, "value": round(qty * px, 0),
+                                      "stop_price": x.get("stop_price"), "trigger_session": x.get("trigger_session")})
+        blocked = W2.blocked(st, [{"symbol": s} for s in stop_names], new_reb)
+        # cash waits: each stop of this cycle that is already sold keeps one per-name budget out of the buys
+        w2st = W2.w2_state(st)["stops"]
+        for s in (W2.stopped_in_cycle(st, st.get("last_rebalance_session")) if not new_reb else set()):
+            v = w2st.get(s) or {}
+            if s in held or v.get("status") != "sold":
+                continue
+            freed = float(v.get("qty") or 0) * float(v.get("close") or 0)
+            reserve += min(per_name, freed) if freed > 0 else per_name
+        out["stopped_this_cycle"] = sorted(blocked)
+        if reserve:
+            out["cash_reserved_for_stopped"] = round(reserve, 0)
+
     # 1) rebalance sells: fund positions that left the target (only when a NEW rebalance is executed)
     if new_reb:
         for s, v in held.items():
-            if s in target or s in FL.MANUAL_ONLY or s in leg:
+            if s in target or s in FL.MANUAL_ONLY or s in leg or s in stop_names:
                 continue
             if s in open_sells:
                 out["notes"].append(f"{s}: sell already open"); continue
@@ -267,7 +375,7 @@ def plan_now(cash: float, open_orders: list | None = None, sold_afran_today: boo
                 afran_proceeds = qty * min(px, ref) * (1 - FEE_SELL_AFRAN)
 
     # 3) buys in target order
-    spend = max(0.0, cash) * SPEND_SHARE
+    spend = max(0.0, max(0.0, cash) * SPEND_SHARE - reserve)
     if simulate_afran_sale and afran_proceeds:
         spend += afran_proceeds * SPEND_SHARE
         out["notes"].append(f"dry: buying power includes the simulated افران sale ({afran_proceeds:,.0f})")
@@ -276,6 +384,8 @@ def plan_now(cash: float, open_orders: list | None = None, sold_afran_today: boo
     for rank, s in enumerate(target, 1):
         if s in FL.MANUAL_ONLY or s in leg:
             out["notes"].append(f"{s}: manual-only / legacy V3, not a fund slot"); continue
+        if s in blocked:
+            out["notes"].append(f"{s}: War2 stopped this cycle, not bought again until the next rebalance"); continue
         if s in open_buys or s in bought_today:
             out["notes"].append(f"{s}: buy already open / submitted today"); continue
         cur = float(held.get(s) or 0)
@@ -417,6 +527,64 @@ def _send_buy(b: dict, dry: bool) -> dict:
     return rec
 
 
+# ------------------------------------------------------------------ War2 bookkeeping (live runs only)
+def war2_persist(p: dict, results: list) -> None:
+    """record tonight's new stops as pending, count order attempts, close the ones the broker no longer shows."""
+    try:
+        st = FL.load_state()
+        _, plan, _ = current_target()
+        now = tehran_now().strftime("%Y-%m-%d %H:%M")
+        if plan_is_fresh(plan):
+            W2.merge_plan_stops(st, [x for x in plan.get("stops") or [] if x.get("status") == "new"], now)
+        w = W2.w2_state(st)
+        for r in results:
+            if r.get("reason") == W2.REASON and FL.norm(r.get("symbol")) in w["stops"]:
+                v = w["stops"][FL.norm(r["symbol"])]
+                v["orders"] = int(v.get("orders") or 0) + 1
+                v["last_order_tehran"] = now
+                v["last_order_msg"] = str(r.get("message"))[:80]
+                v["last_order_submitted"] = bool(r.get("submitted"))
+        _, snap = FL.positions_snapshot()
+        if snap:                         # only with a broker snapshot: no snapshot never closes a stop
+            W2.mark_sold(st, set(snap), now)
+        FL.save_state(st)
+    except Exception as exc:
+        _log({"event": "war2_persist_error", "error": str(exc)[:200]})
+
+
+def war2_reprice(open_orders: list, now: float | None = None) -> list:
+    """cancel OUR open War2 stop sells that sit above today's stop limit for >= 10 min (re-placed next run)."""
+    now = now or time.time()
+    ours = {}
+    for r in _jsonl(OLOG):
+        if r.get("event") == "order" and r.get("reason") == W2.REASON and r.get("submitted") and r.get("orderid"):
+            try:
+                ts = datetime.strptime(r["at"], "%Y-%m-%d %H:%M:%S").timestamp()
+            except Exception:
+                ts = now
+            ours[str(r["orderid"])] = ts
+    stale = []
+    for o in open_orders or []:
+        oid = str(o.get("orderid") or o.get("order_id") or "")
+        side = str(o.get("side") or "")
+        if oid not in ours or not ("فروش" in side or side.lower() == "sell"):
+            continue
+        sym = FL.norm(o.get("symbol"))
+        limit, _ = _stop_px(sym, float(o.get("price") or 0))
+        if (now - ours[oid]) / 60.0 >= 10 and limit and float(o.get("price") or 0) > limit:
+            stale.append({"orderid": oid, "symbol": sym, "price": o.get("price"), "new_limit": limit})
+    if not stale:
+        return []
+    try:
+        import cancel_orders as co
+        res = co.cancel([x["orderid"] for x in stale])
+    except Exception as exc:
+        res = {"ok": False, "error": str(exc)[:80]}
+    for x in stale:
+        _log({"event": "war2_cancel_for_reprice", **x, "result": str(res)[:200]})
+    return stale
+
+
 # ------------------------------------------------------------------ run
 def run(dry: bool = False, force: bool = False, plan_only: bool = False) -> dict:
     fc = FL.fund_config()
@@ -456,8 +624,12 @@ def run(dry: bool = False, force: bool = False, plan_only: bool = False) -> dict
               "afran_sell": p["afran_sell"], "sells": [s["symbol"] for s in p["sells"]],
               "buys": [(b["symbol"], b["qty"], b["price"]) for b in p["buys"]], "notes": p["notes"][:8]})
         results = []
-        for o in ([p["afran_sell"]] if p["afran_sell"] else []) + p["sells"]:
+        if p.get("war2", {}).get("active"):
+            report["war2_reprice"] = [] if dry else war2_reprice(oo)
+        for o in p.get("stop_sells", []) + ([p["afran_sell"]] if p["afran_sell"] else []) + p["sells"]:
             results.append(_send_sell(o, dry))
+        if not dry and p.get("war2", {}).get("active"):
+            war2_persist(p, results)
         if not dry and any(r.get("submitted") for r in results):
             # the sale money becomes buying power when it fills: give it a moment, then re-plan the buys
             time.sleep(20)
@@ -485,6 +657,8 @@ def run(dry: bool = False, force: bool = False, plan_only: bool = False) -> dict
 
 
 if __name__ == "__main__":
+    if "--plan-file" in sys.argv:          # rehearsal against a plan written by fund_live.py --plan --out X
+        PLAN = Path(sys.argv[sys.argv.index("--plan-file") + 1])
     r = run(dry="--dry" in sys.argv, force="--force" in sys.argv, plan_only="--plan-only" in sys.argv)
     if "--plan-only" not in sys.argv:
         print(json.dumps({k: r.get(k) for k in ("dry", "skipped", "committed_rebalance_session")} |

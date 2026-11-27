@@ -3,6 +3,7 @@
     python fund_live.py --plan            nightly (after the close): writes state/fund_plan.json
     python fund_live.py --plan --force    rebalance now even if the schedule says no
     python fund_live.py --status          print the last plan
+    python fund_live.py --plan --out X    rehearsal: write the plan to X, no state change, no log line
 
 What it does (same numbers as the backtest, research/fund/bt_fund.py):
   1. universe  = TSETMC market watch stocks (TSE 300 / IFB 303), symbols without a trailing digit
@@ -34,6 +35,7 @@ sys.path.insert(0, str(BASE))
 import fund_data as FD          # noqa: E402
 import fund_ledger as FL        # noqa: E402
 import strategy_fund as SF      # noqa: E402
+import war2_stop as W2          # noqa: E402
 
 STATE = BASE / "state"
 CACHE = STATE / "fund_cache"
@@ -138,16 +140,74 @@ def market_cap(pf: dict, sessions: list[int], capital: float, pub: str) -> float
     return capital / 1000.0 * pf["by"][k][2] * pf["chain"][sessions[-1]] / pf["chain"][k]
 
 
+# ------------------------------------------------------------------ War2 stop (war2_stop.py)
+def _war2(plan: dict, st: dict, uni: dict, H: dict, sessions: list, w2cfg: dict, fetch: dict) -> None:
+    """judge every F3 holding on tonight's close; fills plan risk / stops / war2_basis (never orders)."""
+    sess = sessions[-1]
+    ins_of = {FL.norm(sym): ins for ins, sym in uni.items()}
+    _, pos = (fetch.get("positions") or FL.positions_snapshot)()
+    leg = FL.legacy_v3(set(pos)) if pos else FL.legacy_v3(set())
+    fund = {s: p for s, p in pos.items() if s not in SF.MANUAL_ONLY and s not in W2.MANUAL_ONLY and s not in leg}
+    w = W2.w2_state(st)
+    basis = W2.update_basis(w["basis"], fund, sess)
+    pend = W2.pending(st)
+    risk, stops = [], []
+    for s, p in sorted(fund.items()):
+        r = W2.judge(s, p, H.get(ins_of.get(s)) or [], sess, basis.get(s), w2cfg["stop_fixed_pct"])
+        if s in pend:
+            r["status"] = "pending"
+        risk.append(r)
+        if r["status"] == "triggered":
+            stops.append({"symbol": s, "status": "new", "trigger_session": sess, "close": r["close"],
+                          "cost_ps": r["cost_ps"], "stop_price": r["stop_price"], "adj": r["adj"],
+                          "qty": r["qty"], "pnl_pct": r["pnl_pct"], "reason": W2.REASON})
+    for s, v in pend.items():
+        stops.append(dict({k: v.get(k) for k in ("trigger_session", "close", "cost_ps", "stop_price", "adj",
+                                                  "cycle", "qty", "pnl_pct")},
+                          symbol=s, status="pending", held=s in fund, reason=W2.REASON))
+    plan["risk"] = risk
+    plan["stops"] = stops
+    plan["war2_basis"] = basis
+    for r in risk:
+        if r["status"] in ("no_cost", "no_close_today"):
+            plan["notes"].append(f"{r['symbol']}: War2 stop not judged tonight ({r['status']})")
+
+
+def _war2_finish(plan: dict, st: dict) -> dict:
+    """cycle tag for tonight's new stops + the stopped-this-cycle list (after the rebalance decision)."""
+    committed = st.get("last_rebalance_session")
+    cyc = plan.get("session") if plan.get("action") == "rebalance" else committed
+    for x in plan.get("stops") or []:
+        if x.get("status") == "new":
+            x["cycle"] = cyc
+    if (plan.get("war2") or {}).get("active"):
+        plan["stopped_this_cycle"] = sorted(W2.stopped_in_cycle(st, committed) |
+                                            {x["symbol"] for x in plan.get("stops") or [] if x.get("status") == "new"})
+    return plan
+
+
 # ------------------------------------------------------------------ plan
 def build_plan(force: bool = False, now: datetime | None = None, fetch=None) -> dict:
     """fetch: optional dict of injectable data functions for tests
-       {universe(), history(ins, day), rahavard (RahavardCache-like), codal_index, total_assets()}"""
+       {universe(), history(ins, day), rahavard (RahavardCache-like), codal_index, total_assets(), positions()}"""
+    st = FL.load_state()
+    plan = _build_plan(force, now, fetch, st)
+    return _war2_finish(plan, st)
+
+
+def _build_plan(force: bool, now: datetime | None, fetch, st: dict) -> dict:
     now = now or datetime.now()
     raw, cfg = SF.load_config(BASE / "config.json")
     fc = FL.fund_config()
     plan = {"at": now.strftime("%Y-%m-%d %H:%M:%S"), "variant": cfg.variant, "enabled": fc["enabled"],
             "mode": fc["mode"], "capital_share": fc["capital_share"], "action": "hold", "buys": [], "sells": [],
             "target": [], "notes": []}
+    w2cfg = W2.config(BASE / "config.json")
+    plan["war2"] = {"name": w2cfg["name"], "stop_fixed_pct": w2cfg["stop_fixed_pct"], "active": w2cfg["active"]}
+    if w2cfg["active"]:             # until tonight's judgement runs, the pending stops from the state stand
+        plan["stops"] = [dict({k: v.get(k) for k in ("trigger_session", "close", "cost_ps", "stop_price", "cycle",
+                                                     "qty")}, symbol=s, status="pending", reason=W2.REASON)
+                         for s, v in W2.pending(st).items()]
     fetch = fetch or {}
     day = now.strftime("%Y%m%d")
     try:
@@ -177,11 +237,15 @@ def build_plan(force: bool = False, now: datetime | None = None, fetch=None) -> 
             return plan
         plan["session"] = sessions[-1]
         # schedule: sessions since the last rebalance (fund_state.json)
-        st = FL.load_state()
         last = st.get("last_rebalance_session")
         since = len([d for d in sessions if last and d > int(last)]) if last else 10 ** 6
         plan["sessions_since_rebalance"] = since if last else None
         rebalance = force or since >= cfg.rebalance_sessions
+        if w2cfg["active"]:         # War2 stop: judged every night on the close (prices only, before fundamentals)
+            try:
+                _war2(plan, st, uni, H, sessions, w2cfg, fetch)
+            except Exception as exc:
+                plan["notes"].append(f"War2 stop error ({str(exc)[:120]}): no new stop tonight, pending stops kept")
         rc = fetch.get("rahavard") or FD.RahavardCache(CACHE / "rahavard")
         cidx = fetch.get("codal_index")
         if cidx is None:
@@ -228,13 +292,17 @@ def build_plan(force: bool = False, now: datetime | None = None, fetch=None) -> 
             plan["notes"].append("regime filter configured but not implemented live: hold")   # F5 is not the live variant
             return plan
         held = FL.fund_symbols()
-        target = SF.select(ranked, held, cfg)
+        stop_names = {x["symbol"] for x in plan.get("stops") or []}     # War2: being stopped out -> not a pick
+        if stop_names:
+            plan["notes"].append("War2 stops left out of the target: " + ", ".join(sorted(stop_names)))
+        target = SF.select([r for r in ranked if FL.norm(r["sym"]) not in stop_names],
+                           [s for s in held if s not in stop_names], cfg)
         if len(target) < cfg.n_hold:
             plan["notes"].append(f"only {len(target)} eligible names")
         known = {r["sym"]: r for r in rows}
         sells = []
         for s in held:
-            if s in target:
+            if s in target or s in stop_names:      # a stopped name is sold by the War2 stop order, never twice
                 continue
             if s not in known:          # no data for a holding -> never sell blind
                 plan["notes"].append(f"{s}: held but no data today, kept")
@@ -262,6 +330,9 @@ def build_plan(force: bool = False, now: datetime | None = None, fetch=None) -> 
             buys.append({"symbol": s, "budget_rial": round(per_name, 0), "ref_price": r["close"],
                          "rank": next((x["rank"] for x in ranked if x["sym"] == s), None),
                          "max_budget_by_liquidity": round(cfg.liq_cap * r["val60"], 0)})
+            if w2cfg["active"] and r["close"]:
+                buys[-1]["stop_price_est"] = round(W2.stop_price(r["close"] * (1 + W2.FEE_BUY),
+                                                                 w2cfg["stop_fixed_pct"]), 0)
         target = [FL.norm(s) for s in target]
         for b in buys:
             b["symbol"] = FL.norm(b["symbol"])
@@ -289,11 +360,25 @@ def main(argv: list[str]) -> int:
     if not fc["enabled"] and "--force" not in argv:
         log("fund_plan_skipped", reason="strategy.fund.enabled is false")
         return 0
+    out = PLAN
+    if "--out" in argv:             # rehearsal: write the plan elsewhere, touch no state (deploy tests)
+        out = Path(argv[argv.index("--out") + 1])
     plan = build_plan(force="--force" in argv)
+    basis = plan.pop("war2_basis", None)
     STATE.mkdir(parents=True, exist_ok=True)
-    PLAN.write_text(json.dumps(plan, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
-    log("fund_plan", action=plan["action"], buys=[b["symbol"] for b in plan["buys"]],
-        sells=[s["symbol"] for s in plan["sells"]], notes=plan["notes"])
+    out.write_text(json.dumps(plan, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
+    if basis is not None and out == PLAN:
+        st = FL.load_state()
+        W2.w2_state(st)["basis"] = basis
+        FL.save_state(st)
+    if out == PLAN:
+        log("fund_plan", action=plan["action"], buys=[b["symbol"] for b in plan["buys"]],
+            sells=[s["symbol"] for s in plan["sells"]], notes=plan["notes"],
+            war2_stops=[(x["symbol"], x["status"]) for x in plan.get("stops") or []])
+    else:
+        print(json.dumps({"out": str(out), "action": plan["action"], "stops": plan.get("stops"),
+                          "stopped_this_cycle": plan.get("stopped_this_cycle"), "notes": plan["notes"][:10]},
+                         ensure_ascii=False, default=str)[:3000])
     return 0
 
 
