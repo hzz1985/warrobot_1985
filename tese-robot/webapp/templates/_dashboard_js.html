@@ -15,15 +15,16 @@
   function activate(name) {
     var found = false;
     document.querySelectorAll('.panel').forEach(function (p) { if (p.id === name) found = true; });
-    if (!found) name = 'overview';
+    if (!found) name = 'f3';
+    var tabName = (name === 'buy' || name === 'sell') ? 'v3archive' : name;   /* V3 tables live under the archive tab */
     document.querySelectorAll('.tab').forEach(function (t) {
-      var on = t.dataset.tab === name;
+      var on = t.dataset.tab === tabName;
       t.classList.toggle('active', on);
       t.setAttribute('aria-selected', on ? 'true' : 'false');
       if (on && t.scrollIntoView) { try { t.scrollIntoView({block: 'nearest', inline: 'nearest'}); } catch (e) {} }
     });
     document.querySelectorAll('.panel').forEach(function (p) { p.classList.toggle('active', p.id === name); });
-    try { localStorage.setItem('tseTab', name); } catch (e) {}
+    try { localStorage.setItem('wrTabF3', name); } catch (e) {}
     if (name === 'overview') drawEquity();
   }
   document.querySelectorAll('.tab').forEach(function (t) {
@@ -143,7 +144,7 @@
   setTimeout(function () { chartGaveUp = true; drawEquity(); }, 5000);
 
   /* ---------- restore tab + scroll after a refresh ---------- */
-  try { var saved = localStorage.getItem('tseTab'); if (saved) activate(saved); } catch (e) {}
+  try { var saved = localStorage.getItem('wrTabF3'); if (saved) activate(saved); } catch (e) {}
   try { var y = sessionStorage.getItem('tseScroll'); if (y) window.scrollTo(0, parseInt(y, 10)); } catch (e) {}
 
   /* ---------- DeepSeekExport: copy / delete ---------- */

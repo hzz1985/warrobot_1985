@@ -35,7 +35,18 @@ from tsebot.ledger import Ledger  # noqa: E402
 from tsebot.calendar_ir import now_tehran  # noqa: E402
 
 import warrobot_data as Wdata
+try:                                   # Hark 2026-11-27: F3_QVGM view (read-only); never breaks the page
+    import f3_data as F3
+except Exception as _f3_exc:           # pragma: no cover
+    F3 = None
+    print(f"[f3] import failed: {_f3_exc}", flush=True)
 app = Flask(__name__)
+
+
+def _f3_view() -> dict:
+    if F3 is None:
+        return {"ok": False, "error": "f3_data import failed"}
+    return F3.safe_payload()
 CFG = config_mod.load()
 
 
@@ -669,6 +680,7 @@ def index():
     port_pct = (port_total / port_invested * 100.0) if port_invested else 0.0
     return render_template(
         "index.html",
+        f3=_f3_view(),
         dash=Wdata.dashboard(positions=positions, target=target, stop=stop, max_pos=max_pos),
         advice=advice,
         picks=picks, exports=exports, prompts=prompts, positions=positions, sell_rows=sell_rows,
@@ -718,6 +730,16 @@ def demo():
                            port_total=0, port_pct=0.0, port_invested=0,
                            generated="نمونه", for_date="نمونه",
                            now=datetime.now().strftime("%Y-%m-%d %H:%M"))
+
+
+@app.route("/api/f3")
+def api_f3():
+    """F3_QVGM dashboard data (read-only JSON)."""
+    d = _f3_view()
+    fn = dict(d.get("funnel") or {})
+    fn.pop("rank_of", None)
+    d["funnel"] = fn
+    return jsonify(d)
 
 
 @app.route("/api/buy")
