@@ -1,4 +1,4 @@
-# F3_QVGM — fundamentals strategy (LIVE since Saturday 2026-11-28)
+# War2 = F3_QVGM + fixed 15 % stop (F3 LIVE since Saturday 2026-11-28; stop approved 2026-11-27)
 
 Owner decision 2026-11-26 22:53 Tehran: V3 is archived, F3_QVGM is the only automatic strategy, real orders from
 the session of Saturday 2026-11-28 (1405-09-08). Not financial advice; numbers below are a backtest.
@@ -12,7 +12,23 @@ the session of Saturday 2026-11-28 (1405-09-08). Not financial advice; numbers b
 | select | top 10 by the mean rank, equal weight; a holding stays while its rank <= 20 |
 | rebalance | every 21 sessions; signal after the close, orders the next session (sells first, then buys) |
 
-Code: `strategy_fund.py` (rank/select), `fund_data.py` (rahavard365 EPS/ROE + optional Codal), `fund_live.py`
+## War2 stop-loss (owner approved 2026-11-27 23:30 Tehran; research `reports/hark_backtest_fund_sl/SUMMARY.md`)
+| item | rule |
+|---|---|
+| level | **fixed 15 % below the fee-inclusive entry cost** (broker average x 1.003712); no trailing stop, **no take-profit** |
+| trigger | judged once a day on the **daily close** in the 21:30 plan (`fund_live.py --plan`); TSETMC price adjustments (capital raise, dividend) since the cost was recorded are taken out, so they never fire a stop |
+| exit | next session `fund_orders.py` sells the whole position **first** (before the افران / rebalance sells and the buys), limit = best bid, else the daily floor (`exit_engine.sell_limit("stop_loss")`) |
+| floor queue | an unfilled stop is re-sent on every run (08:47 .. 12:10) and every next day until the broker no longer shows the name; our own stop order above the current limit for >= 10 min is cancelled and re-placed |
+| re-entry | **cash waits**: the stopped name is not bought or topped up again until the next 21-session rebalance, and no other name replaces it; at the rebalance it can come back only through the normal top-10 selection |
+| scope | F3 positions only. افران / خساپا never judged; آباد keeps the V3 exits; `exit_engine` / `sell_monitor` never act on F3 positions |
+| config | `strategy.fund.stop_fixed_pct` (15; 0 = pure F3), `strategy.fund.name` = "War2" (display); `strategy.version` stays `"fund"` |
+
+Backtest (same engine as below): IS +77.5 % (F3 +79.1), OOS +389.0 % (F3 +385.8), max drawdown about the same;
+worst single trade IS -25.8 % -> -18.5 %. Real exits average ~2-3 pp worse than the 15 % level (close trigger,
+next-session fill, floor queues). It is **insurance against one name collapsing, not drawdown control**; only
+4-6 stop events per period and no bear market in the data -> high overfitting risk.
+
+Code: `war2_stop.py` (stop math + state), `strategy_fund.py` (rank/select), `fund_data.py` (rahavard365 EPS/ROE + optional Codal), `fund_live.py`
 (nightly plan), `fund_ledger.py` (capital split / ownership), `fund_orders.py` (orders).
 
 ## Capital split (owner rules)
@@ -42,10 +58,10 @@ Code: `strategy_fund.py` (rank/select), `fund_data.py` (rahavard365 EPS/ROE + op
 ## Daily schedule (scheduler.py, Tehran)
 | time | job | what |
 |---|---|---|
-| 21:30 every day | `fundplan` -> `fund_live.py --plan` | ranks the universe, writes `state/fund_plan.json` (rebalance every 21 sessions, else hold) |
+| 21:30 every day | `fundplan` -> `fund_live.py --plan` | War2 stop judgement on the close + ranks the universe, writes `state/fund_plan.json` (rebalance every 21 sessions, else hold) |
 | 08:41 | `morning` -> `morning_orders.py` | V3-legacy exits + `order_candidates.prepare()` = F3 buys the cash allows (pre-open, 08:45:01) |
-| 08:47 | `fundbuy` -> `fund_orders.py` | sell the افران excess, re-read buying power, buy the F3 names |
-| 09:05 .. 12:10 | `fundbuy2..6` | buy what is still missing as buying power arrives (idempotent) |
+| 08:47 | `fundbuy` -> `fund_orders.py` | War2 stop sells first, then the افران excess, re-read buying power, buy the F3 names |
+| 09:05 .. 12:10 | `fundbuy2..6` | retry unfilled War2 stops, buy what is still missing as buying power arrives (idempotent) |
 | 10:00 | `rotate` -> `rebalance.py` | **disabled** in fund mode (it used to `cancel_all()`) |
 | 21:25 | `sellrev` -> `sell_monitor.py` | judges legacy V3 positions only; never F3 / افران / خساپا |
 
@@ -69,9 +85,11 @@ Code: `strategy_fund.py` (rank/select), `fund_data.py` (rahavard365 EPS/ROE + op
 `version: "fund"` (keeps the v2/v3 exit numbers for the legacy position), `v3.enabled: false` (archived,
 `archive/v3_20261126/`), `fund: {enabled: true, mode: "replace", live_orders: true, manage_afran: true,
 afran_share: 1/3, n_hold: 10, buffer: 20, rebalance_sessions: 21, pe_max: 40, min_trade_rial: 5e7,
-topup_drift: 0.25, afran_min_excess_pct: 0.02}`.
+topup_drift: 0.25, afran_min_excess_pct: 0.02, name: "War2", stop_fixed_pct: 15}`.
 
 ## Rollback
 `powershell -ExecutionPolicy Bypass -File "<WarRobot>\backups\pre_f3_<stamp>\rollback.ps1"` restores every
 file and the state of V3 exactly as it was on 2026-11-26 and restarts warsched + warrobot.
 Quick stop without rollback: set `strategy.fund.live_orders` to `false` (rehearsal only, no orders).
+War2 stop off without rollback: `strategy.fund.stop_fixed_pct` = 0 (back to pure F3). Full War2 rollback:
+`backups\pre_war2_<stamp>\rollback.ps1`.

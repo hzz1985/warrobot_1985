@@ -113,7 +113,10 @@
       "min_trade_rial": 50000000,
       "topup_drift": 0.25,
       "afran_min_excess_pct": 0.02,
-      "codal_ext_dir": null
+      "codal_ext_dir": null,
+      "name": "War2",
+      "stop_fixed_pct": 15,
+      "_war2": "War2 = F3_QVGM + fixed 15% stop from the fee-inclusive entry cost, judged on the daily close in the 21:30 plan, sold first next morning (best bid / floor, retried until filled); stopped name not re-bought until the next rebalance (cash waits); no take-profit. stop_fixed_pct 0 = pure F3. Owner approved 2026-11-27. See war2_stop.py / STRATEGY_FUND_HARK.md"
     }
   }
 }
