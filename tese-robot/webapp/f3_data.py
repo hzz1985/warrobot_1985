@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-"""F3_QVGM view-model for the dashboard (Hark, 2026-11-27).  READ-ONLY.
+"""War2 (F3_QVGM + fixed stop) view-model for the dashboard (Hark, 2026-11-27).  READ-ONLY.
+
+War2 (2026-11-27): config strategy.fund.name / stop_fixed_pct; fund_plan.json risk / stops / stopped_this_cycle /
+buys[].stop_price_est; fund_state.json war2 {basis, stops, history}; fund_orders.jsonl reason "war2_stop".
 
 Everything here is read from files the bot already writes; nothing is written inside WarRobot:
     state/fund_plan.json        nightly plan (21:30 Tehran): target, ranked_top (score + 4 factors), capital
@@ -30,6 +33,8 @@ if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
 
 AFRAN, KHSAPA = "افران", "خساپا"
+FEE_BUY = 0.003712                    # War2 entry cost = broker average x (1 + buy fee), war2_stop.py
+NEAR_STOP_PCT = 5.0                   # "near the stop" warning on the dashboard
 LEGACY_STOP_PCT = 9.0                 # V3 catastrophe stop (3 x 3 %), exit_engine
 LEGACY_EXIT_DEFAULT = "2026-12-14"    # 15-session time exit of the آباد lot (fund_state legacy_note)
 
@@ -185,9 +190,22 @@ def fund_schedule() -> list:
             ("11:20", "fundbuy5"), ("12:10", "fundbuy6")]
 
 
+def war2_cfg(cfg: dict) -> dict:
+    pct = _f(cfg.get("stop_fixed_pct"), 0.0) or 0.0
+    if not (0 < pct <= 50):
+        pct = 0.0
+    return {"name": str(cfg.get("name") or cfg.get("variant") or "F3_QVGM"), "stop_pct": pct, "active": pct > 0}
+
+
+STOP_FA = {"pending": "حد ضرر فعال — در حال فروش", "triggered": "حد ضرر خورد — فروش جلسهٔ بعد",
+           "stopped": "حد ضرر خورده — تا ری‌بالانس بعد خرید نمی‌شود", "near": "نزدیک حد ضرر", "ok": "امن",
+           "est": "هنوز خریده نشده (تخمینی)", "off": "حد ضرر خاموش", "na": "—"}
+
+
 # ------------------------------------------------------------------ main payload
 def payload() -> dict:
     cfg = _fund_cfg()
+    W2 = war2_cfg(cfg)
     plan = _read(STATE / "fund_plan.json")
     st = _read(STATE / "fund_state.json")
     run = _read(STATE / "fund_run.json")
@@ -262,6 +280,44 @@ def payload() -> dict:
     ranked = {norm(r.get("sym")): r for r in (plan.get("ranked_top") or [])}
     rank_of = fun.get("rank_of") or {}
     target = [norm(s) for s in (plan.get("target") or st.get("target") or [])]
+    risk = {norm(r.get("symbol")): r for r in (plan.get("risk") or [])}
+    w2st = st.get("war2") if isinstance(st.get("war2"), dict) else {}
+    st_stops = {norm(k): v for k, v in (w2st.get("stops") or {}).items()}
+    plan_new = {norm(x.get("symbol")): x for x in (plan.get("stops") or []) if x.get("status") == "new"}
+    cycle = st.get("last_rebalance_session")
+    stop_est = {norm(b.get("symbol")): _f(b.get("stop_price_est")) for b in (plan.get("buys") or [])}
+
+    def war2_row(sym: str, p: dict, close_ref) -> dict:
+        if not W2["active"]:
+            return {"stop_status": "off", "stop_fa": STOP_FA["off"]}
+        pct = W2["stop_pct"]
+        rk = risk.get(sym) or {}
+        held = bool(_f(p.get("qty"), 0))
+        cost = _f(rk.get("cost_ps")) or ((p.get("avg_raw") or 0) * (1 + FEE_BUY) if p.get("avg_raw") else None) \
+            or (p.get("avg") if held else None)
+        stop = _f(rk.get("stop_price")) or (cost * (1 - pct / 100) if cost else None)
+        est = False
+        if not held:
+            stop, est = stop_est.get(sym) or ((close_ref or 0) * (1 + FEE_BUY) * (1 - pct / 100) or None), True
+            cost = None
+        px = _f(p.get("price")) or _f(rk.get("close")) or close_ref
+        dist = ((px - stop) / px * 100) if (px and stop) else None
+        sv = st_stops.get(sym) or {}
+        if sv.get("status") == "pending":
+            code = "pending"
+        elif sym in plan_new:
+            code = "triggered"
+        elif sv.get("status") == "sold" and str(sv.get("cycle")) == str(cycle):
+            code = "stopped"
+        elif not held:
+            code = "est"
+        elif dist is not None and dist <= NEAR_STOP_PCT:
+            code = "near"
+        else:
+            code = "ok"
+        return {"entry_cost": cost, "stop_price": stop, "stop_est": est, "stop_dist_pct": dist,
+                "stop_status": code, "stop_fa": STOP_FA[code], "stop_px_ref": px}
+
     picks = []
     for i, s in enumerate(target, 1):
         r = ranked.get(s) or {}
@@ -287,6 +343,7 @@ def payload() -> dict:
             "status_msg": stt.get("msg") or "", "order_qty": _f(last.get("qty")),
             "order_at": str(last.get("at_tehran") or "")[11:16],
         })
+        picks[-1].update(war2_row(s, p, _f(r.get("close")) or _f(lim)))
 
     # ---- hold buffer (held fund names, rank 11..buffer) + held names outside the buffer
     buffer = int(cfg.get("buffer") or 20)
@@ -373,9 +430,44 @@ def payload() -> dict:
                      "submitted": bool(e.get("submitted")) and not e.get("dry"), "dry": bool(e.get("dry")),
                      "message": str(e.get("message") or "")[:60]}
 
+    # ---- War2: activated stops (pending / triggered tonight / sold this cycle) + recent history
+    stop_orders = {}
+    for e in olog_today:
+        if e.get("event") == "order" and e.get("reason") == "war2_stop":
+            stop_orders.setdefault(norm(e.get("symbol")), []).append(e)
+    stops = []
+    names = list(dict.fromkeys(list(plan_new) + list(st_stops)))
+    for sym in names:
+        sv = dict(st_stops.get(sym) or {})
+        pn = plan_new.get(sym) or {}
+        if not sv and not pn:
+            continue
+        if sv.get("status") == "sold" and str(sv.get("cycle")) != str(cycle) and sym not in plan_new:
+            continue
+        code = "pending" if sv.get("status") == "pending" else ("triggered" if pn and not sv else
+                                                                 ("stopped" if sv.get("status") == "sold" else "pending"))
+        src = sv or pn
+        p = pos.get(sym) or {}
+        oe = (stop_orders.get(sym) or [None])[-1] or {}
+        stops.append({"symbol": sym, "status": code, "status_fa": STOP_FA[code],
+                      "trigger_session": src.get("trigger_session"), "close": _f(src.get("close")),
+                      "cost": _f(src.get("cost_ps")), "stop_price": _f(src.get("stop_price")),
+                      "pnl_pct": _f(src.get("pnl_pct")), "held_qty": _f(p.get("qty"), 0), "price": _f(p.get("price")),
+                      "orders": int(sv.get("orders") or 0),
+                      "last_order": sv.get("last_order_tehran") or (str(oe.get("at_tehran") or "")[:16] or None),
+                      "last_msg": sv.get("last_order_msg") or oe.get("message"),
+                      "submitted": sv.get("last_order_submitted") if sv else oe.get("submitted"),
+                      "sold_seen": sv.get("sold_seen_tehran"), "today_orders": len(stop_orders.get(sym) or [])})
+    stop_hist = [{"symbol": h.get("symbol"), "trigger_session": h.get("trigger_session"),
+                  "pnl_pct": _f(h.get("pnl_pct")), "sold_seen": h.get("sold_seen_tehran")}
+                 for h in (w2st.get("history") or [])[-5:]][::-1]
+    war2 = dict(W2, stops=stops, history=stop_hist, stopped_this_cycle=plan.get("stopped_this_cycle") or [],
+                near=[p_["symbol"] for p_ in picks if p_.get("stop_status") == "near"])
+
     notes = list(plan.get("notes") or [])
     return {
         "ok": bool(plan), "cfg": cfg, "variant": plan.get("variant") or cfg.get("variant"),
+        "name": W2["name"], "war2": war2,
         "live_orders": bool(cfg.get("live_orders")), "enabled": bool(cfg.get("enabled")),
         "plan_at_server": plan.get("at"), "plan_at_tehran": server_to_tehran(plan.get("at")),
         "plan_session": plan.get("session"), "plan_action": plan.get("action"), "plan_notes": notes,
