@@ -66,13 +66,13 @@
   <div class="meta-row">
     <span class="chip {{ 'live' if mode == 'live' else 'dry' }}"><span class="dot"></span>حالت: {{ mode }}</span>
     <span class="chip">اکنون <span class="num">{{ jd(now) }}</span></span>
-    <span class="chip hide-sm">استراتژی <b>{{ (f3 or {}).variant or 'F3_QVGM' }}</b> · برنامه <span class="num">{{ (f3 or {}).plan_at_tehran or '—' }}</span></span>
+    <span class="chip hide-sm">استراتژی <b>{{ (f3 or {}).name or 'War2' }}</b> · برنامه <span class="num">{{ (f3 or {}).plan_at_tehran or '—' }}</span></span>
   </div>
 </header>
 
 <nav class="tabs-wrap" aria-label="بخش‌ها">
   <div class="tabs" role="tablist">
-    <button class="tab active" data-tab="f3" type="button">F3 زنده{% if (f3 or {}).picks %}<span class="cnt">{{ f3.picks|length }}</span>{% endif %}</button>
+    <button class="tab active" data-tab="f3" type="button">{{ (f3 or {}).name or 'War2' }} زنده{% if (f3 or {}).picks %}<span class="cnt">{{ f3.picks|length }}</span>{% endif %}</button>
     <button class="tab" data-tab="overview" type="button">نمای کلی</button>
     <button class="tab" data-tab="orders" type="button">سفارش‌ها</button>
     <button class="tab" data-tab="journal" type="button">ژورنال</button>
@@ -119,7 +119,7 @@
   </div>
 
   <div class="kpis minis">
-    <div class="kpi mini"><div class="lbl">استراتژی</div><div class="val">{{ (f3 or {}).variant or 'F3_QVGM' }}</div></div>
+    <div class="kpi mini"><div class="lbl">استراتژی</div><div class="val">{{ (f3 or {}).name or 'War2' }}</div></div>
     <div class="kpi mini"><div class="lbl">ری‌بالانس بعدی</div><div class="val">{% set _r = (f3 or {}).rebalance or {} %}{% if _r.first %}اولین{% elif _r.left is defined %}{{ _r.left }} جلسه{% else %}—{% endif %}</div></div>
     <div class="kpi mini"><div class="lbl">صندوق افران</div><div class="val">{{ tval(fund.value) }}</div></div>
     <div class="kpi mini"><div class="lbl">سود/زیان کل پوزیشن‌ها</div>
@@ -174,7 +174,7 @@
   <!-- open positions -->
   <div class="section">
     <div class="section-h"><h2>پوزیشن‌های باز</h2>
-      <span class="aside">به‌روزرسانی: {{ jd(pnl_at) }} · هدف هر سهم F3 در تب «F3 زنده»</span></div>
+      <span class="aside">به‌روزرسانی: {{ jd(pnl_at) }} · هدف و حد ضرر هر سهم در تب «{{ (f3 or {}).name or 'War2' }} زنده»</span></div>
     {% if excluded %}<p class="note">خارج از حلقهٔ پایش و تصمیم‌گیری: <b>{{ excluded|join('، ') }}</b> — باگ کارگزار؛ نه فروخته می‌شود و نه اسلات می‌گیرد.</p>{% endif %}
     {% if positions %}
     <div class="positions">
@@ -219,7 +219,7 @@
     </div>
     <!-- F3 targets (short) -->
     <div>
-      <div class="section-h"><h2>۱۰ سهم هدف F3</h2>
+      <div class="section-h"><h2>۱۰ سهم هدف {{ (f3 or {}).name or 'War2' }}</h2>
         <a class="aside" href="#f3" data-goto="f3">همه ←</a></div>
       {% if (f3 or {}).picks %}
       <ul class="card cand-list">
@@ -232,7 +232,7 @@
         </li>
         {% endfor %}
       </ul>
-      {% else %}<div class="empty">برنامهٔ F3 در دسترس نیست.</div>{% endif %}
+      {% else %}<div class="empty">برنامهٔ War2 در دسترس نیست.</div>{% endif %}
     </div>
   </div>
 </section>
@@ -241,7 +241,7 @@
 <section class="panel" id="v3archive">
   <h2 style="margin-top:4px">آرشیو V3 — بایگانی‌شده از ۲۰۲۶-۱۱-۲۶ ۲۳:۱۱</h2>
   <p class="note">V3 (سیگنال صف خرید سقف، حداکثر ۶ انتخاب در روز، ۱۰ اسلات، حد ضرر ۹٪، خروج زمانی ۱۵ جلسه‌ای) دیگر خرید نمی‌کند.
-     تنها اثر باقی‌ماندهٔ آن، قواعد خروج پوزیشن قدیمی <b>آباد</b> است (حد ضرر ۹٪ و خروج زمانی) که در تب «F3 زنده» نشان داده می‌شود.
+     تنها اثر باقی‌ماندهٔ آن، قواعد خروج پوزیشن قدیمی <b>آباد</b> است (حد ضرر ۹٪ و خروج زمانی) که در تب «War2 زنده» نشان داده می‌شود.
      جدول‌های زیر فقط برای سابقه نگه داشته شده‌اند.</p>
   <div class="f3-sched" style="display:flex;gap:8px;flex-wrap:wrap">
     <button class="btn" type="button" data-goto="buy">کاندیدای خرید (اسکن صف سقف V3){% if picks.picks %} · {{ picks.picks|length }}{% endif %}</button>
